@@ -1,5 +1,7 @@
 # New Project Setup Steps
 
+TODO: Move this to codex project! edit codex alias to source and unload codex venv?
+
 ## 1. git init
 
 ```bash
@@ -22,7 +24,6 @@ git commit -m "chore: initial commit"
 ## 2. uv
 
 ```bash
-# install uv if not already installed
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 uv venv
@@ -49,7 +50,6 @@ git tag v0.1.0
 ## 5. Verification
 
 ```bash
-# Verify virtual environment
 python --version
 
 cz version
