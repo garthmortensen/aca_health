@@ -20,11 +20,17 @@ Domain: Affordable Care Act (ACA) health insurance
 
 ## Staging Layer
 
-- Load raw CSVs into staging tables 1:1.
+- launch database
+- define schema on load
+
+`docker compose -f infrastructure/docker/docker-compose.yml up`
+
+- Load seed CSVs into staging tables 1:1.
 - No transforms — just type coercion + basic validation.
 - Track load batch metadata:
   - `load_id`
   - `load_timestamp`
+
 
 ## Dimensional Modeling
 
