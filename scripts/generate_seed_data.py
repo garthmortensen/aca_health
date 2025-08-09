@@ -16,8 +16,8 @@ from faker import Faker
 OUT_DIR = "data/seeds"
 YEAR = date.today().year
 MEMBERS = 5000
-PROVIDERS = 0
-PLANS = 0
+PROVIDERS = 30
+PLANS = 20
 CLAIMS = 5000
 
 SEED = 42
@@ -188,13 +188,11 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
         broker_name = random.choice(BROKER_NAMES + [None, None])
         sa_contracting_entity_name = random.choice(SA_CONTRACT_ENTITIES + [None])
         new_member_in_period = random.choice([0,1])
-        member_called_oscar = random.choice([0,1])
         member_used_app = random.choice([0,1])
         member_had_web_login = random.choice([0,1])
         member_visited_new_provider_ind = random.choice([0,1])
         high_cost_member = 1 if random.random() < 0.05 else 0
         mutually_exclusive_hcc_condition = random.choice(MUTUALLY_EXCL_HCC)
-        wisconsin_area_deprivation_index = random.randint(1,10) if state == "WI" else None
         geographic_reporting = region
         members.append(
             {
@@ -222,13 +220,11 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
                 "broker_name": broker_name,
                 "sa_contracting_entity_name": sa_contracting_entity_name,
                 "new_member_in_period": new_member_in_period,
-                "member_called_oscar": member_called_oscar,
                 "member_used_app": member_used_app,
                 "member_had_web_login": member_had_web_login,
                 "member_visited_new_provider_ind": member_visited_new_provider_ind,
                 "high_cost_member": high_cost_member,
                 "mutually_exclusive_hcc_condition": mutually_exclusive_hcc_condition,
-                "wisconsin_area_deprivation_index": wisconsin_area_deprivation_index,
                 "geographic_reporting": geographic_reporting,
                 "year": YEAR,
             }
@@ -416,13 +412,11 @@ def main() -> None:
             "broker_name",
             "sa_contracting_entity_name",
             "new_member_in_period",
-            "member_called_oscar",
             "member_used_app",
             "member_had_web_login",
             "member_visited_new_provider_ind",
             "high_cost_member",
             "mutually_exclusive_hcc_condition",
-            "wisconsin_area_deprivation_index",
             "geographic_reporting",
             "year",
         ],
