@@ -10,14 +10,13 @@ Domain: Affordable Care Act (ACA) health insurance
 
 ### health insurace
 
-```text
 - Generate CSV seed data:
   - members
   - plans (with metal tier, premiums, coverage details)
   - providers
   - claims and enrollments
-- Add a simple API (e.g., federal poverty level or CMS plan rates)
-```
+
+`python ./scripts/generate_seed_data.py`
 
 ## Staging Layer
 
@@ -43,7 +42,7 @@ Domain: Affordable Care Act (ACA) health insurance
 
 ## ETL Pipelines
 
-- **Extract**: Read CSV/API.
+- **Extract**: Read CSV
 - **Transform**:
   - Standardize types
   - Trim strings
@@ -78,7 +77,7 @@ Domain: Affordable Care Act (ACA) health insurance
 ## Automation & Orchestration
 
 - Provide `run.py` to execute:
-  - extract → stage → dims → facts → aggregates
+  - extract -> stage -> dims -> facts -> aggregates
 - Add incremental load simulation (append daily sales file)
 
 ## Testing & Validation
@@ -124,11 +123,6 @@ Core concepts:
 - Containerization: Docker + docker-compose (local Postgres)
 - Logging: structlog / standard lib + JSON formatting
 - Hashing for SCD2: xxhash / hashlib
-
-### Orchestration Without CI Server
-- Local cron (or systemd timer) invoking make incremental
-- Simple bash wrapper + at/cron for scheduled loads
-- Optional: Git hooks (pre-push → make quality)
 
 ### Next Steps
 - Add requirements.txt & minimal run.py pipeline skeleton.
