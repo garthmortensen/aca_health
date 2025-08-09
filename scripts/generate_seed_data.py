@@ -38,8 +38,38 @@ PROVIDER_SPECIALTIES = [
     "Urology",
     "Neurology",
 ]
+
+# Additional categorical/value domains for extended member attributes
+NETWORK_ACCESS_TYPES = ["HMO", "EPO", "PPO", "POS"]
+CLINICAL_SEGMENTS = ["Healthy", "Chronic", "Behavioral", "Maternity", "Complex"]
+BROKER_NAMES = ["Acme Brokerage", "HealthLink Brokers", "Prime Advisors", "Value Health Brokers"]
+GENERAL_AGENCIES = ["Wellness Group", "Care Partners", "Health Advantage", "Premier Agency"]
+SA_CONTRACT_ENTITIES = ["Strategic Alliance A", "Strategic Alliance B", "Strategic Alliance C"]
+MUTUALLY_EXCL_HCC = ["Diabetes", "CHF", "COPD", "Asthma", "CKD", None]
+CENSUS_REGIONS = {
+    "Northeast": {"ME","NH","VT","MA","RI","CT","NY","NJ","PA"},
+    "Midwest": {"OH","MI","IN","IL","WI","MN","IA","MO","ND","SD","NE","KS"},
+    "South": {"DE","MD","DC","VA","WV","KY","NC","SC","TN","GA","FL","AL","MS","AR","LA","OK","TX"},
+    "West": {"MT","ID","WY","CO","NM","AZ","UT","NV","CA","OR","WA","AK","HI"},
+}
+STATE_TO_REGION = {st: region for region, states in CENSUS_REGIONS.items() for st in states}
+
 CLAIM_STATUS = ["approved", "denied", "pending"]
-ICD10_SAMPLE = ["E11.9", "I10", "J06.9", "M54.50", "Z00.00", "R51.9", "K21.9"]
+# Replaced ICD-10 with ICD-11 sample codes
+ICD11_SAMPLE = [
+    "1A00",  # Cholera due to Vibrio cholerae 01
+    "1A01",  # Cholera due to Vibrio cholerae 0139
+    "1A02",  # Cholera unspecified
+    "1B11",  # Influenza due to identified seasonal influenza virus
+    "2A00",  # Acute HIV infection
+    "2B20",  # Pulmonary tuberculosis
+    "4A00",  # Type 1 diabetes mellitus
+    "5A10",  # Major depressive disorder, single episode
+    "6A40",  # Epilepsy
+    "8A20",  # Malignant neoplasm of breast
+    "CA40",  # Osteoarthritis of knee
+    "DA0Z",  # Hypertension unspecified
+]
 CPT_SAMPLE = ["99213", "99214", "80050", "93000", "71046", "36415", "12001"]
 
 
@@ -132,7 +162,40 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
         city = fake.city()
         state = fake.state_abbr()
         zipcode = fake.postcode()
-        fpl_ratio = round(random.uniform(0.5, 4.0), 2)  # ACA subsidy-like context
+        fpl_ratio = round(random.uniform(0.5, 4.0), 2)
+        age = YEAR - dob.year
+        if age < 18:
+            age_group = "<18"
+        elif age < 26:
+            age_group = "18-25"
+        elif age < 35:
+            age_group = "26-34"
+        elif age < 45:
+            age_group = "35-44"
+        elif age < 55:
+            age_group = "45-54"
+        elif age < 65:
+            age_group = "55-64"
+        else:
+            age_group = "65+"
+        plan_network_access_type = random.choice(NETWORK_ACCESS_TYPES)
+        plan_metal = random.choice(METAL_TIERS)
+        hios_id = f"{random.randint(10000,99999)}{random.randint(100,999)}{random.randint(10,99)}"
+        region = STATE_TO_REGION.get(state, random.choice(list(CENSUS_REGIONS.keys())))
+        enrollment_length_continuous = random.randint(1, 12)  # months
+        clinical_segment = random.choice(CLINICAL_SEGMENTS)
+        general_agency_name = random.choice(GENERAL_AGENCIES + [None, None])
+        broker_name = random.choice(BROKER_NAMES + [None, None])
+        sa_contracting_entity_name = random.choice(SA_CONTRACT_ENTITIES + [None])
+        new_member_in_period = random.choice([0,1])
+        member_called_oscar = random.choice([0,1])
+        member_used_app = random.choice([0,1])
+        member_had_web_login = random.choice([0,1])
+        member_visited_new_provider_ind = random.choice([0,1])
+        high_cost_member = 1 if random.random() < 0.05 else 0
+        mutually_exclusive_hcc_condition = random.choice(MUTUALLY_EXCL_HCC)
+        wisconsin_area_deprivation_index = random.randint(1,10) if state == "WI" else None
+        geographic_reporting = region
         members.append(
             {
                 "member_id": f"MBR{i:06d}",
@@ -147,6 +210,27 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
                 "state": state,
                 "zip": zipcode,
                 "fpl_ratio": fpl_ratio,
+                # Extended attributes
+                "hios_id": hios_id,
+                "plan_network_access_type": plan_network_access_type,
+                "plan_metal": plan_metal,
+                "age_group": age_group,
+                "region": region,
+                "enrollment_length_continuous": enrollment_length_continuous,
+                "clinical_segment": clinical_segment,
+                "general_agency_name": general_agency_name,
+                "broker_name": broker_name,
+                "sa_contracting_entity_name": sa_contracting_entity_name,
+                "new_member_in_period": new_member_in_period,
+                "member_called_oscar": member_called_oscar,
+                "member_used_app": member_used_app,
+                "member_had_web_login": member_had_web_login,
+                "member_visited_new_provider_ind": member_visited_new_provider_ind,
+                "high_cost_member": high_cost_member,
+                "mutually_exclusive_hcc_condition": mutually_exclusive_hcc_condition,
+                "wisconsin_area_deprivation_index": wisconsin_area_deprivation_index,
+                "geographic_reporting": geographic_reporting,
+                "year": YEAR,
             }
         )
     return members
@@ -250,7 +334,7 @@ def gen_claims(
                 "allowed_amount": allowed_amount,
                 "paid_amount": paid_amount,
                 "status": status,
-                "diagnosis_code": random.choice(ICD10_SAMPLE),
+                "diagnosis_code": random.choice(ICD11_SAMPLE),
                 "procedure_code": random.choice(CPT_SAMPLE),
             }
         )
@@ -321,6 +405,26 @@ def main() -> None:
             "state",
             "zip",
             "fpl_ratio",
+            "hios_id",
+            "plan_network_access_type",
+            "plan_metal",
+            "age_group",
+            "region",
+            "enrollment_length_continuous",
+            "clinical_segment",
+            "general_agency_name",
+            "broker_name",
+            "sa_contracting_entity_name",
+            "new_member_in_period",
+            "member_called_oscar",
+            "member_used_app",
+            "member_had_web_login",
+            "member_visited_new_provider_ind",
+            "high_cost_member",
+            "mutually_exclusive_hcc_condition",
+            "wisconsin_area_deprivation_index",
+            "geographic_reporting",
+            "year",
         ],
     )
     write_csv(
