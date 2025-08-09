@@ -8,7 +8,7 @@ Domain: Affordable Care Act (ACA) health insurance
 
 ## Source Data Setup (domain specific)
 
-### health insurace
+### health insurance
 
 - Generate CSV seed data:
   - members
@@ -21,9 +21,11 @@ Domain: Affordable Care Act (ACA) health insurance
 ## Staging Layer
 
 - launch database
-- define schema on load
+- define schema on load, with data dictionary
 
 `docker compose -f infrastructure/docker/docker-compose.yml up`
+
+## next steps
 
 - Load seed CSVs into staging tables 1:1.
 - No transforms — just type coercion + basic validation.
@@ -31,6 +33,7 @@ Domain: Affordable Care Act (ACA) health insurance
   - `load_id`
   - `load_timestamp`
 
+`python -m etl.load.staging_loader`
 
 ## Dimensional Modeling
 
@@ -139,3 +142,6 @@ Core concepts:
 - Add data quality scripts + sql tests (row counts, null, fk).
 - Integrate db migrations (Alembic) & reference in Makefile.
 - Add pre-commit for formatting & lint gating.
+
+
+
