@@ -119,3 +119,6 @@ CREATE INDEX IF NOT EXISTS idx_claims_raw_member ON staging.claims_raw(member_id
 CREATE INDEX IF NOT EXISTS idx_claims_raw_provider ON staging.claims_raw(provider_id);
 CREATE INDEX IF NOT EXISTS idx_claims_raw_plan ON staging.claims_raw(plan_id);
 CREATE INDEX IF NOT EXISTS idx_claims_raw_service_date ON staging.claims_raw(service_date);
+-- Support idempotent re-runs: only one completed batch per file_pattern (optional semantic key)
+CREATE UNIQUE INDEX IF NOT EXISTS uq_load_batches_file_pattern_completed
+    ON staging.load_batches(file_pattern) WHERE status = 'completed';
