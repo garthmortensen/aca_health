@@ -1,6 +1,9 @@
 -- Create staging schema
 CREATE SCHEMA IF NOT EXISTS staging;
 
+-- staging often stays "land raw", meaning it is used for raw data ingestion
+-- it has logical (implied) relationships to other tables, but no foreign keys (minus load_id)
+
 -- Load batch tracking table
 CREATE TABLE IF NOT EXISTS staging.load_batches (
     load_id       BIGSERIAL PRIMARY KEY,
