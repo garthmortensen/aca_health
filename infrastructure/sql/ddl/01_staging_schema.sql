@@ -10,8 +10,15 @@ CREATE TABLE IF NOT EXISTS staging.load_batches (
     started_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
     completed_at  TIMESTAMPTZ,
     row_count     BIGINT,
-    status        TEXT NOT NULL DEFAULT 'started' -- started|completed|failed
+    status        TEXT NOT NULL DEFAULT 'started', -- started|completed|failed
+    file_size_bytes BIGINT,
+    file_sha256     TEXT,
+    source_row_count BIGINT
 );
+-- Ensure new columns exist if table created earlier without them
+ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS file_size_bytes BIGINT;
+ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS file_sha256 TEXT;
+ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS source_row_count BIGINT;
 
 -- Plans raw
 CREATE TABLE IF NOT EXISTS staging.plans_raw (

@@ -6,7 +6,7 @@ Idempotent design:
 - Unique partial index (status='completed') prevents duplicates.
 - Skips file if a completed load_batches row exists for that filename.
 
-Usage: relies on DB_URL env.
+Adds file metadata (size, sha256, source_row_count) for change detection.
 """
 from __future__ import annotations
 
@@ -14,9 +14,11 @@ import os
 import re
 import glob
 import sys
+import hashlib
 from dataclasses import dataclass
 from typing import List
 from datetime import datetime, timezone
+from pathlib import Path
 
 import psycopg
 from psycopg import sql
@@ -91,20 +93,37 @@ def file_completed(cur: psycopg.Cursor, filename: str) -> bool:
     return cur.fetchone() is not None
 
 
+def file_stats(path: str) -> tuple[int, str, int]:
+    size = os.path.getsize(path)
+    h = hashlib.sha256()
+    rows = 0
+    with open(path, 'rb') as f:
+        header_skipped = False
+        for line in f:
+            h.update(line)
+            if not header_skipped:
+                header_skipped = True
+                continue
+            rows += 1
+    return size, h.hexdigest(), rows
+
+
 def load_file(conn: psycopg.Connection, info: FileInfo) -> int:
     filename = os.path.basename(info.path)
+    size_bytes, sha256, src_rows = file_stats(info.path)
     with conn.cursor() as cur:
         if file_completed(cur, filename):
             print(f"Skip (already completed): {filename}")
             return 0
-        # Insert batch row
         cur.execute(
-            "INSERT INTO staging.load_batches (source_name, description, file_pattern) VALUES (%s,%s,%s) RETURNING load_id",
-            (info.entity, f"Load {filename}", filename),
+            "INSERT INTO staging.load_batches (source_name, description, file_pattern, file_size_bytes, file_sha256, source_row_count) VALUES (%s,%s,%s,%s,%s,%s) RETURNING load_id",
+            (info.entity, f"Load {filename}", filename, size_bytes, sha256, src_rows),
         )
         load_id = cur.fetchone()[0]
         try:
             rows = copy_file(cur, info, load_id)
+            if rows != src_rows:
+                print(f"WARNING: row count mismatch file={filename} expected={src_rows} loaded={rows}")
             cur.execute(
                 "UPDATE staging.load_batches SET row_count=%s, completed_at=now(), status='completed' WHERE load_id=%s",
                 (rows, load_id),
