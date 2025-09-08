@@ -1,0 +1,54 @@
+## ---------------------------------------------------------------------------
+## sources.yml
+## This file tells dbt about the "raw" tables that already exist in the database
+## (i.e. tables NOT built by dbt). We declare them here so that downstream dbt
+## models can reference them with the ref-like function source('staging', 'members_raw')
+## instead of hard‑coding schema.table names. This adds lineage + enables tests.
+## ---------------------------------------------------------------------------
+version: 2
+
+## Top-level list of source groups. Each group gets a name (used in source() calls)
+## and (optionally) a schema + database override. Here all raw tables live in the
+## Postgres schema named "staging".
+sources:
+  - name: staging          # Group name → use source('staging', 'claims_raw') in models
+    schema: staging        # Physical schema where these raw tables live
+    tables:
+      - name: plans_raw        # Raw plan attributes as first landed (no transforms)
+        tests:
+          - not_null: { column_name: plan_id }
+      - name: providers_raw    # Raw provider data (entities delivering care)
+        tests:
+          - not_null: { column_name: provider_id }
+      - name: members_raw      # Raw member (person/beneficiary) feed
+        tests:
+          - not_null: { column_name: member_id }
+      - name: enrollments_raw  # Member enrollment periods linking members to plans
+        tests:
+          - not_null: { column_name: enrollment_id }
+      - name: claims_raw       # Claim (medical event / transaction) facts
+        tests:
+          - not_null: { column_name: claim_id }
+      - name: load_batches     # Optional audit/control table: one row per ingestion batch
+        tests:
+          - not_null: { column_name: load_id }
+
+## HOW TO USE THESE SOURCES IN A MODEL (example):
+##   select * from {{ source('staging', 'members_raw') }}
+##
+## WHY NOT ref()? ref() is only for dbt models (things built by dbt). source() is for
+## pre-existing / externally managed objects. Mixing them up causes errors & lineage gaps.
+##
+## ADDING TESTS:
+##   You can attach tests directly under a table, e.g.:
+##     - name: members_raw
+##       tests:
+##         - freshness: { warn_after: {count: 1, period: day}, error_after: {count: 2, period: day} }
+##         - not_null: { column_name: member_id }
+##
+## NEXT STEPS:
+##   1. Leave this file minimal.
+##   3. Add freshness + critical not_null/unique tests to detect ingestion issues early.
+##   4. Keep transformations OUT of sources — transformations belong in staging models.
+##
+## SAFE TO EDIT: Adding comments / tests / descriptions is safe.

@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "star schema exploration"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "faker>=37.6.0",
+    "psycopg>=3.2.9",
+]
 
 [tool.commitizen]
 name = "cz_conventional_commits"

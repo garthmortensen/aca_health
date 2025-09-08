@@ -1,0 +1,199 @@
+version: 2
+
+# Staging layer tests & documentation.
+# Each stg_* model is a 1:1 cleaned projection of a raw ingest table.
+# Goal: enforce minimal data quality before building dimensions & facts.
+
+models:
+  # the name field corresponds to the raw source table
+  - name: stg_members
+    # description field is a brief explanation of the model's purpose and contents
+    description: "Cleaned member rows (renamed / typed) from members_raw; one row per member snapshot load."
+    columns:
+      - name: member_id
+        description: "Natural member identifier from raw source."
+        tests: [not_null, unique]
+      - name: first_name
+        description: "Member given name (raw first_name)."
+      - name: last_name
+        description: "Member family name (raw last_name)."
+      - name: date_of_birth
+        description: "Date of birth (raw dob)."
+      - name: gender
+        description: "Gender code (M/F/etc)."
+      - name: email
+        description: "Contact email address."
+      - name: phone
+        description: "Contact phone number."
+      - name: street
+        description: "Street address."
+      - name: city
+        description: "City."
+      - name: state
+        description: "State code (2-char)."
+      - name: zip
+        description: "Postal code."
+      - name: fpl_ratio
+        description: "Income / Federal Poverty Level ratio."
+      - name: hios_id
+        description: "HIOS identifier (if provided)."
+      - name: plan_network_access_type
+        description: "Plan network access type at snapshot."
+      - name: plan_metal
+        description: "Plan metal tier from member record."
+      - name: age_group
+        description: "Derived age group bucket."
+      - name: region
+        description: "Geographic region grouping."
+      - name: enrollment_length_continuous
+        description: "Approx continuous enrollment months within year."
+      - name: clinical_segment
+        description: "Simulated clinical segment grouping."
+      - name: general_agency_name
+        description: "General agency associated with member."
+      - name: broker_name
+        description: "Broker associated with member."
+      - name: sa_contracting_entity_name
+        description: "Contracting entity name."
+      - name: new_member_in_period
+        description: "Flag (1/0) first-year member."
+      - name: member_used_app
+        description: "Flag (1/0) used mobile app."
+      - name: member_had_web_login
+        description: "Flag (1/0) web portal login."
+      - name: member_visited_new_provider_ind
+        description: "Flag (1/0) visited new provider."
+      - name: high_cost_member
+        description: "Flag (1/0) simulated high cost member."
+      - name: mutually_exclusive_hcc_condition
+        description: "Chronic condition bucket (simulated)."
+      - name: geographic_reporting
+        description: "Geographic reporting group."
+      - name: year
+        description: "Reference year for enrichment attributes."
+      - name: load_id
+        description: "FK to staging.load_batches (ingestion batch)."
+      - name: load_timestamp
+        description: "Ingestion timestamp from raw table."
+  - name: stg_claims
+    description: "Claims with standardized column names; one row per claim_id in raw claims_raw."
+    columns:
+      - name: claim_id
+        description: "Synthetic claim identifier."
+        tests: [not_null, unique]
+      - name: member_id
+        description: "Foreign key to member (not enforced at raw layer)."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_members')
+                field: member_id
+      - name: provider_id
+        description: "Provider identifier referenced on claim."
+      - name: plan_id
+        description: "Plan identifier at time of claim."
+      - name: claim_date
+        description: "Service date of claim (from service_date)."
+      - name: claim_amount
+        description: "Billed claim amount."
+      - name: allowed_amount
+        description: "Allowed amount after adjudication."
+      - name: paid_amount
+        description: "Paid amount (0 if denied/pending)."
+      - name: claim_status
+        description: "Claim status approved/denied/pending."
+      - name: diagnosis_code
+        description: "ICD-11 diagnosis code."
+      - name: procedure_code
+        description: "CPT procedure code."
+      - name: load_id
+        description: "FK to staging.load_batches."
+      - name: load_timestamp
+        description: "Ingestion timestamp from raw claims."
+  - name: stg_plans
+    description: "Plan attributes by (plan_id, effective_year) from plans_raw."
+    columns:
+      - name: plan_id
+        description: "Plan natural key (PLN####)."
+        tests: [not_null]
+      - name: plan_name
+        description: "Plan marketing name."
+      - name: metal_tier
+        description: "ACA metal tier Bronze/Silver/Gold/Platinum."
+      - name: monthly_premium
+        description: "Monthly premium amount."
+      - name: deductible
+        description: "Annual deductible."
+      - name: oop_max
+        description: "Out-of-pocket maximum."
+      - name: coinsurance_rate
+        description: "Member coinsurance fraction (0-1)."
+      - name: pcp_copay
+        description: "Primary care visit copay."
+      - name: effective_year
+        description: "Plan effective year."
+      - name: load_id
+        description: "FK to staging.load_batches."
+      - name: load_timestamp
+        description: "Ingestion timestamp."
+  - name: stg_providers
+    description: "Provider attributes from providers_raw."
+    columns:
+      - name: provider_id
+        description: "Provider natural key (PRV#####)."
+        tests: [not_null]
+      - name: npi
+        description: "Fake NPI-like number."
+      - name: provider_name
+        description: "Provider full name (raw name)."
+      - name: specialty
+        description: "Medical specialty."
+      - name: street
+        description: "Street address."
+      - name: city
+        description: "City."
+      - name: state
+        description: "State code (2-char)."
+      - name: zip
+        description: "Postal code."
+      - name: phone
+        description: "Contact phone number."
+      - name: load_id
+        description: "FK to staging.load_batches."
+      - name: load_timestamp
+        description: "Ingestion timestamp."
+  - name: stg_enrollments
+    description: "Enrollment periods per enrollment_id with derived coverage_days."
+    columns:
+      - name: enrollment_id
+        description: "Natural enrollment identifier."
+        tests: [not_null, unique]
+      - name: member_id
+        description: "Member foreign key reference."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_members')
+                field: member_id
+      - name: plan_id
+        description: "Plan foreign key reference."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_plans')
+                field: plan_id
+      - name: start_date
+        description: "Coverage start date."
+      - name: end_date
+        description: "Coverage end date (capped to year)."
+      - name: coverage_days
+        description: "Derived number of coverage days in period."
+      - name: premium_paid
+        description: "Premium paid by member."
+      - name: csr_variant
+        description: "Cost-sharing reduction variant code."
+      - name: load_id
+        description: "FK to staging.load_batches."
+      - name: load_timestamp
+        description: "Ingestion timestamp."
+

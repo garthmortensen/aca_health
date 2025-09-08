@@ -1,0 +1,158 @@
+version: 2
+
+metrics:
+  # Claims Volume & Financial Metrics
+  - name: monthly_claim_count
+    description: "Total number of claims per month"
+    type: simple
+    label: "Monthly Claim Count"
+    type_params:
+      measure: total_claims
+    
+  - name: monthly_claim_amount
+    description: "Total claim amount billed per month"
+    type: simple
+    label: "Monthly Claim Amount"
+    type_params:
+      measure: total_claim_amount
+    
+  - name: monthly_paid_amount
+    description: "Total amount paid on claims per month"
+    type: simple
+    label: "Monthly Paid Amount"
+    type_params:
+      measure: total_paid_amount
+    
+  - name: claim_approval_rate
+    description: "Percentage of claims that are approved"
+    type: ratio
+    label: "Claim Approval Rate"
+    type_params:
+      numerator: total_claims
+      denominator: total_claims
+      # Note: This would need to be refined with proper filtering for approved vs total
+    filter: |
+      {{ Dimension('claims__claim_status') }} = 'approved'
+    
+  - name: avg_claim_value
+    description: "Average value per claim"
+    type: simple
+    label: "Average Claim Value"
+    type_params:
+      measure: avg_claim_amount
+    
+  # Member & Enrollment Metrics
+  - name: monthly_active_members
+    description: "Count of unique members with claims activity per month"
+    type: simple
+    label: "Monthly Active Members"
+    type_params:
+      measure: unique_members
+    
+  - name: member_utilization_rate
+    description: "Percentage of enrolled members who filed claims"
+    type: ratio
+    label: "Member Utilization Rate"
+    type_params:
+      numerator: unique_members
+      denominator: unique_enrolled_members
+    
+  - name: avg_member_cost
+    description: "Average total cost per member (PMPM - Per Member Per Month)"
+    type: derived
+    label: "Average Member Cost (PMPM)"
+    type_params:
+      expr: total_paid_amount / unique_members
+      metrics:
+        - total_paid_amount
+        - unique_members
+    
+  - name: total_member_months
+    description: "Total member months of coverage"
+    type: derived
+    label: "Total Member Months"
+    type_params:
+      expr: total_coverage_days / 30.44  # Average days per month
+      metrics:
+        - total_coverage_days
+    
+  # Provider Network Metrics
+  - name: provider_productivity
+    description: "Average claims per provider"
+    type: derived
+    label: "Provider Productivity"
+    type_params:
+      expr: total_claims / unique_providers
+      metrics:
+        - total_claims
+        - unique_providers
+    
+  - name: high_volume_providers
+    description: "Count of providers with >50 claims per month"
+    type: simple
+    label: "High Volume Providers"
+    type_params:
+      measure: unique_providers
+    filter: |
+      {{ Metric('total_claims', group_by=[Dimension('claims__provider_id')]) }} > 50
+    
+  # Plan Performance Metrics
+  - name: premium_to_claims_ratio
+    description: "Ratio of premium collected to claims paid (loss ratio)"
+    type: derived
+    label: "Premium to Claims Ratio (Loss Ratio)"
+    type_params:
+      expr: total_paid_amount / total_premium_paid
+      metrics:
+        - total_paid_amount
+        - total_premium_paid
+    
+  - name: plan_retention_rate
+    description: "Percentage of members who renewed their plan"
+    type: simple
+    label: "Plan Retention Rate"
+    type_params:
+      measure: total_enrollments
+    # This would need more sophisticated logic to track renewals
+    
+  # Quality & Risk Metrics
+  - name: chronic_condition_prevalence
+    description: "Percentage of claims related to chronic conditions"
+    type: ratio
+    label: "Chronic Condition Prevalence"
+    type_params:
+      numerator: total_claims
+      denominator: total_claims
+    filter: |
+      {{ Dimension('claims__diagnosis_code') }} in ('4A00', '2B20', 'CA40', 'DA0Z')  # Diabetes, TB, Arthritis, Hypertension
+    
+  - name: preventive_care_utilization
+    description: "Percentage of claims for preventive care services"
+    type: ratio
+    label: "Preventive Care Utilization"
+    type_params:
+      numerator: total_claims
+      denominator: total_claims
+    filter: |
+      {{ Dimension('claims__procedure_code') }} in ('99213', '99214', '93000')  # Wellness visit codes
+    
+  # Cost Efficiency Metrics
+  - name: cost_per_member_per_year
+    description: "Total healthcare cost per member annually (PMPY)"
+    type: derived
+    label: "Cost Per Member Per Year (PMPY)"
+    type_params:
+      expr: (total_paid_amount * 12) / unique_members
+      metrics:
+        - total_paid_amount
+        - unique_members
+    
+  - name: denied_claim_rate
+    description: "Percentage of claims that are denied"
+    type: ratio
+    label: "Denied Claim Rate"
+    type_params:
+      numerator: total_claims
+      denominator: total_claims
+    filter: |
+      {{ Dimension('claims__claim_status') }} = 'denied'

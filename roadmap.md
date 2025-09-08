@@ -1,24 +1,64 @@
 # Roadmap (Simple)
 
-## COMPLETE
+## COMPLETE ✅
 
 1. Generate synthetic ACA CSV source files (Extract step ready).
+   - Run `python ./scripts/generate_seed_data.py`
+   - Use timestamp as seed (seed embedded in filename)
+
 2. Create Postgres staging schema and raw tables plus load_batches audit table.
-3. Implement idempotent staging loader to ingest newest CSVs.
-4. Load initial raw data into staging tables
-   - Run:`python -m etl.load.staging_loader`.
-5. Finish minor loader hardening (optional: checksum, validation queries).
-   - Add columns to load_batches: file_size_bytes, file_sha256, source_row_count (to detect altered same-name files).
-6. Create core dimension tables (DimDate, DimMember, DimPlan, DimProvider) with SCD2 columns.
+   - Kill all data `docker compose -f infrastructure/docker/docker-compose.yml down -v`
+   - Build `docker compose -f infrastructure/docker/docker-compose.yml up -d`
+
+3. Implement idempotent staging loader to ingest newest CSVs and load raw data into staging.
+   - Run: `python scripts/staging_loader.py`
+   - Using .loaded_filenames with filename-based tracking
+   - ✅ FIXED: First row issue (removed duplicate header handling)
+
+4. Create core dimension tables (DimDate, DimMember, DimPlan, DimProvider) with SCD2 columns.
+   - ✅ Implemented via dbt snapshots and dimension models
+
+5. Create fact tables (FactClaim, FactEnrollment).
+   - ✅ Implemented via dbt incremental models
+
+6. Implement a semantic layer called semantic
+   - ✅ agg_claims_monthly, agg_member_cost, agg_provider_performance, dashboard_summary
+
+7. Infrastructure reorganization (sql/ddl,etl → database/schemas,procedures structure)
+   - ✅ Completed directory reorganization with migration tracking
+
+8. **dbt Integration Complete**:
+   - ✅ Staging models (`stg_*`) for clean data transformation
+   - ✅ Snapshots for SCD2 historical tracking
+   - ✅ Dimension models (`dim_*`) with current records
+   - ✅ Fact models (`fct_*`) with incremental loading
+   - ✅ Semantic layer with business metrics and KPIs
+   - ✅ Data quality tests for all models
+
+**Current workflow:** `cd transform && dbt run && dbt test`
 
 ## TODO
 
-7. Populate DimDate and build SCD2 upsert (hash change detection) for other dimensions.
+1. **Enhanced Data Quality** (optional):
+   - Add custom dbt tests for business rules
+   - Implement Great Expectations integration
+   - Add row count reconciliation tests
 
-8. Create fact tables (FactClaim, FactEnrollment) and load via surrogate key resolution.
+2. **Semantic Layer Expansion** (optional):
+   - Add MetricFlow configuration for dbt Semantic Layer
+   - Create additional metrics for provider network analysis
+   - Add time-based analysis (seasonality, trending)
 
-9. Add data quality checks (row counts, PK/FK, nulls, duplicates) and orchestration script.
+3. **Sandbox Environment** (planned):
+   - Implement a scratchpad schema called sandbox
+   - Add to dbt run when created
 
-10. Build summary views (claims by metal tier, member utilization) to validate analytics layer.
+4. **Advanced Analytics** (future):
+   - Risk stratification models
+   - Provider recommendation engine
+   - Claims anomaly detection
 
-
+5. **Performance Optimization** (future):
+   - Implement incremental snapshots
+   - Add partitioning for large fact tables
+   - Optimize query performance for dashboard models

@@ -1,0 +1,204 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "Calendar/date dimension spanning 2018-01-01 to 2030-12-31. One row per day."
+    columns:
+      - name: date_key
+        description: "Surrogate integer key yyyymmdd."
+        tests: [not_null, unique]
+      - name: full_date
+        description: "Actual date value."
+      - name: year
+        description: "Calendar year."
+      - name: quarter
+        description: "Calendar quarter (1-4)."
+      - name: month
+        description: "Calendar month number (1-12)."
+      - name: month_name
+        description: "Abbreviated month name (Mon)."
+      - name: day
+        description: "Day of month (1-31)."
+      - name: day_of_week
+        description: "ISO day of week (1=Mon..7=Sun)."
+      - name: day_name
+        description: "Abbrev day name (Mon..Sun)."
+      - name: week_of_year
+        description: "ISO week number."
+      - name: is_weekend
+        description: "Boolean weekend flag."
+      - name: created_at
+        description: "Row creation timestamp (build time)."
+
+  - name: dim_member
+    description: "Current member attributes (SCD2 current rows) derived from member_snapshot."
+    columns:
+      - name: member_id
+        description: "Natural member key."
+        tests: [not_null, unique]
+      - name: first_name
+        description: "Uppercased first name."
+      - name: last_name
+        description: "Uppercased last name."
+      - name: date_of_birth
+        description: "Date of birth."
+      - name: gender
+        description: "Gender code."
+      - name: age_group
+        description: "Age group bucket from snapshot."
+      - name: region
+        description: "Geographic region."
+      - name: plan_metal
+        description: "Member's current plan metal as of snapshot."
+      - name: load_id
+        description: "Loader batch id passed through from raw."
+      - name: validity_start_ts
+        description: "Snapshot validity window start (dbt_valid_from)."
+      - name: validity_end_ts
+        description: "Snapshot validity window end (dbt_valid_to)."
+      - name: is_current
+        description: "Boolean flag; always true here (filter by current rows)."
+
+  - name: dim_plan
+    description: "Current plan attributes (SCD2 current rows) derived from plan_snapshot."
+    columns:
+      - name: plan_id
+        description: "Natural plan key."
+        tests: [not_null, unique]
+      - name: plan_name
+        description: "Uppercased plan marketing name."
+      - name: metal_tier
+        description: "Metal tier (Bronze/Silver/Gold/Platinum)."
+      - name: monthly_premium
+        description: "Monthly premium amount."
+      - name: deductible
+        description: "Annual deductible."
+      - name: oop_max
+        description: "Out-of-pocket maximum."
+      - name: coinsurance_rate
+        description: "Coinsurance rate after deductible."
+      - name: pcp_copay
+        description: "Primary care physician copay."
+      - name: effective_year
+        description: "Plan effective year (used for temporal joins)."
+      - name: load_id
+        description: "Loader batch id."
+      - name: validity_start_ts
+        description: "Snapshot validity window start."
+      - name: validity_end_ts
+        description: "Snapshot validity window end."
+      - name: is_current
+        description: "Boolean current-row flag."
+
+  - name: dim_provider
+    description: "Current provider attributes (SCD2 current rows) derived from provider_snapshot."
+    columns:
+      - name: provider_id
+        description: "Natural provider key."
+        tests: [not_null, unique]
+      - name: npi
+        description: "National Provider Identifier."
+      - name: provider_name
+        description: "Uppercased provider name."
+      - name: specialty
+        description: "Provider specialty."
+      - name: street
+        description: "Address street."
+      - name: city
+        description: "Address city."
+      - name: state
+        description: "Address state."
+      - name: zip
+        description: "Address ZIP/postal code."
+      - name: phone
+        description: "Contact phone."
+      - name: load_id
+        description: "Loader batch id."
+      - name: validity_start_ts
+        description: "Snapshot validity window start."
+      - name: validity_end_ts
+        description: "Snapshot validity window end."
+      - name: is_current
+        description: "Boolean current-row flag."
+
+  - name: fct_claim
+    description: "Fact table of individual claims. Incremental load from staging layer."
+    columns:
+      - name: claim_id
+        description: "Claim natural key."
+        tests: [not_null, unique]
+      - name: member_id
+        description: "Natural key referencing dim_member.member_id."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_member')
+                field: member_id
+      - name: provider_id
+        description: "Provider natural key."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_provider')
+                field: provider_id
+      - name: plan_id
+        description: "Plan natural key."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_plan')
+                field: plan_id
+      - name: claim_date
+        description: "Service date (from staging)."
+      - name: claim_amount
+        description: "Billed claim amount."
+        tests: [not_null]
+      - name: allowed_amount
+        description: "Allowed amount after adjudication."
+      - name: paid_amount
+        description: "Paid amount (0 if denied/pending)."
+      - name: claim_status
+        description: "Claim status string."
+      - name: diagnosis_code
+        description: "ICD-11 diagnosis code."
+      - name: procedure_code
+        description: "CPT procedure code."
+      - name: load_id
+        description: "Loader batch id."
+      - name: load_timestamp
+        description: "Ingestion timestamp for claim row."
+
+  - name: fct_enrollment
+    description: "Fact table of member enrollment periods linking members to plans. Incremental load from staging."
+    columns:
+      - name: enrollment_id
+        description: "Enrollment natural key."
+        tests: [not_null, unique]
+      - name: member_id
+        description: "Natural key referencing dim_member.member_id."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_member')
+                field: member_id
+      - name: plan_id
+        description: "Plan natural key."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_plan')
+                field: plan_id
+      - name: start_date
+        description: "Enrollment start date."
+      - name: end_date
+        description: "Enrollment end date."
+      - name: coverage_days
+        description: "Number of days in coverage period (inclusive)."
+      - name: premium_paid
+        description: "Premium paid for the period (may be null)."
+      - name: csr_variant
+        description: "Cost-sharing reduction variant."
+      - name: load_id
+        description: "Loader batch id."
+      - name: load_timestamp
+        description: "Ingestion timestamp for enrollment row."

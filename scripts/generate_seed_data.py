@@ -20,8 +20,6 @@ PROVIDERS = 30
 PLANS = 20
 CLAIMS = 5000
 
-SEED = 42
-
 METAL_TIERS = ["Bronze", "Silver", "Gold", "Platinum"]
 PROVIDER_SPECIALTIES = [
     "Family Medicine",
@@ -345,16 +343,19 @@ def main() -> None:
     providers_n = PROVIDERS
     plans_n = PLANS
     claims_n = CLAIMS
-    seed = SEED
+
+    ensure_dir(out)
+
+    # Generate timestamp for both seed and filename suffix
+    # This creates a perfect link between data generation and output files
+    ts = datetime.now().strftime("%Y%m%d%H%M")
+    seed = int(ts)  # Use timestamp as seed (e.g., 202509061430 -> 202509061430)
+    
+    print(f"Using seed={seed} (timestamp: {ts})")
 
     random.seed(seed)
     fake = Faker("en_US")
     fake.seed_instance(seed)
-
-    ensure_dir(out)
-
-    # Append timestamp suffix to output filenames
-    ts = datetime.now().strftime("%Y%m%d%H%M")
 
     plans = gen_plans(fake, plans_n, year)
     providers = gen_providers(fake, providers_n)

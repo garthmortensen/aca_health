@@ -2,9 +2,9 @@
 
 ## Scope & Domain
 
-Scope: Create datawarehouse, from ETL to datacube.
+Scope: Create Kimball style star-schema datawarehouse, from ETL to datacube, using dbt.
 
-Domain: Affordable Care Act (ACA) health insurance
+Domain: ACA health insurance
 
 ## Source Data Setup (domain specific)
 
@@ -35,11 +35,30 @@ Domain: Affordable Care Act (ACA) health insurance
 
 `python -m etl.load.staging_loader`
 
+## dbt Transformations
+
+The project uses dbt for all data transformations:
+
+- **Staging Layer** (`models/staging/`): Clean raw data with minimal transformation
+- **Dimensional Layer** (`models/analytics/`): Star schema with SCD2 via snapshots
+- **Semantic Layer** (`models/semantic/`): Business metrics and aggregations
+- **Snapshots** (`snapshots/`): Track historical changes for members, plans, and providers
+
+Key commands:
+
+```bash
+cd transform
+dbt run        # Build all models
+dbt test       # Run data quality tests  
+dbt snapshot   # Update SCD2 snapshots
+```
+
 ## Dimensional Modeling
 
 ACA star schema:
 
 Dimensions (SCD2 where noted):
+
 - DimDate (static) – calendar attributes (date_key surrogate, date actual, year, month, etc.)
 - DimMember (SCD2) – member demographics + socioeconomic & engagement attributes
   - Surrogate: member_sk (BIGINT)
@@ -62,6 +81,7 @@ Dimensions (SCD2 where noted):
 - DimClaimStatus / DimProcedure / DimDiagnosis (optional outriggers) if high cardinality reuse emerges; initially inline on fact.
 
 Facts:
+
 - FactEnrollment (grain: one row per member-plan continuous coverage period)
   - Grain: (member_sk, plan_sk, enrollment_start_date_key)
   - Measures: premium_paid (can be snapshot or accumulated), coverage_days
@@ -74,12 +94,14 @@ Facts:
   - Measures: claim_amount, allowed_amount, paid_amount
 
 Surrogate Keys & SCD2 Columns (for applicable dims):
+
 - Each SCD2 dimension table columns: *_sk (PK), natural key columns, validity_start_ts, validity_end_ts, current_flag (BOOLEAN), attr_hash (TEXT / BYTEA), load_id, created_at
 - validity_end_ts = '9999-12-31'::timestamp for current row
 - Unique index: (natural_key_columns, validity_start_ts)
 - Current row fast lookup index: (natural_key_columns) WHERE current_flag
 
 Grains Summary:
+
 - DimMember: one row per member version
 - DimPlan: one row per plan_id + effective_year version
 - DimProvider: one row per provider version
@@ -87,21 +109,13 @@ Grains Summary:
 - FactEnrollment: member-plan enrollment period
 
 Change Detection Approach:
+
 1. Stage raw into staging.*_raw (done)
 2. Compute attr_hash = stable hash (e.g. SHA256 concat of ordered change driver attributes after normalization)
 3. For each natural key:
    - If no current row: insert new version
    - If current exists AND hash differs: update current row (set validity_end_ts = now, current_flag = false) then insert new row
    - Else skip
-
-Future Optional Dimensions:
-- DimBroker (if broker attributes explode)
-- DimClinicalSegment (if needing classification history) – else remain attribute on DimMember
-
-Open Questions / To Decide:
-- Whether to separate Address dimension for providers & members (likely premature)
-- Add Date dimension generation script or SQL? (simple calendar table)
-- Claim line modeling (introduce line_number for multi-line claims)
 
 ## ETL Pipelines
 
@@ -129,14 +143,24 @@ Open Questions / To Decide:
 
 ## Aggregations / Cubes
 
-- Create summary tables or materialized views:
-  - claims_daily_member (sum claim + paid amounts)
-  - claims_by_plan_metal_month
-  - high_cost_member_tracking (rolling 12m)
-  - utilization_by_specialty
-- Optionally build a small OLAP-like layer using:
-  - DuckDB
-  - Postgres materialized views
+Current semantic layer models provide business-ready analytics:
+
+- **`agg_claims_monthly`**: Monthly claims summary with volume, costs, and approval rates
+- **`agg_member_cost`**: Per-member cost analysis (PMPM/PMPY) with risk segmentation  
+- **`agg_provider_performance`**: Provider productivity and quality metrics
+- **`dashboard_summary`**: Executive KPIs combining key metrics across domains
+
+Create summary tables or materialized views:
+
+- claims_daily_member (sum claim + paid amounts)
+- claims_by_plan_metal_month
+- high_cost_member_tracking (rolling 12m)
+- utilization_by_specialty
+
+Optionally build a small OLAP-like layer using:
+
+- DuckDB
+- Postgres materialized views
 
 ## Automation & Orchestration
 
@@ -159,42 +183,48 @@ Open Questions / To Decide:
 
 ## Documentation
 
-- Docs handled via sphinx, sent to readthedocs via Github Action.
+Load dbt docs into github pages for the repo
 
-- Update `README` with:
-  - Mermaid schema diagram
-  - Load sequence
-  - Sample queries
+### Tech
 
-### Automation (Makefile-Centric)
-Makefile is the single interface for: environment bootstrap, linting, tests, data generation, full vs incremental loads, data quality checks, and container lifecycle.
-
-Core concepts:
-- Phony targets map to logical pipeline stages.
-- Full load vs incremental controlled by flags/targets.
-- Environment variables loaded from .env / config/dev.env.
-- Docker Compose spins up Postgres (and optional helpers).
-
-### Tech (optional)
-- data creation: faker?
+- data creation: faker
 - Packaging: uv
 - Env management: python-dotenv
-- linting python: Ruff
-- linting sql: SQLFluff
-- DB migrations: Alembic
-- Transform modeling (SQL focus): dbt (optional)
-- Data quality: Great Expectations
+- Transform modeling: dbt
 - Containerization: Docker + docker-compose (local Postgres)
-- Logging: structlog / standard lib + JSON formatting
-- Hashing for SCD2: xxhash / hashlib
 
 ### Next Steps
-- Build dimension DDL (DimMember, DimPlan, DimProvider, DimDate, optional DimGeography)
-- Implement attr hash + SCD2 upsert routines
-- Add fact loaders (claims, enrollment)
-- Add calendar population script
-- Data quality SQL tests (PK, FK, null, duplicates, row counts)
+
+- Data quality: Great Expectations
 - Add pre-commit for formatting & lint gating.
 
+## Modeling ascii decision tree
 
-
+```text
+Start ──► Do you mostly serve BI dashboards? 
+           │
+           ├─► YES → Star Schema (Kimball)
+           │          (simple, stable, SQL-friendly)
+           │
+           └─► NO → Heavy ad-hoc / data science work?
+                     │
+                     ├─► YES → Wide / Denormalized Tables
+                     │          (fast scans in BigQuery/Snowflake)
+                     │
+                     └─► NO → Lots of schema drift or many sources?
+                               │
+                               ├─► YES → Data Vault
+                               │          (auditability, evolvable)
+                               │
+                               └─► NO → Need extreme historization?
+                                         │
+                                         ├─► YES → Anchor Modeling
+                                         │          (temporal, flexible)
+                                         │
+                                         └─► NO → Add a Semantic Layer?
+                                                   │
+                                                   ├─► YES → Semantic Layer
+                                                   │          (consistent KPIs across teams)
+                                                   │
+                                                   └─► NO → Star Schema
+```

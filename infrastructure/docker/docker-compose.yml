@@ -26,7 +26,7 @@
 #   Health becomes 'healthy' after pg_isready succeeds per healthcheck.
 #
 # INIT SQL (FIRST RUN ONLY)
-# - All *.sql files in ../sql/ddl (mounted to /docker-entrypoint-initdb.d) run only
+# - All *.sql files in database/schemas (mounted to /docker-entrypoint-initdb.d) run only
 #   when the data directory is empty (i.e., first time volume is created). After
 #   that, change detection does NOT re-run them. To reapply from scratch, run:
 #       docker compose -f infrastructure/docker/docker-compose.yml down -v
@@ -67,7 +67,7 @@ services:
       # postgres entry point runs every sql script in sorted order
       # docker-entrypoint-initdb.d is a directory containing initialization scripts
       # :ro,Z is SELinux relabeling for read-only volumes
-      - ${PWD}/infrastructure/sql/ddl:/docker-entrypoint-initdb.d:ro,Z
+      - ${PWD}/infrastructure/database/schemas:/docker-entrypoint-initdb.d:ro,Z
     healthcheck:  # Lets compose know when Postgres is ready to accept connections
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s

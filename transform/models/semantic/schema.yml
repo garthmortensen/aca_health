@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: agg_claims_monthly
+    description: "Monthly claims aggregation showing volume, financial metrics, and approval rates"
+    columns:
+      - name: report_month
+        description: "Month of the claims (first day of month)"
+        tests: [not_null]
+      - name: total_claims
+        description: "Total number of claims in the month"
+        tests: [not_null]
+      - name: total_billed_amount
+        description: "Total amount billed for all claims"
+      - name: total_paid_amount
+        description: "Total amount paid for all claims"
+      - name: approval_rate
+        description: "Percentage of claims that were approved (0-1 scale)"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+      - name: unique_members_with_claims
+        description: "Count of unique members who had claims"
+      - name: unique_providers
+        description: "Count of unique providers who submitted claims"
+
+  - name: agg_member_cost
+    description: "Per-member cost analysis including PMPM and PMPY calculations"
+    columns:
+      - name: member_id
+        description: "Member identifier"
+        tests: [not_null, unique]
+      - name: pmpm_cost
+        description: "Per Member Per Month cost"
+        tests: [not_null]
+      - name: pmpy_cost
+        description: "Per Member Per Year cost"
+        tests: [not_null]
+      - name: cost_category
+        description: "Risk-based cost categorization"
+        tests:
+          - accepted_values:
+              values: ['No Claims', 'Low Cost', 'Moderate Cost', 'High Cost', 'Very High Cost']
+      - name: enrollment_months
+        description: "Total months of enrollment"
+      - name: total_claims
+        description: "Total number of claims for the member"
+
+  - name: agg_provider_performance
+    description: "Provider performance analysis including volume, cost, and efficiency metrics"
+    columns:
+      - name: provider_id
+        description: "Provider identifier"
+        tests: [not_null, unique]
+      - name: total_claims
+        description: "Total claims submitted by provider"
+        tests: [not_null]
+      - name: approval_rate
+        description: "Provider's claim approval rate (0-1 scale)"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+      - name: volume_category
+        description: "Provider volume categorization"
+        tests:
+          - accepted_values:
+              values: ['Very Low Volume', 'Low Volume', 'Moderate Volume', 'High Volume']
+      - name: cost_category
+        description: "Provider cost categorization"
+        tests:
+          - accepted_values:
+              values: ['Very Low Cost', 'Low Cost', 'Moderate Cost', 'High Cost']
+      - name: unique_members_served
+        description: "Count of unique members served by provider"

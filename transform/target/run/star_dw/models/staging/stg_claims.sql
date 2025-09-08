@@ -1,0 +1,27 @@
+
+  create view "dw"."dw"."stg_claims__dbt_tmp"
+    
+    
+  as (
+    -- Basic staging model for claims
+
+
+with src as (
+    select * from "dw"."staging"."claims_raw"
+)
+select
+    claim_id,
+    member_id,
+    provider_id,
+    plan_id,
+    service_date as claim_date,
+    claim_amount,
+    allowed_amount,
+    paid_amount,
+    status as claim_status,
+    diagnosis_code,
+    procedure_code,
+    load_id,
+    load_timestamp
+from src
+  );
