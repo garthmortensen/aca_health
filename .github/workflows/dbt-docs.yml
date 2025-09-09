@@ -2,9 +2,9 @@ name: Build and Deploy dbt Docs
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, expectations ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, expectations ]
 
 jobs:
   build-and-deploy:
