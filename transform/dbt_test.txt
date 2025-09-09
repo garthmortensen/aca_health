@@ -1,0 +1,101 @@
+[0m01:31:18  Running with dbt=1.10.10
+[0m01:31:19  Registered adapter: postgres=1.9.0
+[0m01:31:19  [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 5 unused configuration paths:
+- models.star_dw.analytics.facts
+- models.star_dw.semantic
+- models.star_dw.analytics.dims
+- models.star_dw.staging
+- models.star_dw.analytics
+[0m01:31:20  Found 25 data tests, 5 sources, 695 macros
+[0m01:31:20  
+[0m01:31:20  Concurrency: 1 threads (target='dev')
+[0m01:31:20  
+[0m01:31:20  1 of 25 START test dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_claim_amount__100000__0  [RUN]
+[0m01:31:20  1 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_claim_amount__100000__0  [[31mERROR[0m in 0.04s]
+[0m01:31:20  2 of 25 START test dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_service_date__2030_12_31__2018_01_01__True  [RUN]
+[0m01:31:20  2 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_service_date__2030_12_31__2018_01_01__True  [[31mERROR[0m in 0.02s]
+[0m01:31:20  3 of 25 START test dbt_great_expectations_source_expect_column_values_to_be_between_staging_members_raw_dob__2020_01_01__1920_01_01__True  [RUN]
+[0m01:31:20  3 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_be_between_staging_members_raw_dob__2020_01_01__1920_01_01__True  [[31mERROR[0m in 0.02s]
+[0m01:31:20  4 of 25 START test dbt_great_expectations_source_expect_column_values_to_be_between_staging_plans_raw_monthly_premium__2000__50  [RUN]
+[0m01:31:20  4 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_be_between_staging_plans_raw_monthly_premium__2000__50  [[31mERROR[0m in 0.02s]
+[0m01:31:20  5 of 25 START test dbt_great_expectations_source_expect_column_values_to_be_in_set_staging_plans_raw_metal_tier__Bronze__Silver__Gold__Platinum  [RUN]
+[0m01:31:20  5 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_be_in_set_staging_plans_raw_metal_tier__Bronze__Silver__Gold__Platinum  [[31mERROR[0m in 0.02s]
+[0m01:31:20  6 of 25 START test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_claims_raw_claim_id___CLM__0_9_8_  [RUN]
+[0m01:31:20  6 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_match_regex_staging_claims_raw_claim_id___CLM__0_9_8_  [[31mERROR[0m in 0.01s]
+[0m01:31:20  7 of 25 START test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_members_raw_member_id___MBR__0_9_8_  [RUN]
+[0m01:31:20  7 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_match_regex_staging_members_raw_member_id___MBR__0_9_8_  [[31mERROR[0m in 0.01s]
+[0m01:31:20  8 of 25 START test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_providers_raw_npi___0_9_10_  [RUN]
+[0m01:31:20  8 of 25 ERROR dbt_great_expectations_source_expect_column_values_to_match_regex_staging_providers_raw_npi___0_9_10_  [[31mERROR[0m in 0.01s]
+[0m01:31:20  9 of 25 START test source_not_null_staging_claims_raw_claim_amount ............. [RUN]
+[0m01:31:20  9 of 25 PASS source_not_null_staging_claims_raw_claim_amount ................... [[32mPASS[0m in 0.08s]
+[0m01:31:20  10 of 25 START test source_not_null_staging_claims_raw_claim_id ................ [RUN]
+[0m01:31:20  10 of 25 PASS source_not_null_staging_claims_raw_claim_id ...................... [[32mPASS[0m in 0.04s]
+[0m01:31:20  11 of 25 START test source_not_null_staging_claims_raw_service_date ............ [RUN]
+[0m01:31:20  11 of 25 PASS source_not_null_staging_claims_raw_service_date .................. [[32mPASS[0m in 0.04s]
+[0m01:31:20  12 of 25 START test source_not_null_staging_enrollments_raw_end_date ........... [RUN]
+[0m01:31:20  12 of 25 PASS source_not_null_staging_enrollments_raw_end_date ................. [[32mPASS[0m in 0.04s]
+[0m01:31:20  13 of 25 START test source_not_null_staging_enrollments_raw_enrollment_id ...... [RUN]
+[0m01:31:20  13 of 25 PASS source_not_null_staging_enrollments_raw_enrollment_id ............ [[32mPASS[0m in 0.04s]
+[0m01:31:20  14 of 25 START test source_not_null_staging_enrollments_raw_start_date ......... [RUN]
+[0m01:31:20  14 of 25 PASS source_not_null_staging_enrollments_raw_start_date ............... [[32mPASS[0m in 0.04s]
+[0m01:31:20  15 of 25 START test source_not_null_staging_members_raw_dob .................... [RUN]
+[0m01:31:20  15 of 25 PASS source_not_null_staging_members_raw_dob .......................... [[32mPASS[0m in 0.04s]
+[0m01:31:20  16 of 25 START test source_not_null_staging_members_raw_member_id .............. [RUN]
+[0m01:31:20  16 of 25 PASS source_not_null_staging_members_raw_member_id .................... [[32mPASS[0m in 0.04s]
+[0m01:31:20  17 of 25 START test source_not_null_staging_plans_raw_metal_tier ............... [RUN]
+[0m01:31:20  17 of 25 PASS source_not_null_staging_plans_raw_metal_tier ..................... [[32mPASS[0m in 0.04s]
+[0m01:31:20  18 of 25 START test source_not_null_staging_plans_raw_monthly_premium .......... [RUN]
+[0m01:31:20  18 of 25 PASS source_not_null_staging_plans_raw_monthly_premium ................ [[32mPASS[0m in 0.04s]
+[0m01:31:20  19 of 25 START test source_not_null_staging_plans_raw_plan_id .................. [RUN]
+[0m01:31:20  19 of 25 PASS source_not_null_staging_plans_raw_plan_id ........................ [[32mPASS[0m in 0.04s]
+[0m01:31:20  20 of 25 START test source_not_null_staging_providers_raw_provider_id .......... [RUN]
+[0m01:31:20  20 of 25 PASS source_not_null_staging_providers_raw_provider_id ................ [[32mPASS[0m in 0.04s]
+[0m01:31:20  21 of 25 START test source_unique_staging_claims_raw_claim_id .................. [RUN]
+[0m01:31:21  21 of 25 PASS source_unique_staging_claims_raw_claim_id ........................ [[32mPASS[0m in 0.04s]
+[0m01:31:21  22 of 25 START test source_unique_staging_enrollments_raw_enrollment_id ........ [RUN]
+[0m01:31:21  22 of 25 PASS source_unique_staging_enrollments_raw_enrollment_id .............. [[32mPASS[0m in 0.04s]
+[0m01:31:21  23 of 25 START test source_unique_staging_members_raw_member_id ................ [RUN]
+[0m01:31:21  23 of 25 PASS source_unique_staging_members_raw_member_id ...................... [[32mPASS[0m in 0.04s]
+[0m01:31:21  24 of 25 START test source_unique_staging_plans_raw_plan_id .................... [RUN]
+[0m01:31:21  24 of 25 PASS source_unique_staging_plans_raw_plan_id .......................... [[32mPASS[0m in 0.04s]
+[0m01:31:21  25 of 25 START test source_unique_staging_providers_raw_provider_id ............ [RUN]
+[0m01:31:21  25 of 25 PASS source_unique_staging_providers_raw_provider_id .................. [[32mPASS[0m in 0.04s]
+[0m01:31:21  
+[0m01:31:21  Finished running 25 data tests in 0 hours 0 minutes and 1.13 seconds (1.13s).
+[0m01:31:21  
+[0m01:31:21  [31mCompleted with 8 errors, 0 partial successes, and 0 warnings:[0m
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_claim_amount__100000__0 (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_claim_amount__100000__0 (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_service_date__2030_12_31__2018_01_01__True (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_claims_raw_service_date__2030_12_31__2018_01_01__True (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_members_raw_dob__2020_01_01__1920_01_01__True (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_members_raw_dob__2020_01_01__1920_01_01__True (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_plans_raw_monthly_premium__2000__50 (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_be_between_staging_plans_raw_monthly_premium__2000__50 (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_be_in_set_staging_plans_raw_metal_tier__Bronze__Silver__Gold__Platinum (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_be_in_set_staging_plans_raw_metal_tier__Bronze__Silver__Gold__Platinum (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_claims_raw_claim_id___CLM__0_9_8_ (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_claims_raw_claim_id___CLM__0_9_8_ (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_members_raw_member_id___MBR__0_9_8_ (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_members_raw_member_id___MBR__0_9_8_ (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  [31mFailure in test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_providers_raw_npi___0_9_10_ (models/staging/sources.yml)[0m
+[0m01:31:21    Compilation Error in test dbt_great_expectations_source_expect_column_values_to_match_regex_staging_providers_raw_npi___0_9_10_ (models/staging/sources.yml)
+  'dbt_great_expectations' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
+[0m01:31:21  
+[0m01:31:21  Done. PASS=17 WARN=0 ERROR=8 SKIP=0 NO-OP=0 TOTAL=25

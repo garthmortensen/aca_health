@@ -21,4 +21,9 @@
 
 10. Build summary views (claims by metal tier, member utilization) to validate analytics layer.
 
+11. **Great Expectations Integration** (optional):
+    - Add `dbt-great-expectations` package for enhanced data quality testing
+    - Implement business rule validations (claim amount ranges, PMPM reasonableness)
+    - Set up automated data documentation and quality reporting
+
 

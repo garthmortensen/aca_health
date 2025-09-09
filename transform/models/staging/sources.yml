@@ -1,0 +1,110 @@
+version: 2
+
+sources:
+  - name: staging
+    description: "Raw data staging layer"
+    schema: staging
+    tables:
+      - name: claims_raw
+        description: "Raw claims data from CSV files"
+        columns:
+          - name: claim_id
+            description: "Unique claim identifier"
+            tests:
+              - not_null
+              - unique
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: "^CLM[0-9]{7}$"
+          - name: claim_amount
+            description: "Total claim amount"
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: 0
+                    max_value: 100000
+          - name: service_date
+            description: "Date of service"
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: "'2018-01-01'"
+                    max_value: "'2030-12-31'"
+
+      - name: members_raw
+        description: "Raw member data from CSV files"
+        columns:
+          - name: member_id
+            description: "Unique member identifier"
+            tests:
+              - not_null
+              - unique
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: "^MBR[0-9]{6}$"
+          - name: dob
+            description: "Member date of birth"
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: "'1930-01-01'"
+                    max_value: "'2025-12-31'"
+
+      - name: plans_raw
+        description: "Raw plan data from CSV files"
+        columns:
+          - name: plan_id
+            description: "Unique plan identifier"
+            tests:
+              - not_null
+              - unique
+          - name: monthly_premium
+            description: "Monthly premium amount"
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: 50
+                    max_value: 2000
+          - name: metal_tier
+            description: "Plan metal tier"
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_in_set:
+                  arguments:
+                    value_set: ['Bronze', 'Silver', 'Gold', 'Platinum']
+
+      - name: providers_raw
+        description: "Raw provider data from CSV files"
+        columns:
+          - name: provider_id
+            description: "Unique provider identifier"
+            tests:
+              - not_null
+              - unique
+          - name: npi
+            description: "National Provider Identifier"
+            tests:
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  arguments:
+                    regex: "^[0-9]{10}$"
+
+      - name: enrollments_raw
+        description: "Raw enrollment data from CSV files"
+        columns:
+          - name: enrollment_id
+            description: "Unique enrollment identifier"
+            tests:
+              - not_null
+              - unique
+          - name: start_date
+            description: "Enrollment start date"
+            tests:
+              - not_null
+          - name: end_date
+            description: "Enrollment end date"
+            tests:
+              - not_null

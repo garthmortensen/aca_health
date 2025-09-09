@@ -1,0 +1,114 @@
+version: 2
+
+models:
+  - name: stg_claims
+    description: "Cleaned and standardized claims data"
+    columns:
+      - name: claim_id
+        description: "Unique claim identifier"
+        tests:
+          - not_null
+          - unique
+      - name: claim_amount
+        description: "Total claim amount"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000
+      - name: paid_amount
+        description: "Amount paid on claim"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000
+      - name: claim_date
+        description: "Date of service"
+        tests:
+          - not_null
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1000
+            max_value: 1000000
+
+  - name: stg_members
+    description: "Cleaned and standardized member data"
+    columns:
+      - name: member_id
+        description: "Unique member identifier"
+        tests:
+          - not_null
+          - unique
+      - name: date_of_birth
+        description: "Member date of birth"
+        tests:
+          - not_null
+      - name: gender
+        description: "Member gender"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              arguments:
+                value_set: ['M', 'F', 'Other']
+      - name: fpl_ratio
+        description: "Federal Poverty Level ratio"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0.5
+                max_value: 8.0
+
+  - name: stg_plans
+    description: "Cleaned and standardized plan data"
+    columns:
+      - name: plan_id
+        description: "Unique plan identifier"
+        tests:
+          - not_null
+          - unique
+      - name: monthly_premium
+        description: "Monthly premium amount"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 50
+                max_value: 2000
+      - name: deductible
+        description: "Plan deductible amount"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 15000
+
+  - name: stg_providers
+    description: "Cleaned and standardized provider data"
+    columns:
+      - name: provider_id
+        description: "Unique provider identifier"
+        tests:
+          - not_null
+          - unique
+      - name: specialty
+        description: "Provider specialty"
+        tests:
+          - not_null
+
+  - name: stg_enrollments
+    description: "Cleaned and standardized enrollment data"
+    columns:
+      - name: enrollment_id
+        description: "Unique enrollment identifier"
+        tests:
+          - not_null
+          - unique
+      - name: coverage_days
+        description: "Number of coverage days"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 1
+                max_value: 366
