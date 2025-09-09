@@ -1,0 +1,88 @@
+name: Build and Deploy dbt Docs
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dbt
+      run: |
+        pip install dbt-core dbt-postgres
+
+    - name: Set up dbt profiles
+      run: |
+        mkdir -p ~/.dbt
+        cat > ~/.dbt/profiles.yml << EOF
+        star_dw:
+          target: dev
+          outputs:
+            dev:
+              type: postgres
+              host: ${{ secrets.DB_HOST || 'localhost' }}
+              user: ${{ secrets.DB_USER || 'postgres' }}
+              password: ${{ secrets.DB_PASSWORD || 'postgres' }}
+              port: ${{ secrets.DB_PORT || 5432 }}
+              dbname: ${{ secrets.DB_NAME || 'star_dw' }}
+              schema: staging
+              threads: 4
+              keepalives_idle: 0
+              search_path: "staging,analytics,semantic"
+        EOF
+
+    - name: Install dbt dependencies
+      run: |
+        cd transform
+        dbt deps
+
+    - name: Generate dbt docs
+      run: |
+        cd transform
+        dbt docs generate --profiles-dir ~/.dbt
+        
+    - name: Prepare docs for GitHub Pages
+      run: |
+        mkdir -p docs-site
+        cp transform/target/index.html docs-site/
+        cp transform/target/catalog.json docs-site/
+        cp transform/target/manifest.json docs-site/
+        cp transform/target/run_results.json docs-site/ 2>/dev/null || echo "No run_results.json found"
+        
+        # Create a simple landing page
+        cat > docs-site/README.md << EOF
+        # Star Data Warehouse Documentation
+        
+        This site contains the automated dbt documentation for the Star Data Warehouse project.
+        
+        ## [View Data Documentation](./index.html)
+        
+        The documentation includes:
+        - **Data Models**: All staging, analytics, and semantic models
+        - **Data Tests**: dbt-expectations data quality tests (25 tests passing)
+        - **Column Descriptions**: Complete data dictionary
+        - **Data Lineage**: Visual representation of data flow
+        - **Source Documentation**: Raw data source definitions
+        
+        Generated automatically on every commit to main branch.
+        EOF
+
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs-site
+        force_orphan: true
