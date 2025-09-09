@@ -1,4 +1,4 @@
-name: Build and Deploy dbt Docs
+name: Deploy dbt Docs to GitHub Pages
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main, expectations ]
 
 jobs:
-  build-and-deploy:
+  deploy-docs:
     runs-on: ubuntu-latest
     
     steps:
@@ -23,35 +23,47 @@ jobs:
       run: |
         pip install dbt-core dbt-postgres
 
-    - name: Set up dbt profiles
-      run: |
-        mkdir -p ~/.dbt
-        cat > ~/.dbt/profiles.yml << EOF
-        star_dw:
-          target: dev
-          outputs:
-            dev:
-              type: postgres
-              host: ${{ secrets.DB_HOST || 'localhost' }}
-              user: ${{ secrets.DB_USER || 'postgres' }}
-              password: ${{ secrets.DB_PASSWORD || 'postgres' }}
-              port: ${{ secrets.DB_PORT || 5432 }}
-              dbname: ${{ secrets.DB_NAME || 'star_dw' }}
-              schema: staging
-              threads: 4
-              keepalives_idle: 0
-              search_path: "staging,analytics,semantic"
-        EOF
-
     - name: Install dbt dependencies
       run: |
         cd transform
         dbt deps
 
-    - name: Generate dbt docs
+    - name: Generate dbt docs (without database)
       run: |
         cd transform
-        dbt docs generate --profiles-dir ~/.dbt
+        # Create a dummy profiles.yml for parsing
+        mkdir -p ~/.dbt
+        cat > ~/.dbt/profiles.yml << EOF
+        star:
+          target: dev
+          outputs:
+            dev:
+              type: postgres
+              host: localhost
+              user: postgres
+              password: postgres
+              port: 5432
+              dbname: star_dw
+              schema: staging
+              threads: 4
+        EOF
+        
+        # Parse models to generate manifest.json
+        dbt parse --profiles-dir ~/.dbt
+        
+        # Create minimal catalog for documentation
+        cat > target/catalog.json << EOF
+        {
+          "nodes": {},
+          "sources": {},
+          "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%S.%fZ)",
+          "docs": {},
+          "_dbt_version": "1.10.0"
+        }
+        EOF
+        
+        # Generate the docs site
+        dbt docs generate --no-compile --profiles-dir ~/.dbt
         
     - name: Prepare docs for GitHub Pages
       run: |
