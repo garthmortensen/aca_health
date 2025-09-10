@@ -3,4 +3,4 @@ faker==25.2.0
 ruff==0.5.5
 black==24.4.2
 sqlfluff==3.0.7
-dbt-postgres==1.7.4
+dbt-postgres==1.8.2
