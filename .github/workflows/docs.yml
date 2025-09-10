@@ -1,0 +1,77 @@
+name: Build and Deploy dbt Docs
+
+on:
+  push:
+    branches: [ main, master, gh-pages ]
+  pull_request:
+    branches: [ main, master, gh-pages ]
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        
+    - name: Set up Python
+      run: uv python install 3.11
+      
+    - name: Install dependencies with uv
+      run: |
+        uv sync
+        
+    - name: Verify dbt installation
+      run: |
+        uv run dbt --version
+        
+    - name: Generate dbt docs
+      run: |
+        # Create a minimal profiles.yml for docs generation
+        mkdir -p ~/.dbt
+        cat > ~/.dbt/profiles.yml << EOF
+        star_dw:
+          target: dev
+          outputs:
+            dev:
+              type: postgres
+              host: localhost
+              user: dummy
+              password: dummy
+              port: 5432
+              dbname: dummy
+              schema: public
+        EOF
+        
+        # Change to transform directory and generate docs
+        cd transform
+        uv run dbt docs generate --profiles-dir ~/.dbt
+        
+    - name: Prepare docs for GitHub Pages
+      run: |
+        # Create docs directory
+        mkdir -p docs-site
+        
+        # Copy generated docs from transform/target
+        cp transform/target/index.html docs-site/
+        cp transform/target/manifest.json docs-site/
+        cp transform/target/catalog.json docs-site/
+        
+        # List what we're deploying
+        echo "Generated docs files:"
+        ls -la docs-site/
+        
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/gh-pages'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs-site
+        publish_branch: gh-pages
+        force_orphan: true
