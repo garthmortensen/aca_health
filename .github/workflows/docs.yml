@@ -49,8 +49,11 @@ jobs:
               schema: public
         EOF
         
-        # Change to transform directory and generate docs
+        # Change to transform directory and install dependencies
         cd transform
+        uv run dbt deps --profiles-dir ~/.dbt
+        
+        # Generate docs
         uv run dbt docs generate --profiles-dir ~/.dbt
         
     - name: Prepare docs for GitHub Pages
