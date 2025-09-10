@@ -91,20 +91,18 @@ jobs:
         # Create docs directory
         mkdir -p docs-site
         
-        # Copy generated docs from transform/target
+        # Copy generated docs
         cp transform/target/index.html docs-site/
         cp transform/target/manifest.json docs-site/
-        cp transform/target/catalog.json docs-site/
-        
-        # List what we're deploying
+        cp transform/target/catalog.json docs-site/        # List what we're deploying
         echo "Generated docs files:"
         ls -la docs-site/
         
     - name: Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/gh-pages'
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs-site
-        publish_branch: gh-pages
+        publish_branch: gh-pages-docs
         force_orphan: true
