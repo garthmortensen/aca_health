@@ -36,7 +36,7 @@ jobs:
         # Create a minimal profiles.yml for docs generation
         mkdir -p ~/.dbt
         cat > ~/.dbt/profiles.yml << EOF
-        star_dw:
+        star:
           target: dev
           outputs:
             dev:
