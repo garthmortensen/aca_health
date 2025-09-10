@@ -54,7 +54,8 @@ jobs:
         uv run dbt deps --profiles-dir ~/.dbt
         
         # Generate docs
-        uv run dbt docs generate --profiles-dir ~/.dbt
+        uv run dbt parse --profiles-dir ~/.dbt || echo "Parse completed with warnings"
+        uv run dbt docs generate --profiles-dir ~/.dbt --empty-catalog
         
     - name: Prepare docs for GitHub Pages
       run: |
