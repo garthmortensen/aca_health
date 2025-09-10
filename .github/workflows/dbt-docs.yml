@@ -1,0 +1,88 @@
+name: Deploy dbt Docs to GitHub Pages
+
+on:
+  push:
+    branches: [ main, expectations, gh-pages ]
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - name: Set up dbt profile
+      run: |
+        mkdir -p ~/.dbt
+        cat > ~/.dbt/profiles.yml << 'EOF'
+        star:
+          outputs:
+            dev:
+              type: postgres
+              host: localhost
+              port: 5432
+              user: dbt_user
+              password: dbt_password
+              dbname: star_dw
+              schema: staging
+              threads: 4
+              keepalives_idle: 0
+              search_path: staging,public
+          target: dev
+        EOF
+
+    - name: Install dbt packages
+      working-directory: ./transform
+      run: uv run dbt deps
+
+    - name: Generate dbt docs
+      working-directory: ./transform
+      run: |
+        # Parse dbt project and generate documentation without database connection
+        uv run dbt parse
+        uv run dbt docs generate --no-compile
+        
+        # Copy generated files to a docs directory
+        mkdir -p ../docs-site
+        cp target/index.html ../docs-site/
+        cp target/manifest.json ../docs-site/
+        cp target/catalog.json ../docs-site/ 2>/dev/null || echo "No catalog.json found (expected when not connected to database)"
+
+    - name: Create README for docs site
+      run: |
+        cat > docs-site/README.md << 'EOF'
+        # Star Data Warehouse Documentation
+
+        This site contains the dbt-generated documentation for the Star Data Warehouse project.
+
+        ## Features
+        - Interactive dbt documentation with model lineage graphs
+        - Data model descriptions and column-level documentation  
+        - Source system integration details
+        - Data quality tests and validations
+        - dbt-expectations test coverage
+
+        Generated automatically via GitHub Actions from the dbt project using uv.
+        EOF
+
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/expectations' || github.ref == 'refs/heads/gh-pages'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs-site
+        force_orphan: true
