@@ -31,11 +31,9 @@ Your staging pattern (new load_id each batch, immutable prior rows) → Prefer i
 ## 3. Standard Hashdiff Macro
 `macros/hash.sql`:
 ```sql
-{% raw %}
 {% macro hashdiff(cols) %}
   md5(concat_ws('||'{% for c in cols %}, coalesce(trim(cast({{ c }} as text)),'') {% endfor %}))
 {% endmacro %}
-{% endraw %}
 ```
 (Use md5 for brevity; upgrade to sha256 if desired.)
 
@@ -59,7 +57,6 @@ sources:
 ## 5. Staging Model Pattern
 `models/staging/stg_members.sql`:
 ```sql
-{% raw %}
 with src as (
   select *, load_id from {{ source('staging','members_raw') }}
 )
@@ -83,7 +80,6 @@ select
   load_id,
   {{ hashdiff(['first_name','last_name','dob','gender','street','city','state','zip','region','fpl_ratio','clinical_segment','plan_metal']) }} as scd2_hash
 from src;
-{% endraw %}
 ```
 Add tests (unique, not_null) in a `stg_members.yml` if needed.
 
@@ -91,7 +87,6 @@ Add tests (unique, not_null) in a `stg_members.yml` if needed.
 ## 6. Incremental SCD2 Dimension (DimMember)
 `models/dims/dim_member.sql`:
 ```sql
-{% raw %}
 {{ config(
     materialized='incremental',
     unique_key='member_id||valid_from',
@@ -152,7 +147,6 @@ select
   date '9999-12-31' as valid_to,
   true as is_current
 from latest_change
-{% endraw %}
 ```
 (You may alternatively use a MERGE if your warehouse dialect supports it; Postgres in dbt 1.9 allows `strategy='merge'` config.)
 
@@ -166,7 +160,6 @@ Replicate the above pattern for Plan & Provider (change tracked columns + natura
 ## 8. Date Dimension via Seed or Model
 Option A: Seed file `seeds/date_spine.csv` (pre-generated). Option B: SQL model generating series:
 ```sql
-{% raw %}
 {{ config(materialized='table') }}
 with dates as (
   select generate_series(date '2018-01-01', date '2030-12-31', interval '1 day')::date as d
@@ -179,14 +172,12 @@ select
   extract(day from d)::int as day,
   to_char(d,'YYYY-MM') as year_month
 from dates;
-{% endraw %}
 ```
 
 ---
 ## 9. Fact Model (FactClaim)
 `models/facts/fact_claim.sql`:
 ```sql
-{% raw %}
 {{ config(materialized='incremental', unique_key='claim_id') }}
 
 with src as (
@@ -224,7 +215,6 @@ select * from resolved
 {% if is_incremental() %}
  where claim_id not in (select claim_id from {{ this }})
 {% endif %}
-{% endraw %}
 ```
 
 ---
@@ -254,7 +244,6 @@ Add exposure or metric definitions later if adopting dbt semantic layer.
 Example snapshot (if upstream rows mutate rather than append):
 `snapshots/member_snapshot.sql`:
 ```sql
-{% raw %}
 {% snapshot member_snapshot %}
 {{ config(
   target_schema='snapshots',
@@ -264,7 +253,6 @@ Example snapshot (if upstream rows mutate rather than append):
 ) }}
 select * from {{ source('staging','members_raw') }}
 {% endsnapshot %}
-{% endraw %}
 ```
 Then build `dim_member` off latest snapshot rows or transform snapshot table into Type 2 final dimension.
 
