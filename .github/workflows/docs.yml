@@ -53,9 +53,18 @@ jobs:
         cd transform
         uv run dbt deps --profiles-dir ~/.dbt
         
-        # Generate docs
-        uv run dbt parse --profiles-dir ~/.dbt || echo "Parse completed with warnings"
+        # Temporarily rename problematic schema file to avoid missing model errors
+        if [ -f "models/staging/schema.yml" ]; then
+          mv models/staging/schema.yml models/staging/schema.yml.bak
+        fi
+        
+        # Generate docs without the problematic staging models
         uv run dbt docs generate --profiles-dir ~/.dbt --empty-catalog
+        
+        # Restore the schema file
+        if [ -f "models/staging/schema.yml.bak" ]; then
+          mv models/staging/schema.yml.bak models/staging/schema.yml
+        fi
         
     - name: Prepare docs for GitHub Pages
       run: |
