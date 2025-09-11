@@ -42,7 +42,7 @@ jobs:
           echo "=== Creating dummy profiles.yml for docs generation ==="
           mkdir -p ~/.dbt
           cat > ~/.dbt/profiles.yml << EOF
-          star:
+          aca_health:
             target: dev
             outputs:
               dev:
@@ -51,7 +51,7 @@ jobs:
                 user: dummy_user
                 password: dummy_pass
                 port: 5432
-                dbname: star
+                dbname: aca_health
                 schema: dummy_schema
                 threads: 1
                 keepalives_idle: 0
