@@ -51,3 +51,6 @@ models:
       +materialized: view
     semantic:                    # models/semantic/* (semantic models and metrics)
       +materialized: view
+    summary:                     # models/summary/* (aggregated summary tables)
+      +materialized: view
+      +schema: summary           # Place these in the summary schema
