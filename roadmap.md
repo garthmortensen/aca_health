@@ -6,7 +6,7 @@
 2. Create Postgres staging schema and raw tables plus load_batches audit table.
 3. Implement idempotent staging loader to ingest newest CSVs.
 4. Load initial raw data into staging tables
-   - Run:`python -m etl.load.staging_loader`.
+   - Run:`python scripts/staging_loader.py`.
 5. Finish minor loader hardening (optional: checksum, validation queries).
    - Add columns to load_batches: file_size_bytes, file_sha256, source_row_count (to detect altered same-name files).
 6. Create core dimension tables (DimDate, DimMember, DimPlan, DimProvider) with SCD2 columns.

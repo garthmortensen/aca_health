@@ -1,6 +1,0 @@
-[0m02:29:40  Running with dbt=1.10.10
-[0m02:29:40  Encountered an error:
-Runtime Error
-  No dbt_project.yml found at expected path /home/garth/projects/star/dbt_project.yml
-  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
-  

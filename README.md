@@ -33,7 +33,7 @@ Domain: Affordable Care Act (ACA) health insurance
   - `load_id`
   - `load_timestamp`
 
-`python -m etl.load.staging_loader`
+`python scripts/staging_loader.py`
 
 ## Dimensional Modeling
 
