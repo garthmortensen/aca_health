@@ -1,10 +1,20 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table'
+) }}
 
--- Time spine model required for dbt semantic layer
--- This provides a continuous date series for time-based analysis
+-- Time spine model for dbt semantic layer
+-- Must be named exactly 'time_spine' and have column 'date_day'
 
-select
-    full_date as date_day
-from {{ ref('dim_date') }}
-where full_date >= '2020-01-01'
-  and full_date <= '2030-12-31'
+with spine as (
+    select 
+        generate_series(
+            '2020-01-01'::date,
+            '2030-12-31'::date,
+            '1 day'::interval
+        )::date as date_day
+)
+
+select 
+    date_day
+from spine
+order by date_day
