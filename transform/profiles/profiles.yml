@@ -1,13 +1,13 @@
-star:
+aca_health:
   target: ci
   outputs:
     ci:
       type: postgres
       host: localhost
-      user: dummy
-      password: dummy
-      port: 5432
-      dbname: dummy
-      schema: staging
-      threads: 1
-      keepalives_idle: 0
+  user: dummy
+  password: dummy
+  port: 5432
+  dbname: aca_health
+  schema: staging
+  threads: 1
+  keepalives_idle: 0

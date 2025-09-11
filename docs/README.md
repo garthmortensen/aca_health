@@ -1,8 +1,8 @@
-# Star Data Warehouse Documentation
+# ACA Health Data Warehouse Documentation
 
 This repository automatically generates and publishes dbt documentation to GitHub Pages.
 
-## [View Live Documentation](https://garthmortensen.github.io/star/)
+## [View Live Documentation](https://garthmortensen.github.io/aca_health/)
 
 ### Data Quality Tests
 - **25 dbt-expectations tests** covering all staging sources

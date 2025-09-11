@@ -5,7 +5,7 @@
 ## ---------------------------------------------------------------------------
 
 # Project name (used in target relation naming + manifest)
-name: star_dw
+name: aca_health_dw
 
 # project's semantic version
 version: 0.1.0
@@ -14,7 +14,7 @@ version: 0.1.0
 config-version: 2
 
 # Profile name (must match a key in ~/.dbt/profiles.yml). Controls connection + schema.
-profile: star
+profile: aca_health
 
 ## File path locations (relative to this directory)
 ## Add/remove folders here if you reorganize.
@@ -43,7 +43,7 @@ clean-targets: ["target", "dbt_packages"]  # Removed by `dbt clean`
 ## Folder-level keys below (staging/core) scope config to those directories.
 ## ---------------------------------------------------------------------------
 models:
-  star_dw:                       # Root namespace matches project name
+  aca_health_dw:                 # Root namespace matches project name
     +materialized: view          # Default for anything not explicitly overridden
     staging:                     # models/staging/*
       +materialized: view        # Keep staging fast / ephemeral

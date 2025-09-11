@@ -56,9 +56,11 @@
 services:
   postgres:  # Single PostgreSQL service for staging/warehouse
     image: postgres:16  # official Postgres 16 image
-    container_name: star_postgres  # Fixed container name for easy docker exec
+    container_name: aca_health_postgres  # Fixed container name for easy docker exec
     env_file:
       - ../../.env  # Externalize credentials
+    environment:
+      - POSTGRES_DB=aca_health
     ports:
       - "5432:5432"  # Host port 5432 -> container 5432 for local tools (psql, DBeaver)
     volumes:
