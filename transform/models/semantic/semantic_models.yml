@@ -27,3 +27,105 @@ semantic_models:
         description: "Total count of members"
         agg: count
         expr: member_id
+
+  # Base claim fact semantic model (row grain: one row per claim_id)
+  - name: claims
+    description: "Claim fact semantic model (grain: claim)"
+    model: ref('fct_claim')
+    entities:
+      - name: claim
+        type: primary
+        expr: claim_id
+      - name: member
+        type: foreign
+        expr: member_id
+      - name: provider
+        type: foreign
+        expr: provider_id
+      - name: plan
+        type: foreign
+        expr: plan_id
+    dimensions:
+      - name: claim_date
+        type: time
+        type_params:
+          time_granularity: day
+        expr: claim_date
+      - name: claim_status
+        type: categorical
+        expr: claim_status
+      - name: diagnosis_code
+        type: categorical
+        expr: diagnosis_code
+      - name: procedure_code
+        type: categorical
+        expr: procedure_code
+      - name: load_id
+        type: categorical
+        expr: load_id
+    measures:
+      - name: total_claims
+        agg: count
+        expr: claim_id
+        description: "Number of claim rows"
+      - name: total_claim_amount
+        agg: sum
+        expr: claim_amount
+      - name: total_allowed_amount
+        agg: sum
+        expr: allowed_amount
+      - name: total_paid_amount
+        agg: sum
+        expr: paid_amount
+      - name: approval_rate
+        agg: average
+        expr: case when claim_status = 'approved' then 1.0 else 0.0 end
+        description: "Approved claims / total claims"
+
+  # Enrollment fact semantic model (row grain: one row per enrollment period)
+  - name: enrollments
+    description: "Enrollment fact semantic model (grain: enrollment period)"
+    model: ref('fct_enrollment')
+    entities:
+      - name: enrollment
+        type: primary
+        expr: enrollment_id
+      - name: member
+        type: foreign
+        expr: member_id
+      - name: plan
+        type: foreign
+        expr: plan_id
+    dimensions:
+      - name: start_date
+        type: time
+        type_params:
+          time_granularity: day
+        expr: start_date
+      - name: end_date
+        type: time
+        type_params:
+          time_granularity: day
+        expr: end_date
+      - name: csr_variant
+        type: categorical
+        expr: csr_variant
+      - name: load_id
+        type: categorical
+        expr: load_id
+    measures:
+      - name: total_enrollments
+        agg: count
+        expr: enrollment_id
+      - name: total_premium_paid
+        agg: sum
+        expr: premium_paid
+      - name: total_coverage_days
+        agg: sum
+        expr: coverage_days
+      - name: avg_premium_per_enrollment
+        agg: average
+        expr: premium_paid
+      - name: avg_coverage_days
+        agg: average
+        expr: coverage_days
