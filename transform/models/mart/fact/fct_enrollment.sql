@@ -1,5 +1,5 @@
 {{ config(materialized='incremental', unique_key='enrollment_id') }}
-
+-- moved from analytics to mart
 with enrollments as (
     select * from {{ ref('stg_enrollments') }}
 ), dim_member as (

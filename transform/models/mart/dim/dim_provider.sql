@@ -1,5 +1,5 @@
 {{ config(materialized='view') }}
--- Current provider dimension rows derived from snapshot (SCD2 readiness)
+-- moved from analytics to mart
 select
     s.provider_id,
     s.npi,

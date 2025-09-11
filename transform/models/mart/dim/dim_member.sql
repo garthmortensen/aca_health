@@ -1,5 +1,5 @@
 {{ config(materialized='view') }}
--- Current member dimension rows derived from snapshot (SCD2 readiness)
+-- moved from analytics to mart
 select
     s.member_id,
     upper(s.first_name) as first_name,
@@ -15,4 +15,3 @@ select
     (s.dbt_valid_to is null) as is_current
 from {{ ref('member_snapshot') }} s
 where s.dbt_valid_to is null
-

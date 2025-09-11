@@ -1,5 +1,5 @@
 {{ config(materialized='table') }}
--- Date dimension generated on the fly (adjust range as needed)
+-- moved from analytics to mart
 with days as (
   select generate_series(date '2000-01-01', date '2030-12-31', interval '1 day')::date as d
 )

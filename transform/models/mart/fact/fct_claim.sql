@@ -1,5 +1,5 @@
 {{ config(materialized='incremental', unique_key='claim_id') }}
-
+-- moved from analytics to mart
 with claims as (
     select * from {{ ref('stg_claims') }}
 ), dim_member as (

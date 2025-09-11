@@ -1,5 +1,5 @@
 {{ config(materialized='view') }}
--- Current plan dimension rows derived from snapshot (SCD2 readiness)
+-- moved from analytics to mart
 select
     s.plan_id,
     upper(s.name) as plan_name,

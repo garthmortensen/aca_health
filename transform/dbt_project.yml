@@ -47,7 +47,7 @@ models:
     +materialized: view          # Default for anything not explicitly overridden
     staging:                     # models/staging/*
       +materialized: view        # Keep staging fast / ephemeral
-    analytics:                   # models/analytics/* (dim, fact) curated layer
+    mart:                        # models/mart/* (dimensions & facts curated layer)
       +materialized: view
     semantic:                    # models/semantic/* (semantic models and metrics)
       +materialized: view
