@@ -29,6 +29,26 @@ models:
         tests:
           - not_null
           - unique
+      - name: first_name
+        description: "Current member given name (upper‑cased from staging)."
+      - name: last_name
+        description: "Current member family name (upper‑cased from staging)."
+      - name: date_of_birth
+        description: "Member date of birth carried from staging (immutable demographic)."
+      - name: gender
+        description: "Gender code (M/F/other as provided)."
+      - name: age_group
+        description: "Derived age bucket at snapshot validity start."
+      - name: region
+        description: "Geographic region grouping from member staging."
+      - name: plan_metal
+        description: "Member's plan metal tier at snapshot (may change over time)."
+      - name: load_id
+        description: "Ingestion batch identifier passed through from snapshot source."
+      - name: validity_start_ts
+        description: "SCD2 validity window start timestamp (dbt_valid_from)."
+      - name: validity_end_ts
+        description: "SCD2 validity window end timestamp (null for current row)."
       - name: is_current
         description: "Flag indicating current record"
         tests:
@@ -42,6 +62,10 @@ models:
         tests:
           - not_null
           - unique
+      - name: plan_name
+        description: "Marketing / display name of plan (upper‑cased)."
+      - name: metal_tier
+        description: "ACA metal tier classification (Bronze/Silver/Gold/Platinum)."
       - name: monthly_premium
         description: "Monthly premium amount"
         tests:
@@ -49,6 +73,24 @@ models:
               arguments:
                 min_value: 50
                 max_value: 2000
+      - name: deductible
+        description: "Annual deductible amount."
+      - name: oop_max
+        description: "Annual out‑of‑pocket maximum."
+      - name: coinsurance_rate
+        description: "Member coinsurance rate fraction (0‑1)."
+      - name: pcp_copay
+        description: "Primary care physician visit copay amount."
+      - name: effective_year
+        description: "Plan effective year in market."
+      - name: load_id
+        description: "Ingestion batch identifier from snapshot source."
+      - name: validity_start_ts
+        description: "SCD2 validity window start timestamp (dbt_valid_from)."
+      - name: validity_end_ts
+        description: "SCD2 validity window end timestamp (null for current row)."
+      - name: is_current
+        description: "Flag indicating record is the latest active version."
 
   - name: dim_provider
     description: "Provider dimension with SCD2 history"
@@ -58,6 +100,30 @@ models:
         tests:
           - not_null
           - unique
+      - name: npi
+        description: "Provider NPI (synthetic)."
+      - name: provider_name
+        description: "Provider full name (upper‑cased)."
+      - name: specialty
+        description: "Medical specialty classification."
+      - name: street
+        description: "Practice street address."
+      - name: city
+        description: "Practice city."
+      - name: state
+        description: "Two‑character state code."
+      - name: zip
+        description: "Postal ZIP code."
+      - name: phone
+        description: "Practice contact phone number."
+      - name: load_id
+        description: "Ingestion batch identifier from snapshot source."
+      - name: validity_start_ts
+        description: "SCD2 validity window start timestamp (dbt_valid_from)."
+      - name: validity_end_ts
+        description: "SCD2 validity window end timestamp (null for current row)."
+      - name: is_current
+        description: "Flag indicating record is the latest active version."
 
   - name: fct_claim
     description: "Claim fact table"
@@ -99,6 +165,27 @@ models:
               arguments:
                 to: ref('dim_plan')
                 field: plan_id
+      - name: claim_date
+        description: "Date of service for the claim (service_date)."
+        tests: [not_null]
+      - name: allowed_amount
+        description: "Allowed amount post adjudication."
+      - name: paid_amount
+        description: "Amount actually paid (<= allowed_amount)."
+      - name: claim_status
+        description: "Processing status (approved/denied/pending)."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              arguments:
+                value_set: [approved, denied, pending]
+      - name: diagnosis_code
+        description: "Primary diagnosis (ICD) code on claim."
+      - name: procedure_code
+        description: "Primary procedure (CPT) code on claim."
+      - name: load_id
+        description: "Ingestion batch identifier from staging."
+      - name: load_timestamp
+        description: "Original ingestion timestamp from raw claim."
 
   - name: fct_enrollment
     description: "Enrollment fact table"
@@ -124,3 +211,18 @@ models:
               arguments:
                 to: ref('dim_plan')
                 field: plan_id
+      - name: start_date
+        description: "Coverage period start date."
+        tests: [not_null]
+      - name: end_date
+        description: "Coverage period end date (may be null if open)."
+      - name: coverage_days
+        description: "Number of covered days in the enrollment span."
+      - name: premium_paid
+        description: "Total premium paid for the enrollment period."
+      - name: csr_variant
+        description: "Cost sharing reduction variant code."
+      - name: load_id
+        description: "Ingestion batch identifier from staging."
+      - name: load_timestamp
+        description: "Original ingestion timestamp from raw enrollment."
