@@ -46,8 +46,21 @@ for element_type in ['nodes', 'sources', 'macros', 'parent_map', 'child_map']:
                 del json_manifest[element_type][key]
 
 # Read the catalog JSON (contains column-level metadata, if available)
-with open(os.path.join(PATH_DBT_PROJECT, 'target', 'catalog.json'), 'r') as f:
-    json_catalog = json.loads(f.read())
+catalog_path = os.path.join(PATH_DBT_PROJECT, 'target', 'catalog.json')
+if os.path.exists(catalog_path):
+    with open(catalog_path, 'r') as f:
+        json_catalog = json.loads(f.read())
+    print("Using existing catalog.json")
+else:
+    print("catalog.json not found, creating empty catalog (no database connection)")
+    json_catalog = {
+        "metadata": {
+            "dbt_schema_version": "https://schemas.getdbt.com/dbt/catalog/v1.json",
+            "generated_at": "2024-01-01T00:00:00.000000Z"
+        },
+        "nodes": {},
+        "sources": {}
+    }
 
 # Write the modified HTML file with embedded JSON data
 with open(os.path.join(PATH_DBT_PROJECT, 'target', 'index.html'), 'w') as f:

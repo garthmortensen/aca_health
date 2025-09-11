@@ -13,7 +13,9 @@ jobs:
     name: docs
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Required for pushing to gh-pages branch
+      contents: write      # Required for pushing to gh-pages branch
+      pages: write         # Required for GitHub Pages
+      id-token: write      # Required for GitHub Pages
     
     steps:
     - name: checkout
@@ -79,11 +81,22 @@ jobs:
           echo '<!DOCTYPE html><html><head><title>dbt Docs</title></head><body><h1>dbt Documentation</h1><p>Documentation generation in progress...</p></body></html>' > target/index.html
         fi
         
-    - name: Deploy to GitHub Pages
-      if: success()
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./transform/target
-        publish_branch: gh-pages
-        force_orphan: true
+      # Upload artifacts for GitHub Pages
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './transform/target'
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
