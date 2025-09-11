@@ -51,7 +51,7 @@ jobs:
                 user: dummy_user
                 password: dummy_pass
                 port: 5432
-                dbname: dummy_db
+                dbname: star
                 schema: dummy_schema
                 threads: 1
                 keepalives_idle: 0
@@ -77,7 +77,7 @@ jobs:
               python make_static_docs.py
               echo "✓ Static docs generation completed!"
             else
-              echo "⚠ index.html missing - looking for template"
+              echo "index.html missing - looking for template"
               # Look for template in dbt packages
               template_file=""
               if [ -f "dbt_packages/dbt_expectations/docs/index.html" ]; then
@@ -106,7 +106,7 @@ jobs:
           </head>
           <body>
               <div class="header">
-                  <h1>🏗️ dbt Documentation</h1>
+                  <h1>dbt Documentation</h1>
                   <p>Data Build Tool Project Documentation</p>
               </div>
               <div class="content">
@@ -117,8 +117,8 @@ jobs:
                   </div>
                   <div class="info-box">
                       <h2>Status</h2>
-                      <p>✅ Project manifest loaded successfully</p>
-                      <p>⚠️ Database catalog not available (requires database connection)</p>
+                      <p>Project manifest loaded successfully</p>
+                      <p>Database catalog not available (requires database connection)</p>
                   </div>
               </div>
           </body>
@@ -127,7 +127,7 @@ jobs:
               fi
             fi
           else
-            echo "❌ No manifest.json found - creating error documentation"
+            echo "No manifest.json found - creating error documentation"
             mkdir -p target
             cat > target/index.html << 'EOF'
           <!DOCTYPE html>
@@ -137,7 +137,7 @@ jobs:
               <style>body { font-family: Arial, sans-serif; padding: 40px; text-align: center; color: #721c24; }</style>
           </head>
           <body>
-              <h1>⚠️ Documentation Generation Failed</h1>
+              <h1>Documentation Generation Failed</h1>
               <p>There was an issue generating the dbt documentation.</p>
               <p>Please check the GitHub Actions logs for more details.</p>
           </body>
