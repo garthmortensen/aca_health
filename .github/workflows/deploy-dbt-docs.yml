@@ -1,0 +1,76 @@
+name: Deploy dbt Docs to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'transform/**'
+      - '.github/workflows/deploy-dbt-docs.yml'
+  workflow_dispatch: # Allow manual triggers
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+
+    - name: Install project dependencies
+      run: |
+        uv sync
+
+    - name: Install dbt packages
+      run: |
+        cd transform
+        uv run dbt deps
+      env:
+        DBT_PROFILES_DIR: ${{ github.workspace }}/transform/profiles
+
+    - name: Generate dbt docs (documentation only)
+      run: |
+        cd transform
+        # Generate docs without database connection - manifest only
+        uv run dbt parse
+        uv run dbt docs generate --no-compile
+      env:
+        DBT_PROFILES_DIR: ${{ github.workspace }}/transform/profiles
+
+    - name: Create static docs
+      run: |
+        cd transform
+        uv run python github_actions_docs.py
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './transform/target'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

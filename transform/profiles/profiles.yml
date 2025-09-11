@@ -1,0 +1,13 @@
+star:
+  target: ci
+  outputs:
+    ci:
+      type: postgres
+      host: localhost
+      user: dummy
+      password: dummy
+      port: 5432
+      dbname: dummy
+      schema: staging
+      threads: 1
+      keepalives_idle: 0
