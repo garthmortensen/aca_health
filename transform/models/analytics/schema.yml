@@ -1,0 +1,121 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "Date dimension with calendar attributes"
+    columns:
+      - name: date_key
+        description: "Date key in YYYYMMDD format"
+        tests:
+          - not_null
+          - unique
+      - name: full_date
+        description: "Full date value"
+        tests:
+          - not_null
+      - name: year
+        description: "Year"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 2000
+              max_value: 2030
+
+  - name: dim_member
+    description: "Member dimension with SCD2 history"
+    columns:
+      - name: member_id
+        description: "Natural key - member identifier"
+        tests:
+          - not_null
+          - unique
+      - name: is_current
+        description: "Flag indicating current record"
+        tests:
+          - not_null
+
+  - name: dim_plan
+    description: "Plan dimension with SCD2 history"
+    columns:
+      - name: plan_id
+        description: "Natural key - plan identifier"
+        tests:
+          - not_null
+          - unique
+      - name: monthly_premium
+        description: "Monthly premium amount"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 50
+              max_value: 2000
+
+  - name: dim_provider
+    description: "Provider dimension with SCD2 history"
+    columns:
+      - name: provider_id
+        description: "Natural key - provider identifier"
+        tests:
+          - not_null
+          - unique
+
+  - name: fct_claim
+    description: "Claim fact table"
+    columns:
+      - name: claim_id
+        description: "Unique claim identifier"
+        tests:
+          - not_null
+          - unique
+      - name: claim_amount
+        description: "Total claim amount"
+        tests:
+          - not_null
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100000
+      - name: member_id
+        description: "Foreign key to member dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_member')
+              field: member_id
+      - name: provider_id
+        description: "Foreign key to provider dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_provider')
+              field: provider_id
+      - name: plan_id
+        description: "Foreign key to plan dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_plan')
+              field: plan_id
+
+  - name: fct_enrollment
+    description: "Enrollment fact table"
+    columns:
+      - name: enrollment_id
+        description: "Unique enrollment identifier"
+        tests:
+          - not_null
+          - unique
+      - name: member_id
+        description: "Foreign key to member dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_member')
+              field: member_id
+      - name: plan_id
+        description: "Foreign key to plan dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_plan')
+              field: plan_id

@@ -1,0 +1,132 @@
+version: 2
+
+models:
+  - name: agg_claims_monthly
+    description: "Monthly claims aggregation cube"
+    columns:
+      - name: report_month
+        description: "Month of aggregation"
+        tests:
+          - not_null
+      - name: total_claims
+        description: "Total number of claims"
+        tests:
+          - not_null
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100000
+      - name: approval_rate
+        description: "Percentage of approved claims"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0.0
+              max_value: 1.0
+      - name: total_paid_amount
+        description: "Total amount paid"
+        tests:
+          - not_null
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 50000000
+    tests:
+      - dbt_expectations.
+                  arguments:expect_table_row_count_to_be_between:
+          min_value: 1
+          max_value: 120  # Max 10 years * 12 months
+
+  - name: agg_member_cost
+    description: "Member cost analysis cube with PMPM/PMPY metrics"
+    columns:
+      - name: member_id
+        description: "Member identifier"
+        tests:
+          - not_null
+          - unique
+      - name: pmpm_cost
+        description: "Per Member Per Month cost"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 5000  # Reasonable PMPM range
+      - name: pmpy_cost
+        description: "Per Member Per Year cost"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 60000  # Reasonable PMPY range
+      - name: cost_category
+        description: "Member cost risk category"
+        tests:
+          - not_null
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_in_set:
+              value_set: ['No Claims', 'Low Cost', 'Moderate Cost', 'High Cost', 'Very High Cost']
+
+  - name: agg_provider_performance
+    description: "Provider performance analysis cube"
+    columns:
+      - name: provider_id
+        description: "Provider identifier"
+        tests:
+          - not_null
+          - unique
+      - name: total_claims
+        description: "Total claims handled by provider"
+        tests:
+          - not_null
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 10000
+      - name: approval_rate
+        description: "Provider approval rate"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0.0
+              max_value: 1.0
+      - name: volume_category
+        description: "Provider volume category"
+        tests:
+          - not_null
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_in_set:
+              value_set: ['Very Low Volume', 'Low Volume', 'Moderate Volume', 'High Volume']
+
+  - name: dashboard_summary
+    description: "Executive KPI dashboard summary"
+    columns:
+      - name: report_date
+        description: "Report generation date"
+        tests:
+          - not_null
+      - name: latest_month_claims
+        description: "Claims count for latest month"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100000
+      - name: latest_approval_rate
+        description: "Latest month approval rate"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0.0
+              max_value: 1.0
+      - name: high_cost_member_cost_percentage
+        description: "Percentage of costs from high-cost members"
+        tests:
+          - dbt_expectations.
+                  arguments:expect_column_values_to_be_between:
+              min_value: 0.0
+              max_value: 100.0
+    tests:
+      - dbt_expectations.
+                  arguments:expect_table_row_count_to_equal:
+          value: 1  # Should always be exactly one summary row

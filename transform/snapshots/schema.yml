@@ -1,0 +1,104 @@
+version: 2
+
+snapshots:
+  - name: member_snapshot
+    description: "SCD2 snapshot of member attributes (check strategy over core demographic & plan fields)."
+    columns:
+      - name: member_id
+        description: "Natural member key (unique_key)."
+      - name: first_name
+        description: "Raw first name."
+      - name: last_name
+        description: "Raw last name."
+      - name: dob
+        description: "Date of birth."
+      - name: gender
+        description: "Gender code."
+      - name: email
+        description: "Email address."
+      - name: phone
+        description: "Phone number."
+      - name: street
+        description: "Street address."
+      - name: city
+        description: "City."
+      - name: state
+        description: "State code (2-char)."
+      - name: zip
+        description: "Postal code."
+      - name: fpl_ratio
+        description: "Income / Federal Poverty Level ratio."
+      - name: plan_metal
+        description: "Plan metal tier."
+      - name: age_group
+        description: "Age group bucket."
+      - name: region
+        description: "Region grouping."
+      - name: load_id
+        description: "Loader batch id."
+      - name: load_timestamp
+        description: "Ingestion timestamp."
+      - name: dbt_valid_from
+        description: "Snapshot validity start timestamp."
+      - name: dbt_valid_to
+        description: "Snapshot validity end timestamp (null if current)."
+
+  - name: provider_snapshot
+    description: "SCD2 snapshot of provider attributes (name, specialty, address)."
+    columns:
+      - name: provider_id
+        description: "Natural provider key (unique_key)."
+      - name: npi
+        description: "Fake NPI-like identifier."
+      - name: name
+        description: "Provider full name."
+      - name: specialty
+        description: "Medical specialty."
+      - name: street
+        description: "Street address."
+      - name: city
+        description: "City."
+      - name: state
+        description: "State code."
+      - name: zip
+        description: "Postal code."
+      - name: phone
+        description: "Contact phone number."
+      - name: load_id
+        description: "Loader batch id."
+      - name: load_timestamp
+        description: "Ingestion timestamp."
+      - name: dbt_valid_from
+        description: "Snapshot validity start timestamp."
+      - name: dbt_valid_to
+        description: "Snapshot validity end timestamp (null if current)."
+
+  - name: plan_snapshot
+    description: "SCD2 snapshot of plan attributes (pricing + structure)."
+    columns:
+      - name: plan_id
+        description: "Natural plan key (unique_key)."
+      - name: name
+        description: "Plan marketing name."
+      - name: metal_tier
+        description: "Metal tier Bronze/Silver/Gold/Platinum."
+      - name: monthly_premium
+        description: "Monthly premium amount."
+      - name: deductible
+        description: "Annual deductible."
+      - name: oop_max
+        description: "Out-of-pocket maximum."
+      - name: coinsurance_rate
+        description: "Coinsurance fraction (0-1)."
+      - name: pcp_copay
+        description: "Primary care visit copay."
+      - name: effective_year
+        description: "Plan effective year."
+      - name: load_id
+        description: "Loader batch id."
+      - name: load_timestamp
+        description: "Ingestion timestamp."
+      - name: dbt_valid_from
+        description: "Snapshot validity start timestamp."
+      - name: dbt_valid_to
+        description: "Snapshot validity end timestamp (null if current)."
