@@ -80,22 +80,25 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_member')
-              field: member_id
+              arguments:
+                to: ref('dim_member')
+                field: member_id
       - name: provider_id
         description: "Foreign key to provider dimension"
         tests:
           - not_null
           - relationships:
-              to: ref('dim_provider')
-              field: provider_id
+              arguments:
+                to: ref('dim_provider')
+                field: provider_id
       - name: plan_id
         description: "Foreign key to plan dimension"
         tests:
           - not_null
           - relationships:
-              to: ref('dim_plan')
-              field: plan_id
+              arguments:
+                to: ref('dim_plan')
+                field: plan_id
 
   - name: fct_enrollment
     description: "Enrollment fact table"
@@ -110,12 +113,14 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_member')
-              field: member_id
+              arguments:
+                to: ref('dim_member')
+                field: member_id
       - name: plan_id
         description: "Foreign key to plan dimension"
         tests:
           - not_null
           - relationships:
-              to: ref('dim_plan')
-              field: plan_id
+              arguments:
+                to: ref('dim_plan')
+                field: plan_id
