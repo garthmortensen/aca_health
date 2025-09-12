@@ -85,5 +85,78 @@ models:
           - not_null
           - relationships:
               arguments: {to: ref('dim_plan'), field: plan_id}
-      - name: start_date
+
+  - name: star_claims
+    description: "Central star schema joining claim facts to all dimensions for fast analysis."
+    columns:
+      - name: claim_id
+        description: "Unique identifier for the claim."
+        tests: [not_null, unique]
+      - name: claim_date
+        description: "Date the claim was made."
         tests: [not_null]
+      - name: claim_full_date
+        description: "Full date value from the date dimension."
+      - name: member_id
+        description: "Unique identifier for the member."
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_member'), field: member_id}
+      - name: member_first_name
+        description: "Member's first name."
+      - name: member_last_name
+        description: "Member's last name."
+      - name: member_dob
+        description: "Member's date of birth."
+      - name: member_gender
+        description: "Member's gender."
+      - name: member_age_group
+        description: "Member's age group."
+      - name: member_region
+        description: "Member's region."
+      - name: plan_id
+        description: "Unique identifier for the plan."
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_plan'), field: plan_id}
+      - name: plan_name
+        description: "Name of the plan."
+      - name: metal_tier
+        description: "Plan's metal tier."
+      - name: monthly_premium
+        description: "Monthly premium for the plan."
+      - name: provider_id
+        description: "Unique identifier for the provider."
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_provider'), field: provider_id}
+      - name: provider_name
+        description: "Provider's name."
+      - name: provider_specialty
+        description: "Provider's specialty."
+      - name: claim_amount
+        description: "Total amount claimed."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments: {min_value: 0, max_value: 100000}
+      - name: allowed_amount
+        description: "Allowed amount for the claim."
+      - name: paid_amount
+        description: "Amount paid for the claim."
+      - name: claim_status
+        description: "Status of the claim (approved, denied, pending)."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              arguments: {value_set: [approved, denied, pending]}
+      - name: diagnosis_code
+        description: "Diagnosis code for the claim."
+      - name: procedure_code
+        description: "Procedure code for the claim."
+      - name: load_id
+        description: "ETL load identifier."
+      - name: load_timestamp
+        description: "Timestamp when the record was loaded."
