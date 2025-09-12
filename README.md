@@ -1,10 +1,11 @@
 # End-to-End Plan
 
-## Scope & Domain
-
-Scope: Create datawarehouse, from ETL to datacube.
+Scope: Create datawarehouse, from raw to semantic layer.
 
 Domain: Affordable Care Act (ACA) health insurance
+
+## [Data Dictionary](https://garthmortensen.github.io/aca_health/)
+
 # aca_health
 ## Source Data Setup (domain specific)
 
@@ -36,11 +37,10 @@ Domain: Affordable Care Act (ACA) health insurance
 `python scripts/staging_loader.py`
 
 ### Tech (optional)
-- data creation: faker
+- Containerization: Docker + docker-compose (local Postgres)
 - Packaging: uv
-- linting python: Ruff
-- linting sql: SQLFluff
 - Transform modeling: dbt
 - Data quality: Great Expectations / dbt_expectations
-- Containerization: Docker + docker-compose (local Postgres)
-- Hashing for SCD2: hashlib
+- data creation: faker
+- linting python: Ruff
+- linting sql: SQLFluff
