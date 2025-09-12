@@ -36,11 +36,11 @@ Domain: Affordable Care Act (ACA) health insurance
 
 `python scripts/staging_loader.py`
 
-### Tech (optional)
-- Containerization: Docker + docker-compose (local Postgres)
+### Tools
+
+- Containerization: Docker + docker-compose
 - Packaging: uv
 - Transform modeling: dbt
 - Data quality: Great Expectations / dbt_expectations
 - data creation: faker
-- linting python: Ruff
-- linting sql: SQLFluff
+- linting: Ruff, SQLFluff

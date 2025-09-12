@@ -14,3 +14,5 @@ transform/dbt_packages/
 transform/target/
 transform/logs/
 transform/package-lock.yml
+
+.ruff_cache/

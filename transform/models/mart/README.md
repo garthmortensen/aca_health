@@ -1,31 +1,29 @@
-# Mart Layer (Kimball Dimensions & Facts)
+# Mart Layer
 
-This folder holds the conformed dimensional model of the warehouse following classic Kimball principles: clear business process facts joined to shared dimensions via surrogate keys. These models are the semantic foundation that the dbt Semantic Layer and downstream marts/aggregations build on.
+Facts record business events (like claims or enrollments). Dimensions describe those events (like member, plan, provider, date).
 
-Core ideas applied here:
+Key points:
 
-- Bus Architecture: shared dimensions (`dim_member`, `dim_plan`, `dim_provider`, `dim_date`) act as conformed hubs for multiple facts.
-- Grain First: each fact (`fct_claim`, `fct_enrollment`) declares a single, atomic grain (one row per claim / per enrollment period) enabling additive measures.
-- Surrogate Keys & SCD2: dimensions are sourced from snapshots (SCD2) preserving history while exposing a current row flag for convenience.
-- Thin Facts, Rich Dimensions: facts store foreign keys + numeric measures; descriptive attributes live in dimensions for reuse and consistency.
-- Incremental Loading: large facts are incremental to keep builds fast while dimensions (except `dim_date`) are views over current snapshot rows.
+- Shared dimensions connect to many facts for consistent analysis
+- Each fact table has a clear grain (one row per event)
+- Dimensions use snapshots to keep history (SCD2)
+- Facts are kept simple: just keys and numbers; details live in dimensions
 
-Why this matters:
+Why do this?
 
-- Consistent joins & drill paths across analytics artifacts.
-- Reusable measures (e.g. total_claim_amount, premium_paid) flow into semantic metrics and summary cubes without redefining logic.
-- Stable grain prevents double counting and supports time-series rollups.
+- Makes joins and analysis consistent
+- Reuse measures and logic across reports
+- Prevents double counting
 
-Add a new dimension when you introduce a new descriptive entity reused by multiple facts. Add a fact when you model a new business event/process with measurable KPIs.
+Dashboards and heavy aggregations are handled in the `../summary/` folder. 
 
-Out of scope here: heavy aggregation for dashboards (use `../summary/`), semantic entity/measure declarations (`../semantic/`).
+Semantic definitions are in `../semantic/`.
 
-## How dbt handles this folder
+## How dbt builds these models
 
-- Folder config: `dbt_project.yml` maps `models/mart` to the project, applying default `+materialized: view` (overridden per model where needed: incremental/table).
-- Materializations: Dimensions are usually `view` (fast rebuild) except static helpers (e.g. `dim_date` as a `table`). Facts use `incremental` with a `unique_key` to support efficient appends.
-- Naming: Final relation names follow target naming (`<schema>.<model_name>`); surrogate keys / natural keys are not auto-generated—logic lives in snapshots & staging.
-- Lineage: Facts `ref()` their staging sources; dimensions `ref()` snapshot objects, enabling dbt to order builds and show lineage graphs.
-- Tests: Uniqueness & referential integrity defined in `schema.yml` (now relocated here) run after build; failures block deploys.
-- Deployment: Full refresh only needed when historical logic changes (e.g. re-computing grains). Incremental runs default to processing new loads based on `load_timestamp` fields.
-- Performance: Pushing filters/joins to warehouse; minimal Jinja logic keeps SQL readable and debuggable.
+- Most dimensions are views; facts are incremental tables
+- Naming follows `<schema>.<model_name>`
+- Facts use `ref()` to staging; dimensions use `ref()` to snapshots
+- Tests for uniqueness and referential integrity are in `schema.yml`
+- Full refresh is only needed if history logic changes
+- SQL is kept simple for performance and debugging

@@ -1,114 +1,51 @@
-# Snapshots & Slowly Changing Dimensions (SCD) in This Project
+# Snapshots & SCD
 
-This directory implements historical tracking for core dimensions using dbt **snapshots** plus modeling conventions for various SCD types. It merges guidance previously split across `scd_applies.md` and `scd.md`.
+This folder tracks changes to key dimension tables using dbt snapshots. Snapshots keep history when source data overwrites in place.
 
-## Why Snapshots?
+## Why use snapshots?
 
-Operational source records overwrite in-place. dbt snapshots capture row versions over time (Type 2 behavior) by comparing selected columns (either per-column or via a hashdiff) and inserting a new version when they change. This enables as‑of analysis and correct historical joins for facts.
+Source data updates in place. Snapshots record each change, so we can see what data looked like at any point in time. This is called SCD Type 2.
 
-## Fact & Dimension Design (Kimball Recap)
+## SCD Types (Summary)
 
-- Facts: represent business events at a declared grain (claim, enrollment period, member-month, premium payment).
-- Dimensions: descriptive context shared across facts (member, plan, provider, date, geography). Conformed dimensions allow consistent slicing.
-- Decide grain first; measures must be additive at that grain.
+- **Type 0:** Never changes (e.g. dates, IDs)
+- **Type 1:** Overwrite, no history (e.g. typo fixes)
+- **Type 2:** New row for each change, with valid_from/valid_to
+- **Type 3:** Keep current and previous value
+- **Type 4:** Archive old rows in a separate table
+- **Type 6:** Hybrid (Type 1+2+3)
 
-Starter fact grains (illustrative): claim line, member-month, enrollment episode (accumulating), premium payment.
+Default: Use Type 2 for members, plans, providers. Use Type 1 for minor fixes. Use Type 0 for IDs.
 
-## SCD Type Cheat Sheet
+## How dbt Snapshots Work
 
-- Type 0 (immutable): never changes (e.g., date attributes, intrinsic IDs).
-- Type 1 (overwrite): corrects or normalizes (email casing) – history lost.
-- Type 2 (row versioning): full change history with `valid_from`, `valid_to`, `is_current`.
-- Type 3 (previous value columns): keep current + prior single value.
-- Type 4 (historical archive table): rarely needed; split current vs archive.
-- Type 6 (1+2+3 hybrid): Type 2 rows plus Type 1 overwrites & previous_* columns.
+Each snapshot defines a unique key and a strategy (timestamp or check). dbt creates a new row when tracked columns change. Open rows have `dbt_valid_to` as null.
 
-Practical defaults here: members, plans, providers = Type 2 for business‑relevant changing attributes; some low‑value fields treated Type 1 (format fixes); intrinsic keys Type 0.
+## Change Detection
 
-## Snapshot Mechanics in dbt
+A hash of tracked columns is used to detect changes. If the hash changes, a new row is created.
 
-Each snapshot file defines:
+## As-Of Joins
 
-```yaml
-unique_key: <natural key or composite>
-strategy: timestamp|check
-```
+To join facts to the correct dimension version, use the row where the fact date is between `valid_from` and `valid_to`.
 
-- Timestamp strategy: compares `updated_at` style column; new row when timestamp advances.
-- Check strategy: compares listed columns; new row when any differ.
-dbt writes `dbt_valid_from` / `dbt_valid_to`; open rows have `dbt_valid_to` null. Downstream dimension views (our mart layer) often select only current rows or re-alias these to `validity_start_ts` / `validity_end_ts`.
+## Snapshot Types
 
-## Change Detection (Hashdiff Pattern)
+- **Periodic:** One row per entity per period (e.g. monthly snapshot)
+- **Accumulating:** One row per entity, updated as milestones happen
 
-Instead of enumerating many columns in snapshot configs, staging models can compute a normalized hash (trim, lower, coalesce) of tracked attributes. If hash changes → new Type 2 version. This reduces brittle config edits when adding columns.
+## Testing
 
-## As‑Of Joins
+- Only one current row per key
+- No overlapping date ranges
 
-When populating a fact, pick the dimension row valid at the fact’s date:
+## Performance
 
-```sql
-SELECT m.member_id
-FROM {{ ref('dim_member') }} m
-WHERE m.member_id = c.member_id
-  AND m.validity_start_ts <= c.claim_date
-  AND (m.validity_end_ts IS NULL OR c.claim_date < m.validity_end_ts);
-```
-Always filter to current rows only for “point-in-time now” style marts; include historical rows for retrospective analytics.
+- Index by key and current flag for fast lookups
+- Only store needed columns in snapshots
 
-## Periodic & Accumulating Snapshots
+## Which Type to Use?
 
-- Periodic snapshot fact (e.g., monthly enrollment snapshot): one row per entity per period for trending (PMPM, churn).
-- Accumulating snapshot (enrollment episode): single row updated as milestones fill (start, termination). Avoid excessive updates; milestones should be sparse.
-
-## Late Arriving & Inferred Members
-
-If a fact arrives before its dimension change/version: optionally create an inferred Type 2 row flagged `is_inferred`; later, expire and replace when full attributes land. Repair scripts can re-key old facts if a historical backdated row is inserted.
-
-## Testing & Data Quality
-
-- Expect exactly one current row per NK (uniqueness of open version).
-- Ensure no overlapping validity intervals for same NK.
-- Validate hashdiff determinism (same input → same hash) in unit tests.
-- Row count deltas monitored per load for anomaly detection.
-
-## Performance Practices
-
-- Index `(natural_key, is_current)` and `(natural_key, validity_start_ts DESC)` for fast as‑of lookups.
-- Keep snapshot relation lean: only store tracked columns + hash + audit fields; enrich later in marts.
-- Partition very large Type 2 tables by date if volumes justify.
-
-## Choosing the Right Approach
-
-| Need | Technique |
-|------|-----------|
-| Full history of attribute | Type 2 snapshot |
-| Simple correction / no history | Type 1 overwrite in mart view |
-| Prior value alongside current | Type 3 (add `previous_` column) |
-| High-churn heavy dimension | Consider Type 4 archive split |
-| Hybrid (history + prior + overwrite) | Type 6 |
-
-Default path: implement Type 2 via dbt snapshot → expose current row view in mart → semantic layer references that view → summary aggregates use stable surrogate/natural keys.
-
-## Operations Runbook
-
-1. Load staging raw feed.
-2. Compute hashdiffs (if used).
-3. Run `dbt snapshot` (creates/expires rows).
-4. Run `dbt run` to build mart dims (current row selection) and facts (as‑of joins).
-5. Run tests (`dbt test`) to catch overlapping or missing current rows.
-6. Refresh summary & semantic layers.
-
-## When NOT to Snapshot
-
-- Source already supplies full version history (no need to duplicate).
-- Attribute churn is insignificant and never queried historically.
-- Data volume so small that simple Type 1 overwrites suffice.
-
-## Future Enhancements
-
-- Add explicit snapshot tests for non-overlap using custom SQL tests.
-- Implement metric-level freshness alerts (late dimension change detection).
-- Add provider network bridge with effective dating for in-network analytics.
-
----
-Single source for SCD strategy; original separate docs consolidated for easier maintenance.
+- Need history? Use Type 2
+- Just need latest value? Type 1
+- Need previous value too? Type 3

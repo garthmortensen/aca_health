@@ -1,39 +1,35 @@
-# Semantic Layer Models
+# Semantic Layer
 
-This folder contains the dbt **semantic layer** definitions that turn raw dimensional & fact models into governed, reusable business metrics. These are *not* the aggregated summary tables (those live in `../summary/`). Instead they define the **semantic contract** that downstream tools (BI, notebooks, APIs) can query consistently.
+This folder defines business metrics and entities in a way that makes them easy to use and consistent across all dashboards and tools. It does not contain summary tables—those are in the `summary/` folder.
 
-What makes a model here "semantic":
+What this folder does:
 
-1. Explicit entity & grain declarations (e.g. claim, member, enrollment) in `semantic_models.yml`.
-2. Governed measures (sums, counts, averages, ratios) with business names: `total_claim_amount`, `approval_rate`, `total_premium_paid`, etc.
-3. Typed dimensions (time, categorical) enabling consistent filtering & time‑series rollups.
-4. A canonical `time_spine` table to standardize date grain alignment for time-based metrics.
-5. Separation from physical aggregation: aggregation happens on‑demand via the semantic layer rather than being pre‑materialized here.
+- Lists the main business entities (like claim, member, enrollment)
+- Defines important numbers (like total claim amount, approval rate, total premium paid)
+- Sets up how you can filter and group by things like time or category
+- Includes a special table for dates (`time_spine`) to help with time-based analysis
+- Does not store pre-calculated data—metrics are calculated when you query them
 
 Key files:
 
-- `semantic_models.yml` – declares entities, dimensions, measures for claims & enrollments, plus members.
-- `metrics.yml` – (placeholder) would house metric definitions composing measures (add as they mature).
-- `_models.yml` & `time_spine.sql` – provide the date spine required for time-aware metrics.
-- `schema.yml` – kept minimal; tests for the semantic models now live with their underlying mart tables.
+- `semantic_models.yml`: lists entities, dimensions, and measures
+- `metrics.yml`: (for future use) will hold more complex metrics
+- `_models.yml` and `time_spine.sql`: set up the date table
+- `schema.yml`: minimal, since most tests are with the mart tables
 
-When to add something here:
+Add something here if:
 
-- You need a new governed measure or entity relationship.
-- You want a metric available uniformly across dashboards without recreating logic.
+- You want a new metric or relationship to be available everywhere
+- You want to avoid repeating metric logic in different dashboards
 
-When *not* to add it here:
+Don’t add here if:
 
-- You just need a one-off summary table (use `summary/`).
-- You’re building a presentation-ready aggregation (also `summary/`).
+- You just need a one-off summary table (use `summary/`)
+- You are building a table for a specific dashboard (also use `summary/`)
 
-Next ideas: flesh out `metrics.yml` with composed metrics (e.g. cost PMPM), add semantic coverage for providers, and implement metric tests via dbt-expectations.
+## How dbt uses this folder
 
-## How dbt handles this folder
-
-- Compilation only references: `semantic_models.yml` and `metrics.yml` are parsed (not executed) and merged into the manifest; they don't produce relations.
-- Dependency resolution: Each semantic model points to a physical mart model via `model: ref('...')`; dbt ensures the underlying table/view builds first.
-- Time spine: `time_spine.sql` builds a physical table; the `_models.yml` entry attaches metadata (granularity) consumed by the semantic layer.
-- Testing: Column & relationship tests live with source mart models; semantic definitions inherit consistency by referencing those tested relations.
-- Environments: The configured target schema (plus custom schemas) still applies; semantic YAML does not change database naming, only exposes metadata for downstream metric serving.
-- Extensibility: Add new measures without altering consuming dashboards—dbt recompiles the manifest and the semantic service exposes the new metric instantly.
+- The YAML files here are read by dbt to define metrics and entities, but they do not create tables or views
+- Each semantic model points to a real table in the mart layer
+- The `time_spine.sql` file creates a date table for time-based analysis
+- Most tests are done in the mart layer, not here

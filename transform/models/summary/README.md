@@ -1,34 +1,29 @@
-# Summary Layer (Curated Aggregations / Data Cubes)
+# Summary Layer
 
-The summary schema contains pre‑aggregated, presentation‑ready tables ("lightweight data cubes") built from the mart layer for fast dashboard & KPI access. Unlike the semantic layer—which virtualizes metrics at query time—these models materialize commonly requested rollups to reduce compute and simplify BI consumption.
+These tables are built from the mart layer and are ready for fast use—no need to join or calculate.
 
-What makes these cube‑like:
+Key points:
 
-- Defined dimensional cuts (e.g. month, member attributes, provider) baked into each table.
-- Precomputed measures (totals, averages, ratios) to avoid repeated on‑the‑fly aggregation.
-- Denormalized results tuned for slicing & filtering with minimal joins.
-- Stable, predictable grain (monthly, per-member, per-provider) enabling cache‑friendly dashboards.
-- Governed alignment with underlying mart & semantic definitions (naming & logic reused, not reinvented).
+- Each table is set up for common ways people want to group and filter data (like by month, member, or provider)
+- Numbers like totals and averages are already calculated
+- Each table has a clear purpose and level (monthly, per member, per provider)
 
-Table purposes:
+Main tables:
 
-- `agg_claims_monthly`: month‑level claims & cost KPIs with approval metrics.
-- `agg_member_cost`: per‑member utilization & cost stratification (PMPM / risk tiers).
-- `agg_provider_performance`: provider productivity, cost efficiency & categorization.
-- `dashboard_summary` (view): single‑row KPI snapshot composed from the other aggregates.
+- `agg_claims_monthly`: monthly claim and cost numbers
+- `agg_member_cost`: member-level cost and usage
+- `agg_provider_performance`: provider performance and cost
+- `dashboard_summary`: one-row summary for dashboards
 
-Use this layer when: a dashboard hits the same metric set repeatedly, latency matters, or end users shouldn't craft complex joins. If a metric is exploratory or ad‑hoc, prefer querying the semantic layer directly instead of expanding a cube.
+Use these tables when you need fast dashboards or reports that use the same numbers over and over. For new or one-off questions, use the mart or semantic layer instead.
 
-Avoid adding: highly sparse high‑dimensional cubes (explosion risk), one‑off analyst questions, or raw granular data (belongs in mart).
+Don’t add tables here for rare questions or very detailed data—keep those in the mart layer.
 
-Lifecycle tip: start with semantic metrics, promote high‑usage patterns here once stable, and periodically prune stale aggregates.
+Start by using the semantic layer for new metrics. If a metric is used a lot, move it here for speed. Clean up old tables when they’re no longer needed.
 
-## How dbt handles this folder
 
-- Schema override: `dbt_project.yml` sets `+schema: summary`, so these relations land in a dedicated database schema separate from raw/mart tables.
-- Materializations: Generally `table` for stable aggregates; `dashboard_summary` is a `view` to stay light and reflect upstream changes instantly.
-- Dependencies: Each aggregate uses `ref()` to mart layer models; dbt ensures lineage (mart -> summary) and rebuild ordering.
-- Rebuild strategy: For time-series additive tables you could convert to `incremental` later—current full rebuild keeps logic simple while data volume is modest.
-- Testing: Column tests (ranges, sets) live alongside the models (`schema.yml`) to guard KPI drift or data explosions.
-- Use with semantic layer: Semantic metrics can still reference these aggregates if needed, but preferred flow is mart -> semantic (virtual) OR mart -> summary (materialized), not both unless there’s a strong performance case.
-- Change management: Adjusting a metric here requires DDL/DML (rebuild); if experimentation is ongoing, define it first virtually in the semantic layer before promoting.
+- Most are materialized as tables for speed; `dashboard_summary` is a view
+	- **Materialized tables** are real tables stored in the database. The data is saved and does not need to be recalculated each time you query it. This makes queries much faster.
+	- *Example:* `agg_claims_monthly` is a materialized table. When you query it, you get the results instantly because all the totals and counts have already been calculated and stored.
+- Each table is built from mart models using `ref()`
+- Change a metric here only if it’s stable and used often; experiment in the semantic layer first
