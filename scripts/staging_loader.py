@@ -17,8 +17,6 @@ import sys
 import hashlib
 from dataclasses import dataclass
 from typing import List
-from datetime import datetime, timezone
-from pathlib import Path
 
 import psycopg
 from psycopg import sql
