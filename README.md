@@ -92,9 +92,9 @@ dbt run --select mart
 - data creation: faker
 - linting: Ruff, SQLFluff
 
-## ERDs
+## Schema ERDs
 
-## Staging Schema
+## Staging
 
 ```mermaid
 erDiagram
@@ -107,7 +107,7 @@ erDiagram
 
 - Cardinality marks: `||` (one), `o{` (many optional).
 
-## Mart Schema (curated dims & facts)
+## Mart (curated dims & facts)
 
 ```mermaid
 erDiagram
@@ -120,7 +120,7 @@ erDiagram
   mart_dim_date ||--o{ mart_fct_enrollment : "date_span" 
 ```
 
-## Summary Schema
+## Summary (aggs and cubes)
 
 ```mermaid
 erDiagram
@@ -140,12 +140,3 @@ erDiagram
 - `source` edges indicate aggregation lineage.
 - `metrics feed` indicates inputs to composite dashboard view.
 - `derived` indicates a second-level cube built from a first-level cube.
-
-## Semantic Layer
-
-```mermaid
-erDiagram
-  semantic_metric_definitions ||..|| mart_fct_claim : "refs"
-  semantic_metric_definitions ||..|| mart_fct_enrollment : "refs"
-  semantic_time_spine ||--o{ mart_fct_claim : "time_grain"
-```
