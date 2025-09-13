@@ -37,7 +37,7 @@ models:
             min_value: 1
             max_value: 120  # Max 10 years * 12 months
 
-  - name: agg_member_cost
+  - name: agg_member_cost_cube
     description: "Member cost analysis cube with PMPM/PMPY metrics"
     columns:
       - name: member_id
@@ -130,3 +130,88 @@ models:
       - dbt_expectations.expect_table_row_count_to_equal:
           arguments:
             value: 1  # Should always be exactly one summary row
+
+  - name: agg_plan_performance_cube
+    description: "Monthly plan performance metrics with PMPM and approval ratios"
+    columns:
+      - name: plan_id
+        description: "Plan identifier"
+        tests:
+          - not_null
+      - name: report_month
+        description: "Month of aggregation"
+        tests:
+          - not_null
+      - name: pmpm_paid
+        description: "Paid amount per member month"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000
+      - name: approval_rate
+        description: "Plan claim approval rate"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0.0
+                max_value: 1.0
+
+  - name: agg_member_risk_stratification_cube
+    description: "Member risk & utilization stratification cube"
+    columns:
+      - name: member_id
+        description: "Member identifier"
+        tests:
+          - not_null
+          - unique
+      - name: paid_risk_bucket
+        description: "Risk bucket based on paid amount"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              arguments:
+                value_set: ['No Cost','Low','Moderate','High','Very High']
+      - name: utilization_bucket
+        description: "Utilization bucket based on claim count"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              arguments:
+                value_set: ['No Util','Low Util','Moderate Util','High Util','Very High Util']
+
+  - name: agg_provider_specialty_monthly_cube
+    description: "Monthly provider specialty performance metrics"
+    columns:
+      - name: specialty
+        description: "Provider specialty"
+        tests:
+          - not_null
+      - name: report_month
+        description: "Month of aggregation"
+        tests:
+          - not_null
+      - name: approval_rate
+        description: "Specialty approval rate"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0.0
+                max_value: 1.0
+
+  - name: agg_claims_diagnosis_summary_cube
+    description: "Top 50 diagnosis codes per month with financial metrics"
+    columns:
+      - name: report_month
+        description: "Month of aggregation"
+        tests:
+          - not_null
+      - name: diagnosis_code
+        description: "Diagnosis code"
+        tests:
+          - not_null
+      - name: total_claims
+        description: "Total claims for diagnosis in month"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000

@@ -10,16 +10,20 @@ Key points:
 
 Main tables:
 
-- `agg_claims_monthly`: monthly claim and cost numbers
-- `agg_member_cost`: member-level cost and usage
-- `agg_provider_performance`: provider performance and cost
+- `agg_claims_monthly`: monthly claim and cost numbers (single-dimension aggregate: time)
+- `agg_member_cost_cube`: member-level cost and usage (member x attributes)
+- `agg_member_risk_stratification_cube`: member risk & utilization buckets (member x risk dims)
+- `agg_plan_performance_cube`: plan performance over time (plan x month)
+- `agg_provider_performance`: provider performance point-in-time (provider dimension)
+- `agg_provider_specialty_monthly_cube`: specialty performance over time (specialty x month)
+- `agg_claims_diagnosis_summary_cube`: top diagnoses by month (diagnosis x month limited top 50)
 - `dashboard_summary`: one-row summary for dashboards
 
 Use these tables when you need fast dashboards or reports that use the same numbers over and over. For new or one-off questions, use the mart or semantic layer instead.
 
 Don’t add tables here for rare questions or very detailed data—keep those in the mart layer.
 
-Start by using the semantic layer for new metrics. If a metric is used a lot, move it here for speed. Clean up old tables when they’re no longer needed.
+Start by using the semantic layer for new metrics. If a metric is used a lot, move it here for speed. Clean up old tables when they’re no longer needed. Suffix `_cube` indicates 2+ analytical dimensions.
 
 
 - Most are materialized as tables for speed; `dashboard_summary` is a view

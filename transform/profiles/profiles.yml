@@ -1,13 +1,23 @@
 aca_health:
-  target: ci
+  target: dev
   outputs:
+    dev:
+      type: postgres
+      host: '{{ env_var("PGHOST", "localhost") }}'
+      user: '{{ env_var("PGUSER", "etl") }}'
+      password: '{{ env_var("PGPASSWORD", "etl") }}'
+      port: 5432
+      dbname: '{{ env_var("PGDATABASE", "dw") }}'
+      schema: staging
+      threads: 4
+      keepalives_idle: 0
     ci:
       type: postgres
       host: localhost
-  user: dummy
-  password: dummy
-  port: 5432
-  dbname: aca_health
-  schema: staging
-  threads: 1
-  keepalives_idle: 0
+      user: dummy
+      password: dummy
+      port: 5432
+      dbname: aca_health
+      schema: staging
+      threads: 1
+      keepalives_idle: 0

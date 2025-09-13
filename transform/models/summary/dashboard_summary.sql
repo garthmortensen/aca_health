@@ -7,7 +7,7 @@ with monthly_metrics as (
 ),
 cost_distribution as (
     select cost_category, count(member_id) as member_count, sum(total_paid_amount) as category_cost, avg(pmpm_cost) as avg_pmpm
-    from {{ ref('agg_member_cost') }}
+    from {{ ref('agg_member_cost_cube') }}
     group by cost_category
 ),
 provider_summary as (

@@ -1,6 +1,10 @@
 {{ config(materialized='table') }}
 
--- Member cost analysis moved to summary schema
+-- Member cost cube (member x cost metrics)
+-- Renamed from agg_member_cost to enforce cube naming convention (multi-dimension)
+-- Source: dim_member + fct_claim + fct_enrollment aggregated in prior logic.
+
+-- Reuse original logic from agg_member_cost (kept identical)
 with member_enrollment_months as (
     select e.member_id, e.plan_id, sum(e.coverage_days) / 30.44 as total_enrollment_months
     from {{ ref('fct_enrollment') }} e
