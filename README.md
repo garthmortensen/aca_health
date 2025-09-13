@@ -98,11 +98,11 @@ dbt run --select mart
 
 ```mermaid
 erDiagram
-    staging.claims_raw ||--o{ staging.members_raw : "member_id"
-    staging.claims_raw }o--|| staging.providers_raw : "provider_id"
-    staging.claims_raw }o--|| staging.plans_raw : "plan_id"
-    staging.enrollments_raw ||--|| staging.members_raw : "member_id"
-    staging.enrollments_raw }o--|| staging.plans_raw : "plan_id"
+  staging_claims_raw ||--o{ staging_members_raw : "member_id"
+  staging_claims_raw }o--|| staging_providers_raw : "provider_id"
+  staging_claims_raw }o--|| staging_plans_raw : "plan_id"
+  staging_enrollments_raw ||--|| staging_members_raw : "member_id"
+  staging_enrollments_raw }o--|| staging_plans_raw : "plan_id"
 ```
 
 - Cardinality marks: `||` (one), `o{` (many optional).
@@ -111,30 +111,30 @@ erDiagram
 
 ```mermaid
 erDiagram
-    mart.dim_member ||--o{ mart.fct_claim : "member_id"
-    mart.dim_provider ||--o{ mart.fct_claim : "provider_id"
-    mart.dim_plan ||--o{ mart.fct_claim : "plan_id"
-    mart.dim_member ||--o{ mart.fct_enrollment : "member_id"
-    mart.dim_plan ||--o{ mart.fct_enrollment : "plan_id"
-    mart.dim_date ||--o{ mart.fct_claim : "claim_date = full_date"
-    mart.dim_date ||--o{ mart.fct_enrollment : "start_date >= full_date <= end_date" 
+  mart_dim_member ||--o{ mart_fct_claim : "member_id"
+  mart_dim_provider ||--o{ mart_fct_claim : "provider_id"
+  mart_dim_plan ||--o{ mart_fct_claim : "plan_id"
+  mart_dim_member ||--o{ mart_fct_enrollment : "member_id"
+  mart_dim_plan ||--o{ mart_fct_enrollment : "plan_id"
+  mart_dim_date ||--o{ mart_fct_claim : "claim_date"
+  mart_dim_date ||--o{ mart_fct_enrollment : "date_span" 
 ```
 
 ## Summary Schema
 
 ```mermaid
 erDiagram
-    mart.fct_claim ||--o{ summary.agg_claims_monthly : "source"
-    mart.fct_claim ||--o{ summary.agg_plan_performance_cube : "source"
-    mart.fct_claim ||--o{ summary.agg_provider_specialty_monthly_cube : "source"
-    mart.fct_claim ||--o{ summary.agg_claims_diagnosis_summary_cube : "source"
-    mart.fct_enrollment ||--o{ summary.agg_plan_performance_cube : "enrollment context"
-    mart.dim_member ||--o{ summary.agg_member_cost_cube : "member attributes"
-    summary.agg_member_cost_cube ||--o{ summary.agg_member_risk_stratification_cube : "derived"
-    summary.agg_claims_monthly ||--|| summary.dashboard_summary : "metrics feed"
-    summary.agg_member_cost_cube ||--|| summary.dashboard_summary : "metrics feed"
-    summary.agg_provider_performance ||--|| summary.dashboard_summary : "metrics feed"
-    summary.agg_provider_performance ||--o{ summary.agg_provider_specialty_monthly_cube : "roll-up"
+  mart_fct_claim ||--o{ summary_agg_claims_monthly : "source"
+  mart_fct_claim ||--o{ summary_agg_plan_performance_cube : "source"
+  mart_fct_claim ||--o{ summary_agg_provider_specialty_monthly_cube : "source"
+  mart_fct_claim ||--o{ summary_agg_claims_diagnosis_summary_cube : "source"
+  mart_fct_enrollment ||--o{ summary_agg_plan_performance_cube : "enrollment"
+  mart_dim_member ||--o{ summary_agg_member_cost_cube : "member_attrs"
+  summary_agg_member_cost_cube ||--o{ summary_agg_member_risk_stratification_cube : "derived"
+  summary_agg_claims_monthly ||--|| summary_dashboard_summary : "metrics"
+  summary_agg_member_cost_cube ||--|| summary_dashboard_summary : "metrics"
+  summary_agg_provider_performance ||--|| summary_dashboard_summary : "metrics"
+  summary_agg_provider_performance ||--o{ summary_agg_provider_specialty_monthly_cube : "rollup"
 ```
 
 - `source` edges indicate aggregation lineage.
@@ -145,7 +145,7 @@ erDiagram
 
 ```mermaid
 erDiagram
-    semantic.metric_definitions ||..|| mart.fct_claim : "references"
-    semantic.metric_definitions ||..|| mart.fct_enrollment : "references"
-    semantic.time_spine ||--o{ mart.fct_claim : "time grain"
+  semantic_metric_definitions ||..|| mart_fct_claim : "refs"
+  semantic_metric_definitions ||..|| mart_fct_enrollment : "refs"
+  semantic_time_spine ||--o{ mart_fct_claim : "time_grain"
 ```
