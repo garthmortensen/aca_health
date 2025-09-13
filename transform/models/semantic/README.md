@@ -1,6 +1,4 @@
-
 # Semantic Layer
-
 
 This folder defines business metrics and entities in a way that makes them easy to use and consistent across all dashboards and tools. It does not contain summary tables—those are in the `summary/` folder.
 
