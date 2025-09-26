@@ -55,6 +55,12 @@ models:
         description: "Broker associated with member."
       - name: sa_contracting_entity_name
         description: "Contracting entity name."
+      - name: call_count
+        description: "Number of calls placed by member in year/month context."
+      - name: app_login_count
+        description: "Number of mobile app logins."
+      - name: web_login_count
+        description: "Number of web portal logins."
       - name: new_member_in_period
         description: "Flag (1/0) first-year member."
       - name: member_used_app
@@ -69,6 +75,8 @@ models:
         description: "Chronic condition bucket (simulated)."
       - name: geographic_reporting
         description: "Geographic reporting group."
+      - name: wisconsin_area_deprivation_index
+        description: "ADI decile (1-10), 10 is most deprived."
       - name: year
         description: "Reference year for enrichment attributes."
       - name: load_id
@@ -106,6 +114,70 @@ models:
         description: "ICD-11 diagnosis code."
       - name: procedure_code
         description: "CPT procedure code."
+      - name: charges
+        description: "Billed charges amount (for metric derivations)."
+      - name: allowed
+        description: "Allowed amount field used by metrics."
+      - name: clean_claim_status
+        description: "Normalized claim status (PAID/DENIED/PENDING)."
+      - name: claim_from
+        description: "Claim service start date (from generator)."
+      - name: clean_claim_out
+        description: "Claim paid date when paid; null otherwise."
+      - name: utilization
+        description: "Utilization count primitive (sum to get utilization)."
+      - name: hcg_units_days
+        description: "Units or days count primitive (sum for units_days)."
+      - name: claim_type
+        description: "Facility/Professional/RX."
+      - name: major_service_category
+        description: "HCG major service category (toy mapping)."
+      - name: provider_specialty
+        description: "Rendering provider specialty (Pharmacy for RX)."
+      - name: detailed_service_category
+        description: "Detailed service category label."
+      - name: ms_drg
+        description: "MS-DRG code."
+      - name: ms_drg_description
+        description: "MS-DRG description."
+      - name: ms_drg_mdc
+        description: "MDC code for DRG."
+      - name: ms_drg_mdc_desc
+        description: "MDC description for DRG."
+      - name: cpt
+        description: "CPT code duplicate for descriptor convenience."
+      - name: cpt_consumer_description
+        description: "Consumer-friendly CPT description."
+      - name: procedure_level_1
+        description: "CPT hierarchy level 1."
+      - name: procedure_level_2
+        description: "CPT hierarchy level 2."
+      - name: procedure_level_3
+        description: "CPT hierarchy level 3."
+      - name: procedure_level_4
+        description: "CPT hierarchy level 4."
+      - name: procedure_level_5
+        description: "CPT hierarchy level 5."
+      - name: channel
+        description: "Place of service channel (IP/OP/SNF/URG/etc.)."
+      - name: drug_name
+        description: "Drug name (RX only)."
+      - name: drug_class
+        description: "Drug therapeutic class (GPI-4 like)."
+      - name: drug_subclass
+        description: "Drug therapeutic subclass (GPI-6 like)."
+      - name: drug
+        description: "Drug (GPI-8 like)."
+      - name: is_oon
+        description: "Out-of-network flag (1/0)."
+      - name: best_contracting_entity_name
+        description: "Provider contracting entity name."
+      - name: provider_group_name
+        description: "Provider group name."
+      - name: ccsr_system_description
+        description: "CCSR body system description."
+      - name: ccsr_description
+        description: "CCSR code & description."
       - name: load_id
         description: "FK to staging.load_batches."
       - name: load_timestamp

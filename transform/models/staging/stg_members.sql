@@ -26,6 +26,9 @@ select
     general_agency_name,
     broker_name,
     sa_contracting_entity_name,
+    call_count,
+    app_login_count,
+    web_login_count,
     new_member_in_period,
     member_used_app,
     member_had_web_login,
@@ -33,6 +36,7 @@ select
     high_cost_member,
     mutually_exclusive_hcc_condition,
     geographic_reporting,
+    wisconsin_area_deprivation_index,
     year,
     load_id,
     load_timestamp
