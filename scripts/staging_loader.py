@@ -30,13 +30,14 @@ ENTITIES = [
         "provider_id","npi","name","specialty","street","city","state","zip","phone"
     ]),
     ("members", "members_raw", [
-        "member_id","first_name","last_name","dob","gender","email","phone","street","city","state","zip","fpl_ratio","hios_id","plan_network_access_type","plan_metal","age_group","region","enrollment_length_continuous","clinical_segment","general_agency_name","broker_name","sa_contracting_entity_name","new_member_in_period","member_used_app","member_had_web_login","member_visited_new_provider_ind","high_cost_member","mutually_exclusive_hcc_condition","geographic_reporting","year"
+        "member_id","first_name","last_name","dob","gender","email","phone","street","city","state","zip","fpl_ratio","hios_id","plan_network_access_type","plan_metal","age_group","region","enrollment_length_continuous","clinical_segment","general_agency_name","broker_name","sa_contracting_entity_name","call_count","app_login_count","web_login_count","new_member_in_period","member_used_app","member_had_web_login","member_visited_new_provider_ind","high_cost_member","mutually_exclusive_hcc_condition","geographic_reporting","wisconsin_area_deprivation_index","year"
     ]),
     ("enrollments", "enrollments_raw", [
         "enrollment_id","member_id","plan_id","start_date","end_date","premium_paid","csr_variant"
     ]),
     ("claims", "claims_raw", [
-        "claim_id","member_id","provider_id","plan_id","service_date","claim_amount","allowed_amount","paid_amount","status","diagnosis_code","procedure_code"
+        "claim_id","member_id","provider_id","plan_id","service_date","claim_amount","allowed_amount","paid_amount","status","diagnosis_code","procedure_code",
+        "charges","allowed","clean_claim_status","claim_from","clean_claim_out","utilization","hcg_units_days","claim_type","major_service_category","provider_specialty","detailed_service_category","ms_drg","ms_drg_description","ms_drg_mdc","ms_drg_mdc_desc","cpt","cpt_consumer_description","procedure_level_1","procedure_level_2","procedure_level_3","procedure_level_4","procedure_level_5","channel","drug_name","drug_class","drug_subclass","drug","is_oon","best_contracting_entity_name","provider_group_name","ccsr_system_description","ccsr_description"
     ]),
 ]
 

@@ -8,7 +8,7 @@ import csv
 import os
 import random
 from datetime import date, datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from faker import Faker
 
@@ -71,6 +71,68 @@ ICD11_SAMPLE = [
     "DA0Z",  # Hypertension unspecified
 ]
 CPT_SAMPLE = ["99213", "99214", "80050", "93000", "71046", "36415", "12001"]
+
+# Additional vocabularies to support descriptor fields in objective.md
+CLAIM_TYPES = ["Facility", "Professional", "RX"]
+MAJOR_SERVICE_CATEGORIES = [
+    "Evaluation & Management",
+    "Surgery",
+    "Radiology",
+    "Pathology & Lab",
+    "Anesthesia",
+    "Medicine",
+    "Inpatient",
+    "Outpatient",
+    "Emergency",
+    "Pharmacy",
+]
+DETAILED_SERVICE_CATEGORIES = [
+    "Office Visit Established",
+    "Office Visit New",
+    "Cardiac Imaging",
+    "Basic Metabolic Panel",
+    "MRI",
+    "CT Scan",
+    "Physical Therapy",
+    "Infusion Therapy",
+    "Generic Medication",
+    "Brand Medication",
+]
+MS_DRG_CODES: List[Tuple[str, str]] = [
+    ("291", "Heart failure & shock w MCC"),
+    ("292", "Heart failure & shock w CC"),
+    ("293", "Heart failure & shock w/o CC/MCC"),
+    ("470", "Major joint replacement or reattachment of lower extremity w/o MCC"),
+    ("194", "Simple pneumonia & pleurisy w MCC"),
+]
+MS_DRG_MDC: List[Tuple[str, str]] = [
+    ("05", "Diseases & disorders of the circulatory system"),
+    ("04", "Diseases & disorders of the respiratory system"),
+    ("08", "Diseases & disorders of the musculoskeletal system & connective tissue"),
+]
+CHANNELS = ["IP", "OP", "SNF", "URG", "OBS", "PRO"]
+DRUG_CLASSES = [
+    ("Antihypertensives", "ACE Inhibitors", "Lisinopril"),
+    ("Antihyperlipidemics", "Statins", "Atorvastatin"),
+    ("Antidiabetics", "Biguanides", "Metformin"),
+    ("Analgesics", "NSAIDs", "Ibuprofen"),
+]
+CCSR_SYSTEM = [
+    "Circulatory system - Hypertensive disease",
+    "Respiratory system - Pneumonia",
+    "Musculoskeletal system - Osteoarthritis",
+]
+CCSR_DESC = [
+    "CIR007 - Essential hypertension",
+    "RSP002 - Pneumonia (excluding tuberculosis)",
+    "MUS004 - Osteoarthritis",
+]
+PROVIDER_GROUPS = [
+    "Downtown Medical Group",
+    "Northside Physicians",
+    "CareOne Partners",
+    "Regional Health Network",
+]
 
 
 def ensure_dir(path: str) -> None:
@@ -187,13 +249,18 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
         general_agency_name = random.choice(GENERAL_AGENCIES + [None, None])
         broker_name = random.choice(BROKER_NAMES + [None, None])
         sa_contracting_entity_name = random.choice(SA_CONTRACT_ENTITIES + [None])
-        new_member_in_period = random.choice([0,1])
-        member_used_app = random.choice([0,1])
-        member_had_web_login = random.choice([0,1])
+        # Engagement/activity counts
+        call_count = random.choices([0, 1, 2, 3, 4, 5], weights=[60, 15, 10, 8, 5, 2])[0]
+        app_login_count = random.choices([0, 1, 2, 3, 4, 5, 10], weights=[50, 15, 10, 8, 7, 6, 4])[0]
+        web_login_count = random.choices([0, 1, 2, 3, 4, 5, 10], weights=[60, 12, 9, 7, 6, 4, 2])[0]
+        new_member_in_period = random.choice([0, 1])
+        member_used_app = 1 if app_login_count > 0 else 0
+        member_had_web_login = 1 if web_login_count > 0 else 0
         member_visited_new_provider_ind = random.choice([0,1])
         high_cost_member = 1 if random.random() < 0.05 else 0
         mutually_exclusive_hcc_condition = random.choice(MUTUALLY_EXCL_HCC)
         geographic_reporting = region
+        wisconsin_adi = random.randint(1, 10)
         members.append(
             {
                 "member_id": f"MBR{i:06d}",
@@ -219,6 +286,9 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
                 "general_agency_name": general_agency_name,
                 "broker_name": broker_name,
                 "sa_contracting_entity_name": sa_contracting_entity_name,
+                "call_count": call_count,
+                "app_login_count": app_login_count,
+                "web_login_count": web_login_count,
                 "new_member_in_period": new_member_in_period,
                 "member_used_app": member_used_app,
                 "member_had_web_login": member_had_web_login,
@@ -226,6 +296,7 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
                 "high_cost_member": high_cost_member,
                 "mutually_exclusive_hcc_condition": mutually_exclusive_hcc_condition,
                 "geographic_reporting": geographic_reporting,
+                "wisconsin_area_deprivation_index": wisconsin_adi,
                 "year": YEAR,
             }
         )
@@ -319,6 +390,64 @@ def gen_claims(
             paid_amount = round(allowed_amount * random.uniform(0.5, 1.0), 2)
         else:  # pending or denied
             paid_amount = 0.0
+
+        # Map to clean status values and payment date
+        clean_claim_status = {
+            "approved": "PAID",
+            "denied": "DENIED",
+            "pending": "PENDING",
+        }[status]
+        claim_from = service_dt
+        clean_claim_out = None
+        if clean_claim_status == "PAID":
+            clean_claim_out = claim_from + timedelta(days=random.randint(10, 60))
+
+        # Descriptor enrichments
+        claim_type = random.choices(CLAIM_TYPES, weights=[0.15, 0.7, 0.15])[0]
+        channel = random.choice(CHANNELS)
+        is_oon = 1 if random.random() < 0.12 else 0
+        # Specialty: Pharmacy for RX
+        provider_specialty = "Pharmacy" if claim_type == "RX" else prov["specialty"]
+        major_service_category = (
+            "Pharmacy" if claim_type == "RX" else random.choice(MAJOR_SERVICE_CATEGORIES)
+        )
+        detailed_service_category = random.choice(DETAILED_SERVICE_CATEGORIES)
+        ms_drg_code, ms_drg_desc = random.choice(MS_DRG_CODES)
+        mdc_code, mdc_desc = random.choice(MS_DRG_MDC)
+        # CPT mapping
+        cpt = random.choice(CPT_SAMPLE)
+        cpt_consumer_description = {
+            "99213": "Established patient office visit, low complexity",
+            "99214": "Established patient office visit, moderate complexity",
+            "80050": "General health panel",
+            "93000": "Electrocardiogram, complete",
+            "71046": "Chest X-ray",
+            "36415": "Collection of venous blood",
+            "12001": "Simple repair of superficial wounds",
+        }.get(cpt, "Procedure")
+        # Procedure hierarchy (toy)
+        procedure_level_1 = "Surgery" if cpt in {"12001"} else "Medicine"
+        procedure_level_2 = "Office Services" if cpt in {"99213", "99214"} else "Diagnostic"
+        procedure_level_3 = "Imaging" if cpt in {"71046", "93000"} else "Other"
+        procedure_level_4 = "N/A" if procedure_level_1 != "Surgery" else "Surgical Procedure"
+        procedure_level_5 = "N/A" if procedure_level_1 != "Surgery" else "Simple Repair"
+        # RX only drug info
+        drug_name = drug_class = drug_subclass = drug = None
+        if claim_type == "RX":
+            dclass, dsub, dname = random.choice(DRUG_CLASSES)
+            drug_class = dclass
+            drug_subclass = dsub
+            drug_name = dname
+            drug = dname
+        # Contracting entity / provider group
+        best_contracting_entity_name = random.choice(SA_CONTRACT_ENTITIES)
+        provider_group_name = random.choice(PROVIDER_GROUPS)
+        # CCSR
+        ccsr_system_description = random.choice(CCSR_SYSTEM)
+        ccsr_description = random.choice(CCSR_DESC)
+        # Utilization/units
+        utilization = 1.0
+        hcg_units_days = random.randint(1, 5)
         claims.append(
             {
                 "claim_id": f"CLM{i:07d}",
@@ -331,7 +460,40 @@ def gen_claims(
                 "paid_amount": paid_amount,
                 "status": status,
                 "diagnosis_code": random.choice(ICD11_SAMPLE),
-                "procedure_code": random.choice(CPT_SAMPLE),
+                "procedure_code": cpt,
+                # Descriptor fields and metric primitives
+                "charges": claim_amount,
+                "allowed": allowed_amount,
+                "clean_claim_status": clean_claim_status,
+                "claim_from": claim_from.isoformat(),
+                "clean_claim_out": clean_claim_out.isoformat() if clean_claim_out else None,
+                "utilization": utilization,
+                "hcg_units_days": hcg_units_days,
+                "claim_type": claim_type,
+                "major_service_category": major_service_category,
+                "provider_specialty": provider_specialty,
+                "detailed_service_category": detailed_service_category,
+                "ms_drg": ms_drg_code,
+                "ms_drg_description": ms_drg_desc,
+                "ms_drg_mdc": mdc_code,
+                "ms_drg_mdc_desc": mdc_desc,
+                "cpt": cpt,
+                "cpt_consumer_description": cpt_consumer_description,
+                "procedure_level_1": procedure_level_1,
+                "procedure_level_2": procedure_level_2,
+                "procedure_level_3": procedure_level_3,
+                "procedure_level_4": procedure_level_4,
+                "procedure_level_5": procedure_level_5,
+                "channel": channel,
+                "drug_name": drug_name,
+                "drug_class": drug_class,
+                "drug_subclass": drug_subclass,
+                "drug": drug,
+                "is_oon": is_oon,
+                "best_contracting_entity_name": best_contracting_entity_name,
+                "provider_group_name": provider_group_name,
+                "ccsr_system_description": ccsr_system_description,
+                "ccsr_description": ccsr_description,
             }
         )
     return claims
@@ -411,6 +573,9 @@ def main() -> None:
             "general_agency_name",
             "broker_name",
             "sa_contracting_entity_name",
+            "call_count",
+            "app_login_count",
+            "web_login_count",
             "new_member_in_period",
             "member_used_app",
             "member_had_web_login",
@@ -418,6 +583,7 @@ def main() -> None:
             "high_cost_member",
             "mutually_exclusive_hcc_condition",
             "geographic_reporting",
+            "wisconsin_area_deprivation_index",
             "year",
         ],
     )
@@ -441,6 +607,39 @@ def main() -> None:
             "status",
             "diagnosis_code",
             "procedure_code",
+            # Added descriptor + metric base fields
+            "charges",
+            "allowed",
+            "clean_claim_status",
+            "claim_from",
+            "clean_claim_out",
+            "utilization",
+            "hcg_units_days",
+            "claim_type",
+            "major_service_category",
+            "provider_specialty",
+            "detailed_service_category",
+            "ms_drg",
+            "ms_drg_description",
+            "ms_drg_mdc",
+            "ms_drg_mdc_desc",
+            "cpt",
+            "cpt_consumer_description",
+            "procedure_level_1",
+            "procedure_level_2",
+            "procedure_level_3",
+            "procedure_level_4",
+            "procedure_level_5",
+            "channel",
+            "drug_name",
+            "drug_class",
+            "drug_subclass",
+            "drug",
+            "is_oon",
+            "best_contracting_entity_name",
+            "provider_group_name",
+            "ccsr_system_description",
+            "ccsr_description",
         ],
     )
 
