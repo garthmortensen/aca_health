@@ -140,3 +140,76 @@ erDiagram
 - `source` edges indicate aggregation lineage.
 - `metrics feed` indicates inputs to composite dashboard view.
 - `derived` indicates a second-level cube built from a first-level cube.
+
+## End-to-end local workflow
+
+The diagram shows: generate seeds → start Postgres → load staging → build/test with dbt → docs.
+
+```mermaid
+flowchart TD
+  A["Generate Seed Data (Python)"] -->|writes CSVs| B["data/seeds/*.csv"]
+  click A href "scripts/generate_seed_data.py" _self
+  click B href "data/seeds/" _self
+
+  B --> C{"Docker up?"}
+  C -- "No" --> D["Start Postgres\n(docker compose up -d)"]
+  C -- "Yes" --> E["DB Healthy"]
+  D --> E
+  click D href "infrastructure/docker/docker-compose.yml" _self
+
+  E --> F["Apply DDL on init\n(/infrastructure/sql/ddl)"]
+  click F href "infrastructure/sql/ddl/01_staging_schema.sql" _self
+
+  F --> G["Load seeds into staging\n(scripts/staging_loader.py)"]
+  click G href "scripts/staging_loader.py" _self
+
+  G --> H["dbt seed (optional)"]
+  H --> I["dbt run (staging → dims/facts)"]
+  I --> J["dbt test (quality checks)"]
+  J --> K["dbt docs generate \n+ serve (optional)"]
+
+  
+```
+
+### Typical commands
+
+```bash
+# 1 Generate synthetic seeds (timestamped CSVs in data/seeds)
+python3 scripts/generate_seed_data.py
+
+# 2 Start Postgres (first run applies DDL automatically)
+docker compose -f infrastructure/docker/docker-compose.yml up -d
+
+# 3 Load the latest seed files into staging tables
+python3 scripts/staging_loader.py
+
+# 4 Build and validate with dbt
+cd transform
+
+# simple
+dbt build
+
+# piecemeal
+dbt snapshot
+dbt run
+dbt test
+dbt docs generate  # optional
+```
+
+## dbt profile setup
+
+dbt looks for `~/.dbt/profiles.yml` by default. This repo includes a working profile at `transform/profiles/profiles.yml` named `aca_health` (matching `profile:` in `transform/dbt_project.yml`).
+
+Set it up once globally:
+
+```bash
+mkdir -p ~/.dbt
+cp transform/profiles/profiles.yml ~/.dbt/profiles.yml
+```
+
+Validate the profile and connection:
+
+```bash
+cd transform
+dbt debug
+```

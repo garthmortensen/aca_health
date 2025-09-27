@@ -67,7 +67,9 @@ def find_latest_files() -> List[FileInfo]:
 
 def copy_file(cur: psycopg.Cursor, info: FileInfo, load_id: int) -> int:
     # Build COPY statement
-    copy_stmt = sql.SQL("COPY staging.{tbl} ({cols}, load_id) FROM STDIN WITH (FORMAT csv, HEADER true)").format(
+    # IMPORTANT: We stream ONLY data rows (we skip the header line below),
+    # so do NOT declare HEADER true here or Postgres will drop the first row.
+    copy_stmt = sql.SQL("COPY staging.{tbl} ({cols}, load_id) FROM STDIN WITH (FORMAT csv)").format(
         tbl=sql.Identifier(info.table),
         cols=sql.SQL(", ").join(sql.Identifier(c) for c in info.columns),
     )
@@ -158,7 +160,7 @@ def stage_files(conn_str: str) -> int:
 
 
 def main():
-    conn_str = os.environ.get("DB_URL", "postgresql://etl:etl@localhost:5432/dw")
+    conn_str = os.environ.get("DB_URL", "postgresql://etl:etl@localhost:5432/aca_health")
     stage_files(conn_str)
 
 if __name__ == "__main__":

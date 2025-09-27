@@ -1,8 +1,10 @@
 {{ config(materialized='view') }}
 
 -- Staging: enrollments (add coverage_days for convenience)
-with src as (
-  select * from {{ source('staging','enrollments_raw') }}
+with latest as (
+  select max(load_id) as load_id from {{ source('staging','enrollments_raw') }}
+), src as (
+  select * from {{ source('staging','enrollments_raw') }} where load_id = (select load_id from latest)
 )
 select
   enrollment_id,

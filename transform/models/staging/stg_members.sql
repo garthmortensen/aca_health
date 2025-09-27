@@ -1,7 +1,9 @@
 {{ config(materialized='view') }}
 
-with src as (
-    select * from {{ source('staging','members_raw') }}
+with latest as (
+    select max(load_id) as load_id from {{ source('staging','members_raw') }}
+), src as (
+    select * from {{ source('staging','members_raw') }} where load_id = (select load_id from latest)
 )
 select
     member_id,

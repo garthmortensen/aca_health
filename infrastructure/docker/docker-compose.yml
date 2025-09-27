@@ -1,5 +1,4 @@
-# ============================================================================
-# PostgreSQL Dev Container (Data Warehouse Staging)
+#wh PostgreSQL Dev Container (Data Warehouse Staging)
 # ----------------------------------------------------------------------------
 # HOW TO START
 # - Foreground (attached logs):
@@ -84,9 +83,9 @@ volumes:
 # DBeaver Connection Quick Reference
 #   Host: localhost
 #   Port: 5432
-#   Database: dw
+#   Database: aca_health
 #   Username: etl
 #   Password: etl
 # Optional JDBC URL:
-#   jdbc:postgresql://localhost:5432/dw?user=etl&password=etl
+#   jdbc:postgresql://localhost:5432/aca_health?user=etl&password=etl
 # ---------------------------------------------------------------------------

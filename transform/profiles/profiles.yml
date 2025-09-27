@@ -7,7 +7,7 @@ aca_health:
       user: '{{ env_var("PGUSER", "etl") }}'
       password: '{{ env_var("PGPASSWORD", "etl") }}'
       port: 5432
-      dbname: '{{ env_var("PGDATABASE", "dw") }}'
+      dbname: aca_health
       schema: staging
       threads: 4
       keepalives_idle: 0

@@ -1,8 +1,10 @@
 {{ config(materialized='view') }}
 
 -- Staging: plans (clean + light typing / renames if needed)
-with src as (
-  select * from {{ source('staging','plans_raw') }}
+with latest as (
+  select max(load_id) as load_id from {{ source('staging','plans_raw') }}
+), src as (
+  select * from {{ source('staging','plans_raw') }} where load_id = (select load_id from latest)
 )
 select
   plan_id,
