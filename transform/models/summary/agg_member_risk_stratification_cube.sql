@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='summary') }}
 
 -- Member risk & utilization stratification cube (member x risk buckets)
 with base as (

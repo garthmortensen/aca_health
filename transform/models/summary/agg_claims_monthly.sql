@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='summary') }}
 
 -- Monthly claims summary moved to summary schema
 select

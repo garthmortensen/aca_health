@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='summary') }}
 
 -- Plan performance cube (plan x month)
 with plan_claims as (

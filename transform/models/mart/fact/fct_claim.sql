@@ -1,4 +1,4 @@
-{{ config(materialized='incremental', unique_key='claim_id') }}
+{{ config(materialized='incremental', unique_key='claim_id', schema='dw') }}
 -- moved from analytics to mart
 with claims as (
     select * from {{ ref('stg_claims') }}

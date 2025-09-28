@@ -35,7 +35,7 @@ models:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
-            max_value: 120  # Max 10 years * 12 months
+            max_value: 24  # Max 2 years * 12 months (more realistic for test data)
 
   - name: agg_member_cost_cube
     description: "Member cost analysis cube with PMPM/PMPY metrics"

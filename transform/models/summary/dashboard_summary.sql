@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', schema='summary') }}
 
 -- Dashboard summary moved to summary schema
 with monthly_metrics as (

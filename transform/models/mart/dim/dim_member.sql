@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', schema='dw') }}
 -- moved from analytics to mart
 select
     s.member_id,

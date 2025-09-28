@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', schema='staging') }}
 
 with latest as (
     select max(load_id) as load_id from {{ source('staging','members_raw') }}

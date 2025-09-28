@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='summary') }}
 
 -- Provider performance analysis moved to summary schema
 with provider_claims as (

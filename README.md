@@ -35,9 +35,14 @@ Create datawarehouse, from raw to semantic layer, to serve as foundation for cos
 
 `python scripts/staging_loader.py`
 
+
 ## transform
 
 Use dbt to perform all transformations including stage, star-schema analytics mart, summary tables, data cubes and semantic layer.
+
+### Data Models
+
+Models are organized into the following schemas:
 
 Install dbt package dependencies:
 

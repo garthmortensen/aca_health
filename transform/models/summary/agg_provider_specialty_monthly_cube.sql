@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='summary') }}
 
 -- Provider specialty performance cube (specialty x month)
 with claims as (

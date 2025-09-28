@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='summary') }}
 
 -- Diagnosis cube (diagnosis x month) top 50 per month
 with diagnosis_monthly as (

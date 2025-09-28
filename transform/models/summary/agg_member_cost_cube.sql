@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='summary') }}
 
 -- Member cost cube (member x cost metrics)
 -- Renamed from agg_member_cost to enforce cube naming convention (multi-dimension)

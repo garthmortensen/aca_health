@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', schema='dw') }}
 -- Central star schema joining claim facts to all dimensions
 with fct_claim as (
     select * from {{ ref('fct_claim') }}

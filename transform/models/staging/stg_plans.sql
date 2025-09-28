@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', schema='staging') }}
 
 -- Staging: plans (clean + light typing / renames if needed)
 with latest as (

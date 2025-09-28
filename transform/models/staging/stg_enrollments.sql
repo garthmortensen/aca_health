@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', schema='staging') }}
 
 -- Staging: enrollments (add coverage_days for convenience)
 with latest as (

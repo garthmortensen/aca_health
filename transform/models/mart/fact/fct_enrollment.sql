@@ -1,4 +1,4 @@
-{{ config(materialized='incremental', unique_key='enrollment_id') }}
+{{ config(materialized='incremental', unique_key='enrollment_id', schema='dw') }}
 -- moved from analytics to mart
 with enrollments as (
     select * from {{ ref('stg_enrollments') }}

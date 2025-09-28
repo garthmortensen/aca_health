@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', schema='staging') }}
 
 -- Staging: providers
 with latest as (

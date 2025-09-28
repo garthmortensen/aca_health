@@ -1,5 +1,6 @@
 {{ config(
-    materialized='table'
+    materialized='table',
+    schema='semantic'
 ) }}
 
 -- Time spine model for dbt semantic layer

@@ -53,4 +53,3 @@ models:
       +materialized: view
     summary:                     # models/summary/* (aggregated summary tables)
       +materialized: view
-      +schema: summary           # Place these in the summary schema
