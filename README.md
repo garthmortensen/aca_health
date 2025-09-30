@@ -146,6 +146,48 @@ erDiagram
 - `metrics feed` indicates inputs to composite dashboard view.
 - `derived` indicates a second-level cube built from a first-level cube.
 
+## Data Architecture & Materialization Strategy
+
+The data warehouse follows a modern ELT pattern with different materialization strategies based on data characteristics:
+
+```text
+STAGING           SNAPSHOTS            DIMENSIONS           FACTS
+─────────         ──────────           ──────────           ─────────
+members_raw    ─► member_snapshot   ─► dim_member    ────┐
+(raw CSV)         (SCD2 table)        (VIEW)              │
+                                                          │
+plans_raw      ─► plan_snapshot     ─► dim_plan      ────┤
+(raw CSV)         (SCD2 table)        (VIEW)              │
+                                                          │
+providers_raw  ─► provider_snapshot ─► dim_provider  ────┤  fct_claim
+(raw CSV)         (SCD2 table)        (VIEW)              ├─► (INCREMENTAL)
+                                                          │
+claims_raw     ──────────────────────────────────────────┤
+(raw CSV)                                                 │
+                                                          │
+enrollments_raw ──────────────────────────────────────────┤  fct_enrollment
+(raw CSV)                                                 └─► (INCREMENTAL)
+
+generate_series() ──────────────────► dim_date ──────────┘
+(SQL function)                        (TABLE)
+```
+
+### Materialization Types
+
+| Layer | Type | Strategy | Rationale |
+|-------|------|----------|-----------|
+| **Facts** | `incremental` | Append new records only | High-volume transactional data |
+| **Business Dimensions** | `view` | Current records from snapshots | Change tracking with clean interface |
+| **Reference Dimensions** | `table` | Static lookup data | Performance for heavily-joined reference data |
+| **Snapshots** | `snapshot` | SCD2 history tracking | Preserve full change history |
+
+### Benefits
+
+- **Performance**: Facts materialized as tables for fast aggregations
+- **Flexibility**: Dimensions as views enable easy current vs. historical queries  
+- **Efficiency**: Incremental loading processes only new/changed data
+- **Auditability**: Full change history preserved in snapshot tables
+
 ## End-to-end local workflow
 
 The diagram shows: generate seeds → start Postgres → load staging → build/test with dbt → docs.

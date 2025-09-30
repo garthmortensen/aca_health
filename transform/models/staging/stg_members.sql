@@ -39,6 +39,7 @@ select
     mutually_exclusive_hcc_condition,
     geographic_reporting,
     wisconsin_area_deprivation_index,
+    ra_mm,
     year,
     load_id,
     load_timestamp

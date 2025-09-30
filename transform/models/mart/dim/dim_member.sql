@@ -9,6 +9,7 @@ select
     s.age_group,
     s.region,
     s.plan_metal,
+    s.ra_mm,
     s.load_id,
     s.dbt_valid_from as validity_start_ts,
     s.dbt_valid_to   as validity_end_ts,

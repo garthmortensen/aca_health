@@ -261,6 +261,37 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
         mutually_exclusive_hcc_condition = random.choice(MUTUALLY_EXCL_HCC)
         geographic_reporting = region
         wisconsin_adi = random.randint(1, 10)
+        
+        # Calculate risk-adjusted member months (ra_mm)
+        # Base member months from enrollment length, adjusted by risk factors
+        base_mm = enrollment_length_continuous / 12.0  # Convert to fraction of year
+        
+        # Risk adjustment factors based on clinical complexity and demographics
+        risk_multiplier = 1.0
+        if clinical_segment == "Complex":
+            risk_multiplier = 1.8
+        elif clinical_segment == "Chronic":
+            risk_multiplier = 1.4
+        elif clinical_segment == "Behavioral":
+            risk_multiplier = 1.3
+        elif clinical_segment == "Maternity":
+            risk_multiplier = 1.2
+        # Healthy stays at 1.0
+        
+        # Additional risk factors
+        if age > 65:
+            risk_multiplier *= 1.2
+        elif age > 55:
+            risk_multiplier *= 1.1
+        
+        if mutually_exclusive_hcc_condition:
+            risk_multiplier *= 1.15
+            
+        if high_cost_member:
+            risk_multiplier *= 1.5
+            
+        ra_mm = round(base_mm * risk_multiplier, 3)
+        
         members.append(
             {
                 "member_id": f"MBR{i:06d}",
@@ -297,6 +328,7 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
                 "mutually_exclusive_hcc_condition": mutually_exclusive_hcc_condition,
                 "geographic_reporting": geographic_reporting,
                 "wisconsin_area_deprivation_index": wisconsin_adi,
+                "ra_mm": ra_mm,
                 "year": YEAR,
             }
         )
@@ -584,6 +616,7 @@ def main() -> None:
             "mutually_exclusive_hcc_condition",
             "geographic_reporting",
             "wisconsin_area_deprivation_index",
+            "ra_mm",
             "year",
         ],
     )

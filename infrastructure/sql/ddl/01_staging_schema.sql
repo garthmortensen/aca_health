@@ -23,6 +23,9 @@ ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS file_size_bytes BIGINT
 ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS file_sha256 TEXT;
 ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS source_row_count BIGINT;
 
+-- Add ra_mm column to members_raw if it doesn't exist
+ALTER TABLE staging.members_raw ADD COLUMN IF NOT EXISTS ra_mm NUMERIC(5,3);
+
 -- Plans raw
 CREATE TABLE IF NOT EXISTS staging.plans_raw (
     plan_id TEXT,
@@ -88,6 +91,7 @@ CREATE TABLE IF NOT EXISTS staging.members_raw (
     mutually_exclusive_hcc_condition TEXT,
     geographic_reporting TEXT,
     wisconsin_area_deprivation_index SMALLINT,
+    ra_mm NUMERIC(5,3),
     year INTEGER,
     load_id BIGINT REFERENCES staging.load_batches (load_id),
     load_timestamp TIMESTAMPTZ NOT NULL DEFAULT now()

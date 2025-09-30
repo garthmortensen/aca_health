@@ -56,7 +56,7 @@
     strategy='check',
     check_cols=[
       'first_name','last_name','dob','gender','email','phone','street','city','state','zip',
-      'fpl_ratio','plan_metal','age_group','region'
+      'fpl_ratio','plan_metal','age_group','region','ra_mm'
     ]
   )
 }}
@@ -77,6 +77,7 @@ select
   plan_metal,
   age_group,
   region,
+  ra_mm,
   load_id,
   load_timestamp
 from {{ source('staging','members_raw') }}

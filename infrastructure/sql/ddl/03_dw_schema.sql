@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS dw.dim_member (
     high_cost_member SMALLINT,
     mutually_exclusive_hcc_condition TEXT,
     geographic_reporting TEXT,
+    ra_mm NUMERIC(5,3),
     year INTEGER,
     -- SCD2 metadata
     validity_start_ts TIMESTAMPTZ NOT NULL DEFAULT now(),
