@@ -20,71 +20,181 @@ models:
     description: "Member dimension implementing SCD2 to track historical changes in member demographics, risk profiles, and engagement metrics. Maintains complete member lifecycle history with validity periods, enabling point-in-time analysis and trend tracking."
     columns:
       - name: member_id
+        description: "Natural member identifier from source system"
         tests: [not_null, unique]
+      - name: first_name
+        description: "Member first name (normalized to uppercase)"
+      - name: last_name
+        description: "Member last name (normalized to uppercase)"
+      - name: date_of_birth
+        description: "Member date of birth"
+      - name: gender
+        description: "Member gender code (M/F/O)"
+      - name: age_group
+        description: "Simulated age group bucket for demographic analysis"
+      - name: region
+        description: "Geographic region classification"
+      - name: plan_metal
+        description: "ACA metal tier from member enrollment (Bronze/Silver/Gold/Platinum)"
+      - name: ra_mm
+        description: "Risk Adjustment Member Months score"
+      - name: load_id
+        description: "Reference to staging load batch"
+      - name: validity_start_ts
+        description: "SCD2 version start timestamp (when this version became effective)"
+      - name: validity_end_ts
+        description: "SCD2 version end timestamp (when this version was superseded, null for current)"
       - name: is_current
+        description: "Boolean flag indicating if this is the current/active version of the member record"
         tests: [not_null]
 
   - name: dim_plan
     description: "Plan dimension with SCD2 history tracking changes in benefit design, premium rates, and plan attributes over time. Natural key includes both plan_id and effective_year to handle annual plan updates and mid-year modifications."
     columns:
       - name: plan_id
+        description: "Plan identifier from source system (PLN####)"
         tests: [not_null, unique]
+      - name: plan_name
+        description: "Plan marketing name (normalized to uppercase)"
+      - name: metal_tier
+        description: "ACA metal tier classification (Bronze/Silver/Gold/Platinum)"
       - name: monthly_premium
+        description: "Monthly premium amount in dollars"
         tests:
           - dbt_expectations.expect_column_values_to_be_between:
               arguments: {min_value: 50, max_value: 2000}
+      - name: deductible
+        description: "Annual deductible amount"
+      - name: oop_max
+        description: "Out-of-pocket maximum annual limit"
+      - name: coinsurance_rate
+        description: "Member coinsurance rate (decimal between 0-1)"
+      - name: pcp_copay
+        description: "Primary care provider copay amount"
+      - name: effective_year
+        description: "Plan effective year (component of natural key)"
+      - name: load_id
+        description: "Reference to staging load batch"
+      - name: validity_start_ts
+        description: "SCD2 version start timestamp"
+      - name: validity_end_ts
+        description: "SCD2 version end timestamp (null for current)"
+      - name: is_current
+        description: "Boolean flag indicating if this is the current/active version"
 
   - name: dim_provider
     description: "Provider dimension with SCD2 history to capture changes in provider practice details, specialties, and location information. Essential for network analysis, provider performance tracking, and geographic access studies."
     columns:
       - name: provider_id
+        description: "Provider identifier from source system (PRV#####)"
         tests: [not_null, unique]
+      - name: npi
+        description: "Simulated National Provider Identifier"
+      - name: provider_name
+        description: "Provider full name (normalized to uppercase)"
+      - name: specialty
+        description: "Medical specialty classification"
+      - name: street
+        description: "Provider practice street address"
+      - name: city
+        description: "Provider practice city"
+      - name: state
+        description: "Provider practice state code"
+      - name: zip
+        description: "Provider practice postal code"
+      - name: phone
+        description: "Provider contact phone number"
+      - name: load_id
+        description: "Reference to staging load batch"
+      - name: validity_start_ts
+        description: "SCD2 version start timestamp"
+      - name: validity_end_ts
+        description: "SCD2 version end timestamp (null for current)"
+      - name: is_current
+        description: "Boolean flag indicating if this is the current/active version"
 
   - name: fct_claim
     description: "Central claims fact table containing one row per claim with foreign keys to all dimensions. Supports medical cost analysis, utilization studies, provider performance measurement, and member health outcomes tracking through comprehensive claim-level metrics."
     columns:
       - name: claim_id
+        description: "Unique claim identifier (natural key)"
         tests: [not_null, unique]
-      - name: claim_amount
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments: {min_value: 0, max_value: 100000}
       - name: member_id
+        description: "Foreign key reference to member dimension"
         tests:
           - not_null
           - relationships:
               arguments: {to: ref('dim_member'), field: member_id}
       - name: provider_id
+        description: "Foreign key reference to provider dimension"
         tests:
           - not_null
           - relationships:
               arguments: {to: ref('dim_provider'), field: provider_id}
       - name: plan_id
+        description: "Foreign key reference to plan dimension"
         tests:
           - not_null
           - relationships:
               arguments: {to: ref('dim_plan'), field: plan_id}
+      - name: claim_date
+        description: "Date of service for the claim"
+      - name: claim_amount
+        description: "Total billed amount for the claim"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments: {min_value: 0, max_value: 100000}
+      - name: allowed_amount
+        description: "Amount allowed by plan after adjudication"
+      - name: paid_amount
+        description: "Amount actually paid by plan"
       - name: claim_status
+        description: "Processing status of the claim"
         tests:
           - dbt_expectations.expect_column_values_to_be_in_set:
               arguments: {value_set: [approved, denied, pending]}
+      - name: diagnosis_code
+        description: "Primary diagnosis code (ICD-11)"
+      - name: procedure_code
+        description: "Primary procedure code (CPT)"
+      - name: load_id
+        description: "Reference to source staging load batch"
+      - name: load_timestamp
+        description: "Timestamp when record was loaded from staging"
 
   - name: fct_enrollment
     description: "Enrollment fact table tracking member-plan relationships over time with coverage periods and premium information. Critical for membership analytics, revenue tracking, churn analysis, and plan performance evaluation."
     columns:
       - name: enrollment_id
+        description: "Unique enrollment period identifier"
         tests: [not_null, unique]
       - name: member_id
+        description: "Foreign key reference to member dimension"
         tests:
           - not_null
           - relationships:
               arguments: {to: ref('dim_member'), field: member_id}
       - name: plan_id
+        description: "Foreign key reference to plan dimension"
         tests:
           - not_null
           - relationships:
               arguments: {to: ref('dim_plan'), field: plan_id}
+      - name: start_date
+        description: "Coverage period start date"
+      - name: end_date
+        description: "Coverage period end date"
+      - name: coverage_days
+        description: "Number of days covered in enrollment period"
+      - name: premium_paid
+        description: "Premium amount paid by member"
+      - name: csr_variant
+        description: "Cost-sharing reduction variant code"
+      - name: load_id
+        description: "Reference to source staging load batch"
+      - name: load_timestamp
+        description: "Timestamp when record was loaded from staging"
 
   - name: star_claims
     description: "Comprehensive star schema view pre-joining claim facts with all dimensions (member, provider, plan, date) for high-performance analytics. Optimized for dashboard queries, ad-hoc analysis, and business intelligence reporting by eliminating complex joins at query time."
