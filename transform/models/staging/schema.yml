@@ -8,7 +8,7 @@ models:
   # the name field corresponds to the raw source table
   - name: stg_members
     # description field is a brief explanation of the model's purpose and contents
-    description: "Cleaned member rows (renamed / typed) from members_raw; one row per member snapshot load."
+    description: "Cleaned and standardized member demographics, enrollment attributes, and behavioral metrics. Provides 1:1 transformation from staging.members_raw with proper data types, renamed columns, and basic data quality validations. Includes risk adjustment scores, engagement metrics, and geographic classifications."
     columns:
       - name: member_id
         description: "Natural member identifier from raw source."
@@ -84,7 +84,7 @@ models:
       - name: load_timestamp
         description: "Ingestion timestamp from raw table."
   - name: stg_claims
-    description: "Claims with standardized column names; one row per claim_id in raw claims_raw."
+    description: "Comprehensive medical, pharmacy, and dental claims data with enhanced categorization and coding. Provides 1:1 transformation from staging.claims_raw with standardized naming, proper data types, and extensive enrichment attributes including MS-DRG codes, CPT classifications, drug information, and CCSR clinical categories."
     columns:
       - name: claim_id
         description: "Synthetic claim identifier."
@@ -183,7 +183,7 @@ models:
       - name: load_timestamp
         description: "Ingestion timestamp from raw claims."
   - name: stg_plans
-    description: "Plan attributes by (plan_id, effective_year) from plans_raw."
+    description: "Health insurance plan catalog with benefit design details. Contains plan identifiers, metal tier classifications, premium structures, deductibles, out-of-pocket maximums, copay amounts, and coinsurance rates. Each row represents a unique plan-year combination."
     columns:
       - name: plan_id
         description: "Plan natural key (PLN####)."
@@ -209,7 +209,7 @@ models:
       - name: load_timestamp
         description: "Ingestion timestamp."
   - name: stg_providers
-    description: "Provider attributes from providers_raw."
+    description: "Healthcare provider directory with practice information. Includes provider identifiers, simulated NPI numbers, demographic details, medical specialties, and complete practice addresses. Represents individual practitioners and healthcare facilities in the network."
     columns:
       - name: provider_id
         description: "Provider natural key (PRV#####)."
@@ -235,7 +235,7 @@ models:
       - name: load_timestamp
         description: "Ingestion timestamp."
   - name: stg_enrollments
-    description: "Enrollment periods per enrollment_id with derived coverage_days."
+    description: "Member plan enrollment periods with coverage duration metrics. Tracks continuous enrollment spans between members and plans, including start/end dates, premium payments, CSR variant assignments, and calculated coverage days. Critical for membership analytics and premium revenue tracking."
     columns:
       - name: enrollment_id
         description: "Natural enrollment identifier."

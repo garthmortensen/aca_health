@@ -56,6 +56,7 @@ COMMENT ON COLUMN dw.dim_member.member_visited_new_provider_ind IS '1 if member 
 COMMENT ON COLUMN dw.dim_member.high_cost_member IS '1 if simulated high cost classification';
 COMMENT ON COLUMN dw.dim_member.mutually_exclusive_hcc_condition IS 'Chosen chronic condition bucket';
 COMMENT ON COLUMN dw.dim_member.geographic_reporting IS 'Geographic reporting code';
+COMMENT ON COLUMN dw.dim_member.ra_mm IS 'Risk Adjustment Member Months score';
 COMMENT ON COLUMN dw.dim_member.year IS 'Snapshot / attribution year (source)';
 COMMENT ON COLUMN dw.dim_member.validity_start_ts IS 'SCD2 version start timestamp (inclusive)';
 COMMENT ON COLUMN dw.dim_member.validity_end_ts IS 'SCD2 version end timestamp (exclusive boundary sentinel if 9999-12-31)';
@@ -138,3 +139,21 @@ COMMENT ON COLUMN dw.fact_enrollment.created_at IS 'Insertion timestamp';
 COMMENT ON VIEW dw.v_dim_member_current IS 'Convenience view of current (active) member dimension versions';
 COMMENT ON VIEW dw.v_dim_provider_current IS 'Convenience view of current provider dimension versions';
 COMMENT ON VIEW dw.v_dim_plan_current IS 'Convenience view of current plan dimension versions';
+
+-- ===================== Index Comments =====================
+-- Dimension table indexes
+COMMENT ON INDEX dw.idx_dim_member_member_id_current IS 'Performance index on member_id for current records only';
+COMMENT ON INDEX dw.idx_dim_member_attr_hash_current IS 'Change detection index on attr_hash for current records';
+COMMENT ON INDEX dw.idx_dim_provider_provider_id_current IS 'Performance index on provider_id for current records only';
+COMMENT ON INDEX dw.idx_dim_plan_nk_current IS 'Natural key index on (plan_id, effective_year) for current records';
+
+-- Fact table indexes
+COMMENT ON INDEX dw.idx_fact_claim_member_sk IS 'Foreign key index for member dimension joins';
+COMMENT ON INDEX dw.idx_fact_claim_provider_sk IS 'Foreign key index for provider dimension joins';
+COMMENT ON INDEX dw.idx_fact_claim_plan_sk IS 'Foreign key index for plan dimension joins';
+COMMENT ON INDEX dw.idx_fact_claim_date_key IS 'Foreign key index for date dimension joins and time-based queries';
+COMMENT ON INDEX dw.idx_fact_claim_status IS 'Performance index for claim status filtering';
+COMMENT ON INDEX dw.idx_fact_enrollment_member_sk IS 'Foreign key index for member dimension joins in enrollment facts';
+COMMENT ON INDEX dw.idx_fact_enrollment_plan_sk IS 'Foreign key index for plan dimension joins in enrollment facts';
+COMMENT ON INDEX dw.idx_fact_enrollment_start_date_key IS 'Foreign key index for start date dimension joins';
+COMMENT ON INDEX dw.idx_fact_enrollment_end_date_key IS 'Foreign key index for end date dimension joins';

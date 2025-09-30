@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: agg_claims_monthly
-    description: "Monthly claims aggregation cube"
+    description: "Pre-aggregated monthly claims summary providing KPIs including total claims volume, financial metrics (billed/allowed/paid amounts), approval rates, and unique member/provider counts. Optimized for executive dashboards and trend analysis over time."
     columns:
       - name: report_month
         description: "Month of aggregation"
@@ -38,7 +38,7 @@ models:
             max_value: 24  # Max 2 years * 12 months (more realistic for test data)
 
   - name: agg_member_cost_cube
-    description: "Member cost analysis cube with PMPM/PMPY metrics"
+    description: "Member-level cost analytics cube with standardized PMPM (Per Member Per Month) and PMPY (Per Member Per Year) metrics. Enables member cost profiling, risk stratification, and actuarial analysis for plan pricing and medical management."
     columns:
       - name: member_id
         description: "Member identifier"
@@ -68,7 +68,7 @@ models:
                 value_set: ['No Claims', 'Low Cost', 'Moderate Cost', 'High Cost', 'Very High Cost']
 
   - name: agg_provider_performance
-    description: "Provider performance analysis cube"
+    description: "Provider performance analytics cube aggregating claims volume, financial metrics, and approval rates by provider. Supports network management, provider scorecards, and contracting decisions through provider-specific KPIs and volume categorization."
     columns:
       - name: provider_id
         description: "Provider identifier"
@@ -99,7 +99,7 @@ models:
                 value_set: ['Very Low Volume', 'Low Volume', 'Moderate Volume', 'High Volume']
 
   - name: dashboard_summary
-    description: "Executive KPI dashboard summary"
+    description: "Executive-level KPI dashboard providing current period metrics including latest month claims volume, approval rates, high-cost member impacts, and cross-functional performance indicators. Single-row summary optimized for real-time dashboard consumption."
     columns:
       - name: report_date
         description: "Report generation date"
@@ -132,7 +132,7 @@ models:
             value: 1  # Should always be exactly one summary row
 
   - name: agg_plan_performance_cube
-    description: "Monthly plan performance metrics with PMPM and approval ratios"
+    description: "Plan performance analytics by month with standardized PMPM costs, claims approval ratios, and member engagement metrics. Critical for plan profitability analysis, pricing decisions, and competitive benchmarking across the plan portfolio."
     columns:
       - name: plan_id
         description: "Plan identifier"
@@ -158,7 +158,7 @@ models:
                 max_value: 1.0
 
   - name: agg_member_risk_stratification_cube
-    description: "Member risk & utilization stratification cube"
+    description: "Member risk stratification analytics categorizing members by paid amount buckets, utilization patterns, and cost profiles. Essential for actuarial modeling, medical management prioritization, and risk-based plan design with member-specific risk scoring."
     columns:
       - name: member_id
         description: "Member identifier"
@@ -179,7 +179,7 @@ models:
                 value_set: ['No Util','Low Util','Moderate Util','High Util','Very High Util']
 
   - name: agg_provider_specialty_monthly_cube
-    description: "Monthly provider specialty performance metrics"
+    description: "Monthly provider specialty analytics tracking claims volume, costs, and performance patterns by medical specialty. Supports specialty-specific network adequacy analysis, provider recruitment strategies, and specialty-based cost management initiatives."
     columns:
       - name: specialty
         description: "Provider specialty"
@@ -198,7 +198,7 @@ models:
                 max_value: 1.0
 
   - name: agg_claims_diagnosis_summary_cube
-    description: "Top 50 diagnosis codes per month with financial metrics"
+    description: "Monthly diagnosis code analytics featuring top 50 most frequent diagnoses with associated claims volume, financial impact, and cost per diagnosis. Critical for population health management, clinical program development, and disease-specific cost analysis."
     columns:
       - name: report_month
         description: "Month of aggregation"

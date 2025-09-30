@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim_date
-    description: "Date dimension with calendar attributes"
+    description: "Calendar date dimension with comprehensive temporal attributes including year, quarter, month, week, and weekend indicators. Provides standard time intelligence for all fact table joins and enables temporal analysis across the data warehouse."
     columns:
       - name: date_key
         description: "Date key in YYYYMMDD format"
@@ -17,7 +17,7 @@ models:
               arguments: {min_value: 2000, max_value: 2030}
 
   - name: dim_member
-    description: "Member dimension with SCD2 history"
+    description: "Member dimension implementing SCD2 to track historical changes in member demographics, risk profiles, and engagement metrics. Maintains complete member lifecycle history with validity periods, enabling point-in-time analysis and trend tracking."
     columns:
       - name: member_id
         tests: [not_null, unique]
@@ -25,7 +25,7 @@ models:
         tests: [not_null]
 
   - name: dim_plan
-    description: "Plan dimension with SCD2 history"
+    description: "Plan dimension with SCD2 history tracking changes in benefit design, premium rates, and plan attributes over time. Natural key includes both plan_id and effective_year to handle annual plan updates and mid-year modifications."
     columns:
       - name: plan_id
         tests: [not_null, unique]
@@ -35,13 +35,13 @@ models:
               arguments: {min_value: 50, max_value: 2000}
 
   - name: dim_provider
-    description: "Provider dimension with SCD2 history"
+    description: "Provider dimension with SCD2 history to capture changes in provider practice details, specialties, and location information. Essential for network analysis, provider performance tracking, and geographic access studies."
     columns:
       - name: provider_id
         tests: [not_null, unique]
 
   - name: fct_claim
-    description: "Claim fact table"
+    description: "Central claims fact table containing one row per claim with foreign keys to all dimensions. Supports medical cost analysis, utilization studies, provider performance measurement, and member health outcomes tracking through comprehensive claim-level metrics."
     columns:
       - name: claim_id
         tests: [not_null, unique]
@@ -71,7 +71,7 @@ models:
               arguments: {value_set: [approved, denied, pending]}
 
   - name: fct_enrollment
-    description: "Enrollment fact table"
+    description: "Enrollment fact table tracking member-plan relationships over time with coverage periods and premium information. Critical for membership analytics, revenue tracking, churn analysis, and plan performance evaluation."
     columns:
       - name: enrollment_id
         tests: [not_null, unique]
@@ -87,7 +87,7 @@ models:
               arguments: {to: ref('dim_plan'), field: plan_id}
 
   - name: star_claims
-    description: "Central star schema joining claim facts to all dimensions for fast analysis."
+    description: "Comprehensive star schema view pre-joining claim facts with all dimensions (member, provider, plan, date) for high-performance analytics. Optimized for dashboard queries, ad-hoc analysis, and business intelligence reporting by eliminating complex joins at query time."
     columns:
       - name: claim_id
         description: "Unique identifier for the claim."
