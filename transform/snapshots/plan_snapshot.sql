@@ -16,8 +16,6 @@ select
   oop_max,
   coinsurance_rate,
   pcp_copay,
-  effective_year,
-  load_id,
-  load_timestamp
+  effective_year
 from {{ source('staging','plans_raw') }}
 {% endsnapshot %}

@@ -38,9 +38,7 @@ select
     c.paid_amount,
     c.claim_status,
     c.diagnosis_code,
-    c.procedure_code,
-    c.load_id,
-    c.load_timestamp
+    c.procedure_code
 from fct_claim c
 left join member m on c.member_id = m.member_id
 left join plan p on c.plan_id = p.plan_id

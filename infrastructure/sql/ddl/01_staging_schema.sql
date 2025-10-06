@@ -1,30 +1,9 @@
 -- Create staging schema
 CREATE SCHEMA IF NOT EXISTS staging;
 
--- staging often stays "land raw", meaning it is used for raw data ingestion
--- it has logical (implied) relationships to other tables, but no foreign keys (minus load_id)
-
--- Load batch tracking table
-CREATE TABLE IF NOT EXISTS staging.load_batches (
-    load_id BIGSERIAL PRIMARY KEY,
-    source_name TEXT NOT NULL,
-    description TEXT,
-    file_pattern TEXT,
-    started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    completed_at TIMESTAMPTZ,
-    row_count BIGINT,
-    status TEXT NOT NULL DEFAULT 'started', -- started|completed|failed
-    file_size_bytes BIGINT,
-    file_sha256 TEXT,
-    source_row_count BIGINT
-);
--- Ensure new columns exist if table created earlier without them
-ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS file_size_bytes BIGINT;
-ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS file_sha256 TEXT;
-ALTER TABLE staging.load_batches ADD COLUMN IF NOT EXISTS source_row_count BIGINT;
-
--- Add ra_mm column to members_raw if it doesn't exist
-ALTER TABLE staging.members_raw ADD COLUMN IF NOT EXISTS ra_mm NUMERIC(5,3);
+-- Staging schema contains raw tables loaded via dbt seed
+-- Tables have no foreign keys to allow flexible data loading
+-- Deduplication is handled in dbt staging models
 
 -- Plans raw
 CREATE TABLE IF NOT EXISTS staging.plans_raw (
@@ -36,9 +15,7 @@ CREATE TABLE IF NOT EXISTS staging.plans_raw (
     oop_max INTEGER,
     coinsurance_rate NUMERIC(5, 4),
     pcp_copay INTEGER,
-    effective_year INTEGER,
-    load_id BIGINT REFERENCES staging.load_batches (load_id),
-    load_timestamp TIMESTAMPTZ NOT NULL DEFAULT now()
+    effective_year INTEGER
 );
 
 -- Providers raw
@@ -51,9 +28,7 @@ CREATE TABLE IF NOT EXISTS staging.providers_raw (
     city TEXT,
     state CHAR(2),
     zip TEXT,
-    phone TEXT,
-    load_id BIGINT REFERENCES staging.load_batches (load_id),
-    load_timestamp TIMESTAMPTZ NOT NULL DEFAULT now()
+    phone TEXT
 );
 
 -- Members raw
@@ -92,9 +67,7 @@ CREATE TABLE IF NOT EXISTS staging.members_raw (
     geographic_reporting TEXT,
     wisconsin_area_deprivation_index SMALLINT,
     ra_mm NUMERIC(5,3),
-    year INTEGER,
-    load_id BIGINT REFERENCES staging.load_batches (load_id),
-    load_timestamp TIMESTAMPTZ NOT NULL DEFAULT now()
+    year INTEGER
 );
 
 -- Enrollments raw
@@ -105,9 +78,7 @@ CREATE TABLE IF NOT EXISTS staging.enrollments_raw (
     start_date DATE,
     end_date DATE,
     premium_paid NUMERIC(10, 2),
-    csr_variant TEXT,
-    load_id BIGINT REFERENCES staging.load_batches (load_id),
-    load_timestamp TIMESTAMPTZ NOT NULL DEFAULT now()
+    csr_variant TEXT
 );
 
 -- Claims raw
@@ -155,23 +126,10 @@ CREATE TABLE IF NOT EXISTS staging.claims_raw (
     best_contracting_entity_name TEXT,
     provider_group_name TEXT,
     ccsr_system_description TEXT,
-    ccsr_description TEXT,
-    load_id BIGINT REFERENCES staging.load_batches (load_id),
-    load_timestamp TIMESTAMPTZ NOT NULL DEFAULT now()
+    ccsr_description TEXT
 );
 
 -- Indexes
-CREATE INDEX IF NOT EXISTS idx_plans_raw_load ON staging.plans_raw (load_id);
-CREATE INDEX IF NOT EXISTS idx_providers_raw_load ON staging.providers_raw (
-    load_id
-);
-CREATE INDEX IF NOT EXISTS idx_members_raw_load ON staging.members_raw (
-    load_id
-);
-CREATE INDEX IF NOT EXISTS idx_enrollments_raw_load ON staging.enrollments_raw (
-    load_id
-);
-CREATE INDEX IF NOT EXISTS idx_claims_raw_load ON staging.claims_raw (load_id);
 CREATE INDEX IF NOT EXISTS idx_claims_raw_member ON staging.claims_raw (
     member_id
 );
@@ -182,6 +140,3 @@ CREATE INDEX IF NOT EXISTS idx_claims_raw_plan ON staging.claims_raw (plan_id);
 CREATE INDEX IF NOT EXISTS idx_claims_raw_service_date ON staging.claims_raw (
     service_date
 );
--- Support idempotent re-runs: only one completed batch per file_pattern (optional semantic key)
-CREATE UNIQUE INDEX IF NOT EXISTS uq_load_batches_file_pattern_completed
-ON staging.load_batches (file_pattern) WHERE status = 'completed';

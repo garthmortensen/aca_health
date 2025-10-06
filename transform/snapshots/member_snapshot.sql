@@ -77,8 +77,6 @@ select
   plan_metal,
   age_group,
   region,
-  ra_mm,
-  load_id,
-  load_timestamp
+  ra_mm
 from {{ source('staging','members_raw') }}
 {% endsnapshot %}

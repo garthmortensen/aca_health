@@ -15,13 +15,7 @@ select
     e.end_date,
     e.coverage_days,
     e.premium_paid,
-    e.csr_variant,
-    e.load_id,
-    e.load_timestamp
+    e.csr_variant
 from enrollments e
 left join dim_member dm using (member_id)
 left join dim_plan dp using (plan_id)
-
-{% if is_incremental() %}
-where e.load_timestamp > (select coalesce(max(load_timestamp), '1900-01-01') from {{ this }})
-{% endif %}

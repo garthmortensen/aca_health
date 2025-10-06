@@ -1,26 +1,31 @@
 #!/usr/bin/env python3
 """
 Generate ACA-like synthetic seed data as CSVs using Faker.
-Configure counts and output directory via the constants below, then run without CLI args.
-Outputs (timestamped): plans_YYYYMMDDHHMM.csv, providers_YYYYMMDDHHMM.csv, members_YYYYMMDDHHMM.csv, enrollments_YYYYMMDDHHMM.csv, claims_YYYYMMDDHHMM.csv
+
+Outputs:
+  - Timestamped files in data/seeds/ (for archival/versioning)
+  - Stable-named files in transform/seeds/ (for dbt seed)
+  
+Run without CLI args: python scripts/generate_seed_data.py
 """
 import csv
 import os
 import random
+import shutil
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Tuple
 
 from faker import Faker
 
 # User-configurable parameters
-OUT_DIR = "data/seeds"
+DBT_SEEDS_DIR = "transform/seeds/"  # Stable-named CSVs for dbt
 YEAR = date.today().year
-MEMBERS = 5000
-PROVIDERS = 30
-PLANS = 20
-CLAIMS = 5000
+PLANS =        10  # real dist 100
+PROVIDERS =   100  # real dist 100,000
+MEMBERS =    1000  # real dist 1,000,000
+CLAIMS =    10000  # real dist 10,000,000
 
-SEED = 42
+SEED = 1
 
 METAL_TIERS = ["Bronze", "Silver", "Gold", "Platinum"]
 PROVIDER_SPECIALTIES = [
@@ -532,8 +537,9 @@ def gen_claims(
 
 
 def main() -> None:
-    # Use config variables instead of CLI args
-    out = OUT_DIR
+    """Generate synthetic ACA data and write to dbt directories."""
+    # Use config variables
+    dbt_out = DBT_SEEDS_DIR
     year = YEAR
     members_n = MEMBERS
     providers_n = PROVIDERS
@@ -545,9 +551,9 @@ def main() -> None:
     fake = Faker("en_US")
     fake.seed_instance(seed)
 
-    ensure_dir(out)
+    ensure_dir(dbt_out)
 
-    # Append timestamp suffix to output filenames
+    # Timestamp suffix for archival files
     ts = datetime.now().strftime("%Y%m%d%H%M")
 
     plans = gen_plans(fake, plans_n, year)
@@ -559,125 +565,132 @@ def main() -> None:
     plans_by_id = {p["plan_id"]: p for p in plans}
     claims = gen_claims(fake, members, providers, plans_by_id, enroll_idx, year, claims_n)
 
-    write_csv(
-        os.path.join(out, f"plans_{ts}.csv"),
-        plans,
-        [
-            "plan_id",
-            "name",
-            "metal_tier",
-            "monthly_premium",
-            "deductible",
-            "oop_max",
-            "coinsurance_rate",
-            "pcp_copay",
-            "effective_year",
-        ],
-    )
-    write_csv(
-        os.path.join(out, f"providers_{ts}.csv"),
-        providers,
-        ["provider_id", "npi", "name", "specialty", "street", "city", "state", "zip", "phone"],
-    )
-    write_csv(
-        os.path.join(out, f"members_{ts}.csv"),
-        members,
-        [
-            "member_id",
-            "first_name",
-            "last_name",
-            "dob",
-            "gender",
-            "email",
-            "phone",
-            "street",
-            "city",
-            "state",
-            "zip",
-            "fpl_ratio",
-            "hios_id",
-            "plan_network_access_type",
-            "plan_metal",
-            "age_group",
-            "region",
-            "enrollment_length_continuous",
-            "clinical_segment",
-            "general_agency_name",
-            "broker_name",
-            "sa_contracting_entity_name",
-            "call_count",
-            "app_login_count",
-            "web_login_count",
-            "new_member_in_period",
-            "member_used_app",
-            "member_had_web_login",
-            "member_visited_new_provider_ind",
-            "high_cost_member",
-            "mutually_exclusive_hcc_condition",
-            "geographic_reporting",
-            "wisconsin_area_deprivation_index",
-            "ra_mm",
-            "year",
-        ],
-    )
-    write_csv(
-        os.path.join(out, f"enrollments_{ts}.csv"),
-        enrollments,
-        ["enrollment_id", "member_id", "plan_id", "start_date", "end_date", "premium_paid", "csr_variant"],
-    )
-    write_csv(
-        os.path.join(out, f"claims_{ts}.csv"),
-        claims,
-        [
-            "claim_id",
-            "member_id",
-            "provider_id",
-            "plan_id",
-            "service_date",
-            "claim_amount",
-            "allowed_amount",
-            "paid_amount",
-            "status",
-            "diagnosis_code",
-            "procedure_code",
-            # Added descriptor + metric base fields
-            "charges",
-            "allowed",
-            "clean_claim_status",
-            "claim_from",
-            "clean_claim_out",
-            "utilization",
-            "hcg_units_days",
-            "claim_type",
-            "major_service_category",
-            "provider_specialty",
-            "detailed_service_category",
-            "ms_drg",
-            "ms_drg_description",
-            "ms_drg_mdc",
-            "ms_drg_mdc_desc",
-            "cpt",
-            "cpt_consumer_description",
-            "procedure_level_1",
-            "procedure_level_2",
-            "procedure_level_3",
-            "procedure_level_4",
-            "procedure_level_5",
-            "channel",
-            "drug_name",
-            "drug_class",
-            "drug_subclass",
-            "drug",
-            "is_oon",
-            "best_contracting_entity_name",
-            "provider_group_name",
-            "ccsr_system_description",
-            "ccsr_description",
-        ],
-    )
+    # Define entity configurations
+    entities = [
+        {
+            "name": "plans",
+            "data": plans,
+            "fields": [
+                "plan_id",
+                "name",
+                "metal_tier",
+                "monthly_premium",
+                "deductible",
+                "oop_max",
+                "coinsurance_rate",
+                "pcp_copay",
+                "effective_year",
+            ],
+        },
+        {
+            "name": "providers",
+            "data": providers,
+            "fields": ["provider_id", "npi", "name", "specialty", "street", "city", "state", "zip", "phone"],
+        },
+        {
+            "name": "members",
+            "data": members,
+            "fields": [
+                "member_id",
+                "first_name",
+                "last_name",
+                "dob",
+                "gender",
+                "email",
+                "phone",
+                "street",
+                "city",
+                "state",
+                "zip",
+                "fpl_ratio",
+                "hios_id",
+                "plan_network_access_type",
+                "plan_metal",
+                "age_group",
+                "region",
+                "enrollment_length_continuous",
+                "clinical_segment",
+                "general_agency_name",
+                "broker_name",
+                "sa_contracting_entity_name",
+                "call_count",
+                "app_login_count",
+                "web_login_count",
+                "new_member_in_period",
+                "member_used_app",
+                "member_had_web_login",
+                "member_visited_new_provider_ind",
+                "high_cost_member",
+                "mutually_exclusive_hcc_condition",
+                "geographic_reporting",
+                "wisconsin_area_deprivation_index",
+                "ra_mm",
+                "year",
+            ],
+        },
+        {
+            "name": "enrollments",
+            "data": enrollments,
+            "fields": ["enrollment_id", "member_id", "plan_id", "start_date", "end_date", "premium_paid", "csr_variant"],
+        },
+        {
+            "name": "claims",
+            "data": claims,
+            "fields": [
+                "claim_id",
+                "member_id",
+                "provider_id",
+                "plan_id",
+                "service_date",
+                "claim_amount",
+                "allowed_amount",
+                "paid_amount",
+                "status",
+                "diagnosis_code",
+                "procedure_code",
+                "charges",
+                "allowed",
+                "clean_claim_status",
+                "claim_from",
+                "clean_claim_out",
+                "utilization",
+                "hcg_units_days",
+                "claim_type",
+                "major_service_category",
+                "provider_specialty",
+                "detailed_service_category",
+                "ms_drg",
+                "ms_drg_description",
+                "ms_drg_mdc",
+                "ms_drg_mdc_desc",
+                "cpt",
+                "cpt_consumer_description",
+                "procedure_level_1",
+                "procedure_level_2",
+                "procedure_level_3",
+                "procedure_level_4",
+                "procedure_level_5",
+                "channel",
+                "drug_name",
+                "drug_class",
+                "drug_subclass",
+                "drug",
+                "is_oon",
+                "best_contracting_entity_name",
+                "provider_group_name",
+                "ccsr_system_description",
+                "ccsr_description",
+            ],
+        },
+    ]
 
-    print(f"Wrote CSVs to: {out} (suffix: _{ts})")
+    # Write files to both directories
+    for entity in entities:
+        # Stable-named file for dbt
+        stable_path = os.path.join(dbt_out, f"{entity['name']}.csv")
+        write_csv(stable_path, entity["data"], entity["fields"])
 
+    print(f" Wrote stable-named CSVs to: {dbt_out}")
 
 if __name__ == "__main__":
     main()

@@ -1,21 +1,33 @@
+-- Staging model for plans with deduplication
 {{ config(materialized='view', schema='staging') }}
 
--- Staging: plans (clean + light typing / renames if needed)
-with latest as (
-  select max(load_id) as load_id from {{ source('staging','plans_raw') }}
-), src as (
-  select * from {{ source('staging','plans_raw') }} where load_id = (select load_id from latest)
+with source as (
+    select * from {{ source('staging', 'plans_raw') }}
+),
+
+deduped as (
+    select 
+        *,
+        row_number() over (
+            partition by plan_id 
+            order by plan_id
+        ) as row_num
+    from source
+),
+
+final as (
+    select
+        plan_id,
+        name as plan_name,
+        metal_tier,
+        monthly_premium::numeric(10,2) as monthly_premium,
+        deductible,
+        oop_max,
+        coinsurance_rate,
+        pcp_copay,
+        effective_year
+    from deduped
+    where row_num = 1
 )
-select
-  plan_id,
-  name as plan_name,
-  metal_tier,
-  monthly_premium::numeric(10,2) as monthly_premium,
-  deductible,
-  oop_max,
-  coinsurance_rate,
-  pcp_copay,
-  effective_year,
-  load_id,
-  load_timestamp
-from src
+
+select * from final

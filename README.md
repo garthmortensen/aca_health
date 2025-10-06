@@ -8,33 +8,50 @@ Create datawarehouse, from raw to semantic layer, to serve as foundation for cos
 
 ## Execution
 
-### create health insurance seed data
+### 1. Generate health insurance seed data
 
-- Generate seed data:
-  - members
-  - plans
-  - providers
-  - claims and enrollments
+Generate synthetic seed data:
 
-`python ./scripts/generate_seed_data.py`
+```bash
+python scripts/generate_seed_data.py
+```
 
-### create database and read seeds
+This creates:
 
-- launch database
-- define schema on load, with data dictionary
+- **Timestamped CSVs** in `data/seeds/` (for archival/versioning)
+- **Stable-named CSVs** in `transform/seeds/` (for dbt seed to load)
 
-`docker compose -f infrastructure/docker/docker-compose.yml up`
+### 2. Create database
 
-## Load Staging Data
+Launch Postgres container:
 
-- Load seed CSVs into staging tables 1:1.
-- No transforms — just type coercion + basic validation.
-- Track load batch metadata:
-  - `load_id`
-  - `load_timestamp`
+```bash
+docker compose -f infrastructure/docker/docker-compose.yml up -d
+```
 
-`python scripts/staging_loader.py`
+On first run, this:
 
+- Creates database `aca_health`
+- Runs DDL scripts from `infrastructure/sql/ddl/`
+- Creates empty `staging.*_raw` tables
+
+### 3. Load and transform with dbt
+
+```bash
+cd transform
+
+# Load CSV seeds into staging.*_raw tables
+dbt seed --full-refresh
+
+# Run transformations (staging → mart → summary)
+dbt run
+
+# Run data quality tests
+dbt test
+
+# Or run everything at once
+dbt build
+```
 
 ## transform
 
@@ -148,34 +165,36 @@ erDiagram
 
 ## Data Architecture & Materialization Strategy
 
-The data warehouse follows a modern ELT pattern with different materialization strategies based on data characteristics:
+The data warehouse follows a modern ELT pattern with dbt-native seed loading and different materialization strategies based on data characteristics:
 
 ```text
-STAGING           SNAPSHOTS            DIMENSIONS           FACTS
-─────────         ──────────           ──────────           ─────────
-members_raw    ─► member_snapshot   ─► dim_member    ────┐
-(raw CSV)         (SCD2 table)        (VIEW)              │
-                                                          │
-plans_raw      ─► plan_snapshot     ─► dim_plan      ────┤
-(raw CSV)         (SCD2 table)        (VIEW)              │
-                                                          │
-providers_raw  ─► provider_snapshot ─► dim_provider  ────┤  fct_claim
-(raw CSV)         (SCD2 table)        (VIEW)              ├─► (INCREMENTAL)
-                                                          │
-claims_raw     ──────────────────────────────────────────┤
-(raw CSV)                                                 │
-                                                          │
-enrollments_raw ──────────────────────────────────────────┤  fct_enrollment
-(raw CSV)                                                 └─► (INCREMENTAL)
+SEEDS (CSV)       STAGING           SNAPSHOTS            DIMENSIONS           FACTS
+──────────        ─────────         ──────────           ──────────           ─────────
+members.csv    ─► members_raw    ─► member_snapshot   ─► dim_member    ────┐
+(dbt seed)        (TABLE)           (SCD2 table)         (VIEW)              │
+                                                                             │
+plans.csv      ─► plans_raw      ─► plan_snapshot     ─► dim_plan      ────┤
+(dbt seed)        (TABLE)           (SCD2 table)         (VIEW)              │
+                                                                             │
+providers.csv  ─► providers_raw  ─► provider_snapshot ─► dim_provider  ────┤  fct_claim
+(dbt seed)        (TABLE)           (SCD2 table)         (VIEW)              ├─► (INCREMENTAL)
+                                                                             │
+claims.csv     ─► claims_raw     ──────────────────────────────────────────┤
+(dbt seed)        (TABLE)                                                    │
+                                                                             │
+enrollments.csv─► enrollments_raw ─────────────────────────────────────────┤  fct_enrollment
+(dbt seed)        (TABLE)                                                    └─► (INCREMENTAL)
 
-generate_series() ──────────────────► dim_date ──────────┘
-(SQL function)                        (TABLE)
+generate_series() ──────────────────────────────────► dim_date ──────────┘
+(SQL function)                                         (TABLE)
 ```
 
 ### Materialization Types
 
 | Layer | Type | Strategy | Rationale |
 |-------|------|----------|-----------|
+| **Seeds** | `table` | dbt seed loads CSVs | Idempotent data loading from source files |
+| **Staging** | `view` | Deduplicate and clean | Lightweight transformation layer |
 | **Facts** | `incremental` | Append new records only | High-volume transactional data |
 | **Business Dimensions** | `view` | Current records from snapshots | Change tracking with clean interface |
 | **Reference Dimensions** | `table` | Static lookup data | Performance for heavily-joined reference data |
@@ -183,6 +202,8 @@ generate_series() ──────────────────► dim_
 
 ### Benefits
 
+- **Simplicity**: dbt seed provides idempotent CSV loading without custom Python
+- **Lineage**: Full data lineage visible in dbt docs (seeds → staging → marts)
 - **Performance**: Facts materialized as tables for fast aggregations
 - **Flexibility**: Dimensions as views enable easy current vs. historical queries  
 - **Efficiency**: Incremental loading processes only new/changed data
@@ -190,7 +211,7 @@ generate_series() ──────────────────► dim_
 
 ## End-to-end local workflow
 
-The diagram shows: generate seeds → start Postgres → load staging → build/test with dbt → docs.
+The diagram shows: generate seeds → start Postgres → load with dbt seed → build/test with dbt → docs.
 
 ```mermaid
 flowchart TD
@@ -207,40 +228,34 @@ flowchart TD
   E --> F["Apply DDL on init\n(/infrastructure/sql/ddl)"]
   click F href "infrastructure/sql/ddl/01_staging_schema.sql" _self
 
-  F --> G["Load seeds into staging\n(scripts/staging_loader.py)"]
-  click G href "scripts/staging_loader.py" _self
-
-  G --> H["dbt seed (optional)"]
-  H --> I["dbt run (staging → dims/facts)"]
-  I --> J["dbt test (quality checks)"]
-  J --> K["dbt docs generate \n+ serve (optional)"]
-
-  
+  F --> G["dbt seed\n(loads CSVs into staging.*_raw)"]
+  G --> H["dbt run\n(staging → dims/facts → summary)"]
+  H --> I["dbt test\n(quality checks)"]
+  I --> J["dbt docs generate\n+ serve (optional)"]
 ```
 
 ### Typical commands
 
 ```bash
-# 1 Generate synthetic seeds (timestamped CSVs in data/seeds)
-python3 scripts/generate_seed_data.py
+# 1. Generate synthetic seeds (creates timestamped + stable-named CSVs)
+python scripts/generate_seed_data.py
 
-# 2 Start Postgres (first run applies DDL automatically)
+# 2. Start Postgres (first run applies DDL automatically)
 docker compose -f infrastructure/docker/docker-compose.yml up -d
 
-# 3 Load the latest seed files into staging tables
-python3 scripts/staging_loader.py
-
-# 4 Build and validate with dbt
+# 3. Build and validate with dbt
 cd transform
 
-# simple
+# Option A: All-in-one command
 dbt build
 
-# piecemeal
-dbt snapshot
-dbt run
-dbt test
-dbt docs generate  # optional
+# Option B: Step-by-step
+dbt seed --full-refresh  # Load CSVs into staging tables
+dbt snapshot            # Capture SCD2 changes
+dbt run                 # Run transformations
+dbt test                # Run data quality tests
+dbt docs generate       # Generate documentation (optional)
+dbt docs serve          # Serve docs locally (optional)
 ```
 
 ## dbt profile setup

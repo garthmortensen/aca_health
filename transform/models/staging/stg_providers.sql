@@ -1,21 +1,33 @@
+-- Staging model for providers with deduplication
 {{ config(materialized='view', schema='staging') }}
 
--- Staging: providers
-with latest as (
-  select max(load_id) as load_id from {{ source('staging','providers_raw') }}
-), src as (
-  select * from {{ source('staging','providers_raw') }} where load_id = (select load_id from latest)
+with source as (
+    select * from {{ source('staging', 'providers_raw') }}
+),
+
+deduped as (
+    select 
+        *,
+        row_number() over (
+            partition by provider_id 
+            order by provider_id
+        ) as row_num
+    from source
+),
+
+final as (
+    select
+        provider_id,
+        npi,
+        name as provider_name,
+        specialty,
+        street,
+        city,
+        state,
+        zip,
+        phone
+    from deduped
+    where row_num = 1
 )
-select
-  provider_id,
-  npi,
-  name as provider_name,
-  specialty,
-  street,
-  city,
-  state,
-  zip,
-  phone,
-  load_id,
-  load_timestamp
-from src
+
+select * from final

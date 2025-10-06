@@ -16,8 +16,6 @@ select
   city,
   state,
   zip,
-  phone,
-  load_id,
-  load_timestamp
+  phone
 from {{ source('staging','providers_raw') }}
 {% endsnapshot %}

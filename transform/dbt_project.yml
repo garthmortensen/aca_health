@@ -53,3 +53,15 @@ models:
       +materialized: view
     summary:                     # models/summary/* (aggregated summary tables)
       +materialized: view
+
+## ---------------------------------------------------------------------------
+## Seed configurations
+## Seeds are CSV files that get loaded into the database via `dbt seed`
+## By default seeds go into the schema defined in profiles.yml, but we
+## override here to load them into the "staging" schema where raw data lives.
+## ---------------------------------------------------------------------------
+seeds:
+  aca_health_dw:
+    +schema: staging             # Load all seeds into staging schema
+    +quote_columns: false        # Don't quote column names (Postgres default)
+

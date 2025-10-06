@@ -1,0 +1,78 @@
+version: 2
+
+seeds:
+  - name: plans
+    config:
+      alias: plans_raw
+      schema: staging
+      column_types:
+        monthly_premium: numeric(10,2)
+        deductible: integer
+        oop_max: integer
+    columns:
+      - name: plan_id
+        tests:
+          - not_null
+          - unique
+
+  - name: providers
+    config:
+      alias: providers_raw
+      schema: staging
+      column_types:
+        zip: text
+        phone: text
+        npi: text
+    columns:
+      - name: provider_id
+        tests:
+          - not_null
+          - unique
+
+  - name: members
+    config:
+      alias: members_raw
+      schema: staging
+      column_types:
+        dob: date
+        zip: text
+        phone: text
+        email: text
+        fpl_ratio: numeric(5,2)
+        hios_id: text
+        ra_mm: numeric(5,3)
+        year: integer
+    columns:
+      - name: member_id
+        tests:
+          - not_null
+          - unique
+
+  - name: enrollments
+    config:
+      alias: enrollments_raw
+      schema: staging
+      column_types:
+        start_date: date
+        end_date: date
+        premium_paid: numeric(10,2)
+    columns:
+      - name: enrollment_id
+        tests:
+          - not_null
+          - unique
+
+  - name: claims
+    config:
+      alias: claims_raw
+      schema: staging
+      column_types:
+        service_date: date
+        claim_amount: numeric(12,2)
+        allowed_amount: numeric(12,2)
+        paid_amount: numeric(12,2)
+    columns:
+      - name: claim_id
+        tests:
+          - not_null
+          - unique

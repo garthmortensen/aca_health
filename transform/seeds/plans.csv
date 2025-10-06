@@ -1,0 +1,11 @@
+plan_id,name,metal_tier,monthly_premium,deductible,oop_max,coinsurance_rate,pcp_copay,effective_year
+PLN0001,DarkSlateBlue Bronze 2025,Bronze,427.12,6200,8400,0.4,45,2025
+PLN0002,Coral Bronze 2025,Bronze,414.14,7500,9000,0.4,45,2025
+PLN0003,LightCyan Bronze 2025,Bronze,331.49,7550,8000,0.4,45,2025
+PLN0004,DarkOrchid Gold 2025,Gold,716.94,1950,5400,0.2,25,2025
+PLN0005,Snow Gold 2025,Gold,808.75,1400,5300,0.2,25,2025
+PLN0006,RoyalBlue Gold 2025,Gold,777.35,1150,5850,0.2,25,2025
+PLN0007,SeaShell Bronze 2025,Bronze,303.35,7700,8000,0.4,45,2025
+PLN0008,Olive Gold 2025,Gold,714.36,1300,4350,0.2,25,2025
+PLN0009,HoneyDew Silver 2025,Silver,531.91,4400,7550,0.3,35,2025
+PLN0010,DarkGray Silver 2025,Silver,486.43,3700,7450,0.3,35,2025

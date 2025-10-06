@@ -16,12 +16,6 @@ select
     c.paid_amount,
     c.claim_status,
     c.diagnosis_code,
-    c.procedure_code,
-    c.load_id,
-    c.load_timestamp
+    c.procedure_code
 from claims c
 left join dim_member dm using (member_id)
-
-{% if is_incremental() %}
-where c.load_timestamp > (select coalesce(max(load_timestamp), '1900-01-01') from {{ this }})
-{% endif %}
