@@ -5,7 +5,7 @@
   )
 }}
 
--- Descriptor cube: claim-level dimensions with aggregated metrics for trend analysis
+-- Moved from mart to summary folder (path change only). Descriptor cube: claim-level dimensions with aggregated metrics for trend analysis
 -- Built from fat fact table (fct_claim) and dimensions for proper data warehouse layering
 -- Compares 2024 vs 2025 with pre-aggregated metrics for efficient querying
 
@@ -23,10 +23,7 @@ providers as (
 
 claim_data as (
     select
-        -- Extract year from service date
         extract(year from c.claim_date) as year,
-        
-        -- Member identifying dimensions (from members table)
         m.hios_id,
         m.state,
         m.plan_network_access_type,
@@ -39,16 +36,12 @@ claim_data as (
         m.broker_name,
         m.sa_contracting_entity_name,
         m.enrollment_length_continuous,
-        
-        -- Geographic reporting dimension
         case
             when substr(m.hios_id, 1, 5) = '29341' then 'OHB (Columbus)'
             when substr(m.hios_id, 1, 5) = '45845' then 'OHC (Cleveland Clinic Product)'
             when m.state = 'TX' then concat(m.state, '-', m.plan_network_access_type)
             else m.state
         end as geographic_reporting,
-        
-        -- Membership flags
         case when m.enrollment_length_continuous <= 5 then 1 else 0 end as new_member_in_period,
         case when m.call_count > 0 then 1 else 0 end as member_called_oscar,
         m.member_used_app,
@@ -57,8 +50,6 @@ claim_data as (
         m.high_cost_member,
         m.mutually_exclusive_hcc_condition,
         m.wisconsin_area_deprivation_index,
-        
-        -- Claim dimensions
         c.claim_type,
         coalesce(c.major_service_category, 'Unmapped') as major_service_category,
         case
@@ -93,8 +84,6 @@ claim_data as (
         c.provider_group_name,
         c.ccsr_system_description,
         c.ccsr_description,
-        
-        -- Metric primitives
         c.clean_claim_status,
         c.charges,
         c.allowed,
@@ -103,7 +92,6 @@ claim_data as (
         c.utilization,
         c.hcg_units_days,
         c.claim_id
-        
     from claims c
     inner join members m on c.member_id = m.member_id
         and extract(year from c.claim_date) = m.year
@@ -112,7 +100,6 @@ claim_data as (
 )
 
 select
-    -- All dimension columns
     year,
     hios_id,
     state,
@@ -158,8 +145,6 @@ select
     provider_group_name,
     ccsr_system_description,
     ccsr_description,
-    
-    -- Aggregated metrics
     sum(case when clean_claim_status = 'PAID' then charges else 0 end) as charges,
     sum(case when clean_claim_status != 'PAID' then charges else 0 end) as denied_charges,
     sum(allowed) as allowed,
@@ -175,7 +160,6 @@ select
             else null
         end
     ) as avg_days_service_to_paid
-
 from claim_data
 group by 
     year, hios_id, state, plan_network_access_type, plan_metal, age_group, gender,

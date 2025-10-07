@@ -1,72 +1,6 @@
 version: 2
 
 models:
-  - name: agg_claims_monthly
-    description: "Pre-aggregated monthly claims summary providing KPIs including total claims volume, financial metrics (billed/allowed/paid amounts), approval rates, and unique member/provider counts. Optimized for executive dashboards and trend analysis over time."
-    columns:
-      - name: report_month
-        description: "Month of aggregation"
-        tests:
-          - not_null
-      - name: total_claims
-        description: "Total number of claims"
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments:
-                min_value: 0
-                max_value: 100000
-      - name: approval_rate
-        description: "Percentage of approved claims"
-        tests:
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments:
-                min_value: 0.0
-                max_value: 1.0
-      - name: total_paid_amount
-        description: "Total amount paid"
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments:
-                min_value: 0
-                max_value: 50000000
-    tests:
-      - dbt_expectations.expect_table_row_count_to_be_between:
-          arguments:
-            min_value: 1
-            max_value: 24  # Max 2 years * 12 months (more realistic for test data)
-
-  - name: agg_member_cost_cube
-    description: "Member-level cost analytics cube with standardized PMPM (Per Member Per Month) and PMPY (Per Member Per Year) metrics. Enables member cost profiling, risk stratification, and actuarial analysis for plan pricing and medical management."
-    columns:
-      - name: member_id
-        description: "Member identifier"
-        tests:
-          - not_null
-          - unique
-      - name: pmpm_cost
-        description: "Per Member Per Month cost"
-        tests:
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments:
-                min_value: 0
-                max_value: 5000  # Reasonable PMPM range
-      - name: pmpy_cost
-        description: "Per Member Per Year cost"
-        tests:
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments:
-                min_value: 0
-                max_value: 60000  # Reasonable PMPY range
-      - name: cost_category
-        description: "Member cost risk category"
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_in_set:
-              arguments:
-                value_set: ['No Claims', 'Low Cost', 'Moderate Cost', 'High Cost', 'Very High Cost']
-
   - name: agg_provider_performance
     description: "Provider performance analytics cube aggregating claims volume, financial metrics, and approval rates by provider. Supports network management, provider scorecards, and contracting decisions through provider-specific KPIs and volume categorization."
     columns:
@@ -157,61 +91,90 @@ models:
                 min_value: 0.0
                 max_value: 1.0
 
-  - name: agg_member_risk_stratification_cube
-    description: "Member risk stratification analytics categorizing members by paid amount buckets, utilization patterns, and cost profiles. Essential for actuarial modeling, medical management prioritization, and risk-based plan design with member-specific risk scoring."
+  # Trend cubes moved here from mart directory (definitions remain in mart/schema.yml docs if desired)
+  - name: agg_trend_descriptor
+    description: "{{ doc('trend_descriptor_definition') }}"
     columns:
-      - name: member_id
-        description: "Member identifier"
+      - name: year
+        description: "Calendar year (2024 or 2025)"
         tests:
           - not_null
-          - unique
-      - name: paid_risk_bucket
-        description: "Risk bucket based on paid amount"
+          - accepted_values:
+              values: [2024, 2025]
+      - name: is_out_of_network
+        description: "Indicator (1/0) if the claim is out of network"
         tests:
-          - dbt_expectations.expect_column_values_to_be_in_set:
-              arguments:
-                value_set: ['No Cost','Low','Moderate','High','Very High']
-      - name: utilization_bucket
-        description: "Utilization bucket based on claim count"
+          - accepted_values:
+              values: [0, 1]
+      - name: clinical_segment
+        description: "{{ doc('clinical_segment_values') }}"
         tests:
-          - dbt_expectations.expect_column_values_to_be_in_set:
-              arguments:
-                value_set: ['No Util','Low Util','Moderate Util','High Util','Very High Util']
-
-  - name: agg_provider_specialty_monthly_cube
-    description: "Monthly provider specialty analytics tracking claims volume, costs, and performance patterns by medical specialty. Supports specialty-specific network adequacy analysis, provider recruitment strategies, and specialty-based cost management initiatives."
+          - accepted_values:
+              values: ["Healthy", "Chronic", "Behavioral", "Maternity", "Complex"]
+      - name: high_cost_member
+        description: "High cost member flag"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: allowed
+        description: "Total allowed amount"
+      - name: count_of_claims
+        description: "Distinct claim count"
+      - name: out_of_network_allowed
+        description: "Allowed amount for out-of-network claims"
+      - name: utilization
+        description: "Utilization events count"
+      - name: avg_days_service_to_paid
+        description: "Avg days from service to paid"
+  - name: agg_trend_normalizer
+    description: "{{ doc('trend_norm_definition') }}"
     columns:
-      - name: specialty
-        description: "Provider specialty"
+      - name: year
+        description: "Calendar year (2024 or 2025)"
         tests:
           - not_null
-      - name: report_month
-        description: "Month of aggregation"
+          - accepted_values:
+              values: [2024, 2025]
+      - name: plan_metal
+        description: "ACA metal tier"
+        tests:
+          - accepted_values:
+              values: ["Bronze", "Silver", "Gold", "Platinum"]
+      - name: gender
+        description: "Member gender"
+        tests:
+          - accepted_values:
+              values: ["F", "M", "O"]
+      - name: clinical_segment
+        description: "{{ doc('clinical_segment_values') }}"
+        tests:
+          - accepted_values:
+              values: ["Healthy", "Chronic", "Behavioral", "Maternity", "Complex"]
+      - name: new_member_in_period
+        description: "New member flag"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: member_called_oscar
+        description: "Member called flag"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: member_used_app
+        description: "Member used app flag"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: high_cost_member
+        description: "High cost member flag"
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: member_months
+        description: "Risk-adjusted member months"
         tests:
           - not_null
-      - name: approval_rate
-        description: "Specialty approval rate"
-        tests:
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments:
-                min_value: 0.0
-                max_value: 1.0
-
-  - name: agg_claims_diagnosis_summary_cube
-    description: "Monthly diagnosis code analytics featuring top 50 most frequent diagnoses with associated claims volume, financial impact, and cost per diagnosis. Critical for population health management, clinical program development, and disease-specific cost analysis."
-    columns:
-      - name: report_month
-        description: "Month of aggregation"
+      - name: unique_members_enrolled
+        description: "Distinct enrolled members"
         tests:
           - not_null
-      - name: diagnosis_code
-        description: "Diagnosis code"
-        tests:
-          - not_null
-      - name: total_claims
-        description: "Total claims for diagnosis in month"
-        tests:
-          - dbt_expectations.expect_column_values_to_be_between:
-              arguments:
-                min_value: 0
-                max_value: 100000

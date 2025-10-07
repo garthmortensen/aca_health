@@ -7,6 +7,7 @@ The trend analysis cubes are pre-aggregated data models designed for efficient y
 ## Models
 
 ### 1. `agg_trend_descriptor` (Descriptor Cube)
+
 **Location:** `dw.agg_trend_descriptor`
 
 Contains **claim-level dimensions** with pre-aggregated metrics. This cube provides detailed breakdowns of claims data.
@@ -29,8 +30,9 @@ Contains **claim-level dimensions** with pre-aggregated metrics. This cube provi
 - `count_of_claims` - Distinct claim count
 - `avg_days_service_to_paid` - Average payment turnaround time
 
-### 2. `agg_trend_norm` (Normalization Cube)
-**Location:** `dw.agg_trend_norm`
+### 2. `agg_trend_normalizer` (Normalization Cube)
+
+**Location:** `dw.agg_trend_normalizer`
 
 Contains **member-level dimensions** with enrollment metrics. This cube provides the denominator for normalized calculations.
 
@@ -57,7 +59,7 @@ SELECT
     SUM(d.count_of_claims) as total_claims,
     SUM(n.unique_members_enrolled) as total_members
 FROM dw.agg_trend_descriptor d
-JOIN dw.agg_trend_norm n 
+JOIN dw.agg_trend_normalizer n 
     ON d.year = n.year 
     AND d.geographic_reporting = n.geographic_reporting
     AND d.age_group = n.age_group
@@ -77,7 +79,7 @@ WITH yearly_metrics AS (
         SUM(d.utilization) as total_util,
         SUM(n.member_months) as member_months
     FROM dw.agg_trend_descriptor d
-    JOIN dw.agg_trend_norm n 
+    JOIN dw.agg_trend_normalizer n 
         ON d.year = n.year 
         AND d.geographic_reporting = n.geographic_reporting
         AND d.age_group = n.age_group
@@ -109,7 +111,7 @@ SELECT
     SUM(n.member_months) as member_months,
     ROUND(SUM(d.allowed) / SUM(n.member_months), 2) as pmpm
 FROM dw.agg_trend_descriptor d
-JOIN dw.agg_trend_norm n 
+JOIN dw.agg_trend_normalizer n 
     ON d.year = n.year 
     AND d.high_cost_member = n.high_cost_member
     AND d.age_group = n.age_group
@@ -129,7 +131,7 @@ SELECT
     SUM(n.member_months) as member_months,
     ROUND(SUM(d.allowed) / SUM(n.member_months), 2) as pmpm_allowed
 FROM dw.agg_trend_descriptor d
-JOIN dw.agg_trend_norm n 
+JOIN dw.agg_trend_normalizer n 
     ON d.year = n.year 
     AND d.clinical_segment = n.clinical_segment
     AND d.age_group = n.age_group
@@ -143,6 +145,7 @@ ORDER BY d.year, d.clinical_segment, pmpm_allowed DESC;
 When joining the two cubes, use **common dimensions** to ensure proper alignment:
 
 **Recommended join keys:**
+
 - `year` (always required)
 - `geographic_reporting`
 - `age_group`
@@ -151,6 +154,7 @@ When joining the two cubes, use **common dimensions** to ensure proper alignment
 - `clinical_segment`
 - `plan_metal`
 - Behavioral flags: `high_cost_member`, `new_member_in_period`, etc.
+
 
 ## Best Practices
 
@@ -175,7 +179,7 @@ dbt seed --full-refresh
 dbt run
 
 # Or build just the trend cubes
-dbt run --select agg_trend_descriptor agg_trend_norm
+dbt run --select agg_trend_descriptor agg_trend_normalizer
 ```
 
 ## Data Lineage
@@ -183,12 +187,14 @@ dbt run --select agg_trend_descriptor agg_trend_norm
 **Fat Fact Table Architecture:**
 
 This data warehouse uses a **fat fact table** design where `fct_claim` includes both metrics AND descriptive attributes. This design choice enables:
+
 - ✅ Simpler queries (fewer joins required)
 - ✅ Better query performance
 - ✅ Direct analysis on fact tables
 - ✅ Proper data warehouse layering (staging → mart → cubes)
 
-```
+
+```text
 Source Data → Seeds
     ├── claims.csv → staging.claims_raw → stg_claims
     ├── members.csv → staging.members_raw → stg_members → member_snapshot (SCD2)
@@ -201,13 +207,15 @@ Data Mart (in dw schema) - FAT TABLES
          ↓
 Trend Cubes (pre-aggregated analytics)
     ├── agg_trend_descriptor (claim-level metrics from fct_claim)
-    └── agg_trend_norm (member-level metrics from dim_member)
+    └── agg_trend_normalizer (member-level metrics from dim_member)
 ```
 
 **Key Difference from Traditional Design:**
+
 - Traditional: Thin fact tables with just FKs and metrics, join to dimensions for attributes
 - This warehouse: Fat fact tables with commonly-used attributes denormalized for analysis
 - Trend cubes are built FROM the mart layer (not staging), following proper DW best practices
+
 
 ## Current Data Coverage
 
