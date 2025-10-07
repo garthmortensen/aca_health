@@ -19,11 +19,11 @@ from faker import Faker
 
 # User-configurable parameters
 DBT_SEEDS_DIR = "transform/seeds/"  # Stable-named CSVs for dbt
-YEAR = date.today().year
+YEARS = [2024, 2025]  # Generate data for both years
 PLANS =        10  # real dist 100
 PROVIDERS =   100  # real dist 100,000
 MEMBERS =    1000  # real dist 1,000,000
-CLAIMS =    10000  # real dist 10,000,000
+CLAIMS_PER_YEAR = 5000  # real dist 10,000,000 per year
 
 SEED = 1
 
@@ -183,7 +183,7 @@ def gen_plans(fake: Faker, n: int, year: int) -> List[Dict[str, object]]:
 
         plans.append(
             {
-                "plan_id": f"PLN{i:04d}",
+                "plan_id": f"PLN{year}{i:04d}",
                 "name": f"{fake.color_name()} {tier} {year}",
                 "metal_tier": tier,
                 "monthly_premium": premium,
@@ -221,7 +221,7 @@ def gen_providers(fake: Faker, n: int) -> List[Dict[str, object]]:
     return providers
 
 
-def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
+def gen_members(fake: Faker, n: int, year: int) -> List[Dict[str, object]]:
     members: List[Dict[str, object]] = []
     for i in range(1, n + 1):
         dob = fake.date_of_birth(minimum_age=0, maximum_age=90)
@@ -230,7 +230,7 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
         state = fake.state_abbr()
         zipcode = fake.postcode()
         fpl_ratio = round(random.uniform(0.5, 4.0), 2)
-        age = YEAR - dob.year
+        age = year - dob.year
         if age < 18:
             age_group = "<18"
         elif age < 26:
@@ -299,7 +299,7 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
         
         members.append(
             {
-                "member_id": f"MBR{i:06d}",
+                "member_id": f"MBR{year}{i:06d}",
                 "first_name": fake.first_name(),
                 "last_name": fake.last_name(),
                 "dob": dob.isoformat(),
@@ -334,7 +334,7 @@ def gen_members(fake: Faker, n: int) -> List[Dict[str, object]]:
                 "geographic_reporting": geographic_reporting,
                 "wisconsin_area_deprivation_index": wisconsin_adi,
                 "ra_mm": ra_mm,
-                "year": YEAR,
+                "year": year,
             }
         )
     return members
@@ -365,7 +365,7 @@ def gen_enrollments(
         premium_paid = round(plan["monthly_premium"] * random.uniform(0.8, 1.0), 2)
         enrollments.append(
             {
-                "enrollment_id": f"ENR{i:06d}",
+                "enrollment_id": f"ENR{year}{i:06d}",
                 "member_id": m["member_id"],
                 "plan_id": plan["plan_id"],
                 "start_date": start.isoformat(),
@@ -487,7 +487,7 @@ def gen_claims(
         hcg_units_days = random.randint(1, 5)
         claims.append(
             {
-                "claim_id": f"CLM{i:07d}",
+                "claim_id": f"CLM{year}{i:07d}",
                 "member_id": m["member_id"],
                 "provider_id": prov["provider_id"],
                 "plan_id": plan["plan_id"],
@@ -540,11 +540,11 @@ def main() -> None:
     """Generate synthetic ACA data and write to dbt directories."""
     # Use config variables
     dbt_out = DBT_SEEDS_DIR
-    year = YEAR
+    years = YEARS
     members_n = MEMBERS
     providers_n = PROVIDERS
     plans_n = PLANS
-    claims_n = CLAIMS
+    claims_per_year = CLAIMS_PER_YEAR
     seed = SEED
 
     random.seed(seed)
@@ -556,20 +556,47 @@ def main() -> None:
     # Timestamp suffix for archival files
     ts = datetime.now().strftime("%Y%m%d%H%M")
 
-    plans = gen_plans(fake, plans_n, year)
+    # Generate providers once (they exist across both years)
     providers = gen_providers(fake, providers_n)
-    members = gen_members(fake, members_n)
-    enrollments = gen_enrollments(members, plans, year)
+    
+    # Initialize collections for all data across both years
+    all_plans = []
+    all_members = []
+    all_enrollments = []
+    all_claims = []
+    
+    # Generate data for each year
+    for year in years:
+        print(f"Generating data for year {year}...")
+        
+        # Generate plans for this year
+        year_plans = gen_plans(fake, plans_n, year)
+        all_plans.extend(year_plans)
+        
+        # Generate members for this year (members can enroll in different years)
+        year_members = gen_members(fake, members_n, year)
+        all_members.extend(year_members)
+        
+        # Generate enrollments for this year's members
+        year_enrollments = gen_enrollments(year_members, year_plans, year)
+        all_enrollments.extend(year_enrollments)
+        
+        # Generate claims for this year
+        enroll_idx = index_enrollments_by_member(year_enrollments)
+        plans_by_id = {p["plan_id"]: p for p in year_plans}
+        year_claims = gen_claims(fake, year_members, providers, plans_by_id, enroll_idx, year, claims_per_year)
+        all_claims.extend(year_claims)
+        
+        print(f"  - Generated {len(year_plans)} plans")
+        print(f"  - Generated {len(year_members)} members")
+        print(f"  - Generated {len(year_enrollments)} enrollments")
+        print(f"  - Generated {len(year_claims)} claims")
 
-    enroll_idx = index_enrollments_by_member(enrollments)
-    plans_by_id = {p["plan_id"]: p for p in plans}
-    claims = gen_claims(fake, members, providers, plans_by_id, enroll_idx, year, claims_n)
-
-    # Define entity configurations
+    # Define entity configurations with all data
     entities = [
         {
             "name": "plans",
-            "data": plans,
+            "data": all_plans,
             "fields": [
                 "plan_id",
                 "name",
@@ -589,7 +616,7 @@ def main() -> None:
         },
         {
             "name": "members",
-            "data": members,
+            "data": all_members,
             "fields": [
                 "member_id",
                 "first_name",
@@ -630,12 +657,12 @@ def main() -> None:
         },
         {
             "name": "enrollments",
-            "data": enrollments,
+            "data": all_enrollments,
             "fields": ["enrollment_id", "member_id", "plan_id", "start_date", "end_date", "premium_paid", "csr_variant"],
         },
         {
             "name": "claims",
-            "data": claims,
+            "data": all_claims,
             "fields": [
                 "claim_id",
                 "member_id",
@@ -690,7 +717,13 @@ def main() -> None:
         stable_path = os.path.join(dbt_out, f"{entity['name']}.csv")
         write_csv(stable_path, entity["data"], entity["fields"])
 
-    print(f" Wrote stable-named CSVs to: {dbt_out}")
+    print(f"\n✅ Wrote stable-named CSVs to: {dbt_out}")
+    print(f"   Total records:")
+    print(f"   - Plans: {len(all_plans)}")
+    print(f"   - Providers: {len(providers)}")
+    print(f"   - Members: {len(all_members)}")
+    print(f"   - Enrollments: {len(all_enrollments)}")
+    print(f"   - Claims: {len(all_claims)}")
 
 if __name__ == "__main__":
     main()
