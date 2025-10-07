@@ -14,5 +14,6 @@ transform/dbt_packages/
 transform/target/
 transform/logs/
 transform/package-lock.yml
+transform/seeds/*.csv
 
 .ruff_cache/
