@@ -1,5 +1,47 @@
 # aca_health
 
+TODO: create read only role and have it create on database standup
+```sql
+-- connect as a superuser or db owner (e.g., etl)
+-- psql -h localhost -U postgres -d aca_health
+
+-- role with read-only defaults
+create role app_readonly noinherit;
+alter role app_readonly set default_transaction_read_only = on;
+
+-- login user for the app
+create user reader with login password 'pass';
+grant app_readonly to reader;
+
+-- limit access to curated schemas (dw + summary)
+grant usage on schema dw to app_readonly;
+grant usage on schema summary to app_readonly;
+
+-- existing and future objects
+grant select on all tables in schema dw to app_readonly;
+grant select on all tables in schema summary to app_readonly;
+grant select on all sequences in schema dw to app_readonly;
+grant select on all sequences in schema summary to app_readonly;
+
+-- ensure future objects created by dbt user (etl) are visible
+alter default privileges for user etl in schema dw grant select on tables to app_readonly;
+alter default privileges for user etl in schema summary grant select on tables to app_readonly;
+alter default privileges for user etl in schema dw grant select on sequences to app_readonly;
+alter default privileges for user etl in schema summary grant select on sequences to app_readonly;
+
+-- harden schema
+revoke create on schema dw from app_readonly;
+revoke create on schema summary from app_readonly;
+```
+
+test that it works
+
+```sql
+-- connect as reader
+select 1;                       -- should work
+create table t(x int);          -- should fail
+```
+
 ## overview
 
 Create datawarehouse, from raw to semantic layer, to serve as foundation for cost analyzer.
