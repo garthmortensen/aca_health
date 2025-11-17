@@ -64,11 +64,11 @@ services:
       - "5432:5432"  # Host port 5432 -> container 5432 for local tools (psql, DBeaver)
     volumes:
       - pgdata:/var/lib/postgresql/data              # Named volume persists database cluster
-      - ${PWD}/data/seeds:/seeds:ro,Z                # Seeds (read-only, SELinux relabel)
+      - ./data/seeds:/seeds:ro,Z                     # Seeds (read-only, SELinux relabel)
       # postgres entry point runs every sql script in sorted order
       # docker-entrypoint-initdb.d is a directory containing initialization scripts
       # :ro,Z is SELinux relabeling for read-only volumes
-      - ${PWD}/infrastructure/sql/ddl:/docker-entrypoint-initdb.d:ro,Z
+      - ./infrastructure/sql/ddl:/docker-entrypoint-initdb.d:ro,Z
     healthcheck:  # Lets compose know when Postgres is ready to accept connections
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
@@ -77,7 +77,7 @@ services:
     restart: unless-stopped  # Auto-restart unless explicitly stopped
 
 volumes:
-  pgdata:  # Named volume metadata (actual data managed by Docker)
+  pgdata:  # Named volume metadata (actual data managed by Podman)
 
 # ---------------------------------------------------------------------------
 # DBeaver Connection Quick Reference

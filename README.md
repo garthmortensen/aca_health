@@ -50,7 +50,30 @@ Create datawarehouse, from raw to semantic layer, to serve as foundation for cos
 
 ## Execution
 
-### 1. Generate health insurance seed data
+### 1. Set up Python environment with UV
+
+Create and activate a UV virtual environment:
+
+```bash
+# Create virtual environment with Python 3.13
+uv venv --python 3.13
+
+# Activate the environment
+source .venv/bin/activate
+
+# Install project dependencies
+uv pip install -e .
+```
+
+This installs all required dependencies including:
+- `faker` for generating synthetic data
+- `dbt-postgres` for data transformations
+- `psycopg[binary]` for database connectivity
+- Development tools (ruff, black, sqlfluff)
+
+**Note**: Python 3.13 is required (dbt doesn't support 3.14 yet).
+
+### 2. Generate health insurance seed data
 
 Generate synthetic seed data:
 
@@ -63,12 +86,12 @@ This creates:
 - **Timestamped CSVs** in `data/seeds/` (for archival/versioning)
 - **Stable-named CSVs** in `transform/seeds/` (for dbt seed to load)
 
-### 2. Create database
+### 3. Create database with Podman
 
 Launch Postgres container:
 
 ```bash
-docker compose -f infrastructure/docker/docker-compose.yml up -d
+podman-compose -f infrastructure/docker/docker-compose.yml up -d
 ```
 
 On first run, this:
@@ -77,10 +100,24 @@ On first run, this:
 - Runs DDL scripts from `infrastructure/sql/ddl/`
 - Creates empty `staging.*_raw` tables
 
-### 3. Load and transform with dbt
+### 4. Load and transform with dbt
+
+#### dbt initial setup
+
+Create default profile.
+
+```bash
+mkdir -p ~/.dbt
+cp transform/profiles/profiles.yml ~/.dbt/profiles.yml
+```
 
 ```bash
 cd transform
+```
+
+```bash
+# Install dbt package dependencies:
+dbt deps
 
 # Load CSV seeds into staging.*_raw tables
 dbt seed --full-refresh
@@ -102,12 +139,6 @@ Use dbt to perform all transformations including stage, star-schema analytics ma
 ### Data Models
 
 Models are organized into the following schemas:
-
-Install dbt package dependencies:
-
-```bash
-dbt deps
-```
 
 Run snapshots (captures SCD2 changes for members / plans / providers):
 
@@ -149,7 +180,7 @@ dbt run --select mart
 
 ## Tools
 
-- Containerization: Docker + docker-compose
+- Containerization: Podman 5.6 + podman-compose
 - Packaging: uv
 - Transform modeling: dbt
 - Data QA: dbt_expectations (Great Expectations)
@@ -261,8 +292,8 @@ flowchart TD
   click A href "scripts/generate_seed_data.py" _self
   click B href "data/seeds/" _self
 
-  B --> C{"Docker up?"}
-  C -- "No" --> D["Start Postgres\n(docker compose up -d)"]
+  B --> C{"Podman up?"}
+  C -- "No" --> D["Start Postgres\n(podman-compose up -d)"]
   C -- "Yes" --> E["DB Healthy"]
   D --> E
   click D href "infrastructure/docker/docker-compose.yml" _self
@@ -279,13 +310,18 @@ flowchart TD
 ### Typical commands
 
 ```bash
-# 1. Generate synthetic seeds (creates timestamped + stable-named CSVs)
+# 1. Set up Python environment (first time only)
+uv venv --python 3.13
+source .venv/bin/activate
+uv pip install -e .
+
+# 2. Generate synthetic seeds (creates timestamped + stable-named CSVs)
 python scripts/generate_seed_data.py
 
-# 2. Start Postgres (first run applies DDL automatically)
-docker compose -f infrastructure/docker/docker-compose.yml up -d
+# 3. Start Postgres (first run applies DDL automatically)
+podman-compose -f infrastructure/docker/docker-compose.yml up -d
 
-# 3. Build and validate with dbt
+# 4. Build and validate with dbt
 cd transform
 
 # Option A: All-in-one command

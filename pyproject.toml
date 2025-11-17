@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "aca_health"
 version = "0.1.0"
@@ -12,6 +16,9 @@ dependencies = [
     "sqlfluff>=3.0.7",
     "dbt-postgres>=1.8.2"
 ]
+
+[tool.setuptools]
+py-modules = []
 
 [tool.commitizen]
 name = "cz_conventional_commits"
