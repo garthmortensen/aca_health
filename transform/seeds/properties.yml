@@ -67,10 +67,157 @@ seeds:
       alias: claims_raw
       schema: staging
       column_types:
+        claim_id: text
+        member_id: text
+        provider_id: text
+        plan_id: text
         service_date: date
         claim_amount: numeric(12,2)
         allowed_amount: numeric(12,2)
         paid_amount: numeric(12,2)
+        status: text
+        diagnosis_code: text
+        procedure_code: text
+        charges: numeric(12,2)
+        allowed: numeric(12,2)
+        clean_claim_status: text
+        claim_from: date
+        clean_claim_out: date
+        utilization: numeric(10,2)
+        hcg_units_days: integer
+        claim_type: text
+        major_service_category: text
+        provider_specialty: text
+        detailed_service_category: text
+        ms_drg: text
+        ms_drg_description: text
+        ms_drg_mdc: text
+        ms_drg_mdc_desc: text
+        cpt: text
+        cpt_consumer_description: text
+        procedure_level_1: text
+        procedure_level_2: text
+        procedure_level_3: text
+        procedure_level_4: text
+        procedure_level_5: text
+        channel: text
+        drug_name: text
+        drug_class: text
+        drug_subclass: text
+        drug: text
+        is_oon: integer
+        best_contracting_entity_name: text
+        provider_group_name: text
+        ccsr_system_description: text
+        ccsr_description: text
+    columns:
+      - name: claim_id
+        tests:
+          - not_null
+          - unique
+
+  - name: claims_ebola
+    config:
+      alias: claims_ebola
+      schema: staging
+      column_types:
+        claim_id: text
+        member_id: text
+        provider_id: text
+        plan_id: text
+        service_date: date
+        claim_amount: numeric(12,2)
+        allowed_amount: numeric(12,2)
+        paid_amount: numeric(12,2)
+        status: text
+        diagnosis_code: text
+        procedure_code: text
+        charges: numeric(12,2)
+        allowed: numeric(12,2)
+        clean_claim_status: text
+        claim_from: date
+        clean_claim_out: date
+        utilization: numeric(10,2)
+        hcg_units_days: integer
+        claim_type: text
+        major_service_category: text
+        provider_specialty: text
+        detailed_service_category: text
+        ms_drg: text
+        ms_drg_description: text
+        ms_drg_mdc: text
+        ms_drg_mdc_desc: text
+        cpt: text
+        cpt_consumer_description: text
+        procedure_level_1: text
+        procedure_level_2: text
+        procedure_level_3: text
+        procedure_level_4: text
+        procedure_level_5: text
+        channel: text
+        drug_name: text
+        drug_class: text
+        drug_subclass: text
+        drug: text
+        is_oon: integer
+        best_contracting_entity_name: text
+        provider_group_name: text
+        ccsr_system_description: text
+        ccsr_description: text
+    columns:
+      - name: claim_id
+        tests:
+          - not_null
+          - unique
+
+  - name: claims_radiation
+    config:
+      alias: claims_radiation
+      schema: staging
+      column_types:
+        claim_id: text
+        member_id: text
+        provider_id: text
+        plan_id: text
+        service_date: date
+        claim_amount: numeric(12,2)
+        allowed_amount: numeric(12,2)
+        paid_amount: numeric(12,2)
+        status: text
+        diagnosis_code: text
+        procedure_code: text
+        charges: numeric(12,2)
+        allowed: numeric(12,2)
+        clean_claim_status: text
+        claim_from: date
+        clean_claim_out: date
+        utilization: numeric(10,2)
+        hcg_units_days: integer
+        claim_type: text
+        major_service_category: text
+        provider_specialty: text
+        detailed_service_category: text
+        ms_drg: text
+        ms_drg_description: text
+        ms_drg_mdc: text
+        ms_drg_mdc_desc: text
+        cpt: text
+        cpt_consumer_description: text
+        procedure_level_1: text
+        procedure_level_2: text
+        procedure_level_3: text
+        procedure_level_4: text
+        procedure_level_5: text
+        channel: text
+        drug_name: text
+        drug_class: text
+        drug_subclass: text
+        drug: text
+        is_oon: integer
+        best_contracting_entity_name: text
+        provider_group_name: text
+        ccsr_system_description: text
+        ccsr_description: text
     columns:
       - name: claim_id
         tests:
