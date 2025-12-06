@@ -3,10 +3,6 @@
 
 with source as (
     select * from {{ source('staging', 'claims_raw') }}
-    union all
-    select * from {{ ref('claims_ebola') }}
-    union all
-    select * from {{ ref('claims_radiation') }}
 ),
 
 deduped as (

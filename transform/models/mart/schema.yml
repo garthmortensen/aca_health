@@ -145,7 +145,7 @@ models:
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              arguments: {min_value: 0, max_value: 100000}
+              arguments: {min_value: 0, max_value: 3000000}
       - name: allowed_amount
         description: "Amount allowed by plan after adjudication"
       - name: paid_amount
@@ -253,7 +253,7 @@ models:
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              arguments: {min_value: 0, max_value: 100000}
+              arguments: {min_value: 0, max_value: 3000000}
       - name: allowed_amount
         description: "Allowed amount for the claim."
       - name: paid_amount

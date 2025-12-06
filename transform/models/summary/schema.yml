@@ -82,7 +82,7 @@ models:
           - dbt_expectations.expect_column_values_to_be_between:
               arguments:
                 min_value: 0
-                max_value: 100000
+                max_value: 5000000
       - name: approval_rate
         description: "Plan claim approval rate"
         tests:

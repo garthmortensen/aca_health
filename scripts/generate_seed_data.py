@@ -9,6 +9,7 @@ Outputs:
 Run without CLI args: python scripts/generate_seed_data.py
 """
 import csv
+import json
 import os
 import random
 import shutil
@@ -19,11 +20,11 @@ from faker import Faker
 
 # User-configurable parameters
 DBT_SEEDS_DIR = "transform/seeds/"  # Stable-named CSVs for dbt
-YEARS = [2024, 2025]  # Generate data for both years
-PLANS =        10  # real dist 100
-PROVIDERS =   100  # real dist 100,000
-MEMBERS =    1000  # real dist 1,000,000
-CLAIMS_PER_YEAR = 5000  # real dist 10,000,000 per year
+YEARS = [2022, 2023, 2024, 2025]  # Generate data for both years
+PLANS =        20  # real dist 100
+PROVIDERS =   400  # real dist 100,000
+MEMBERS =    10000  # real dist 1,000,000
+CLAIMS_PER_YEAR = 50000  # real dist 10,000,000 per year
 
 SEED = 1
 
@@ -406,10 +407,34 @@ def gen_claims(
     enrollments_by_member: Dict[str, List[Dict[str, object]]],
     year: int,
     n_claims: int,
+    scenarios_by_category: Dict[str, List[Dict[str, object]]],
+    providers_by_specialty: Dict[str, List[Dict[str, object]]],
 ) -> List[Dict[str, object]]:
     # Gracefully handle missing prerequisites
     if not members or not providers or not plans_by_id or not enrollments_by_member:
         return []
+    
+    # Define category weights for realistic distribution
+    # Catastrophic is rare (0.5%), Chronic is common (40%), etc.
+    categories = list(scenarios_by_category.keys())
+    # Default weights if keys match expected structure, otherwise uniform
+    weights_map = {
+        "catastrophic": 0.005,
+        "chronic_management": 0.40,
+        "acute_illness": 0.20,
+        "preventive": 0.15,
+        "injury_ortho": 0.10,
+        "maternity": 0.05,
+        "oncology": 0.05,
+        "surgical": 0.04,
+        "general_medicine": 0.005
+    }
+    
+    # Normalize weights based on actual available categories
+    weights = []
+    for cat in categories:
+        weights.append(weights_map.get(cat, 0.05))
+    
     claims: List[Dict[str, object]] = []
     for i in range(1, n_claims + 1):
         m = random.choice(members)
@@ -418,10 +443,43 @@ def gen_claims(
         if not enr:
             # skip if not enrolled on service date
             continue
-        prov = random.choice(providers)
+        
+        # Pick a category then a scenario
+        cat = random.choices(categories, weights=weights, k=1)[0]
+        scenario_list = scenarios_by_category[cat]
+        if not scenario_list:
+             # Fallback if empty category
+             scenario_list = scenarios_by_category.get("general_medicine", []) or [s for sublist in scenarios_by_category.values() for s in sublist]
+        
+        scenario = random.choice(scenario_list)
+        
+        # Determine claim type based on scenario capabilities
+        has_drugs = len(scenario.get("drugs", [])) > 0
+        has_procs = len(scenario.get("procedures", [])) > 0
+        
+        if has_drugs and has_procs:
+            claim_type = random.choices(["RX", "Professional"], weights=[0.3, 0.7])[0]
+        elif has_drugs:
+            claim_type = "RX"
+        else:
+            claim_type = "Professional"
+
+        # Select provider based on scenario specialty
+        spec = scenario.get("specialty", "Family Medicine")
+        eligible_provs = providers_by_specialty.get(spec, providers)
+        if not eligible_provs:
+             eligible_provs = providers
+        prov = random.choice(eligible_provs)
+        
         plan = plans_by_id[enr["plan_id"]]
-        claim_amount = round(random.uniform(50, 5000), 2)
+        
+        # Cost and utilization from scenario
+        cost_min, cost_max = scenario.get("cost_range", [50.0, 5000.0])
+        los_min, los_max = scenario.get("length_of_stay_range", [0, 0])
+        
+        claim_amount = round(random.uniform(cost_min, cost_max), 2)
         allowed_amount = round(claim_amount * random.uniform(0.5, 1.0), 2)
+        
         status = random.choices(CLAIM_STATUS, weights=[0.8, 0.1, 0.1])[0]
         if status == "approved":
             paid_amount = round(allowed_amount * random.uniform(0.5, 1.0), 2)
@@ -440,42 +498,48 @@ def gen_claims(
             clean_claim_out = claim_from + timedelta(days=random.randint(10, 60))
 
         # Descriptor enrichments
-        claim_type = random.choices(CLAIM_TYPES, weights=[0.15, 0.7, 0.15])[0]
         channel = random.choice(CHANNELS)
         is_oon = 1 if random.random() < 0.12 else 0
-        # Specialty: Pharmacy for RX
+        
         provider_specialty = "Pharmacy" if claim_type == "RX" else prov["specialty"]
-        major_service_category = (
-            "Pharmacy" if claim_type == "RX" else random.choice(MAJOR_SERVICE_CATEGORIES)
-        )
-        detailed_service_category = random.choice(DETAILED_SERVICE_CATEGORIES)
+        
+        # Use scenario data
+        if claim_type == "RX":
+            major_service_category = "Pharmacy"
+            detailed_service_category = "Prescription Drug"
+            drug_name = random.choice(scenario["drugs"]) if scenario["drugs"] else "Generic Drug"
+            drug_class = "N/A" 
+            drug_subclass = "N/A"
+            drug = drug_name
+            cpt = "N/A"
+            procedure_level_1 = "N/A"
+            procedure_level_2 = "N/A"
+            procedure_level_3 = "N/A"
+            procedure_level_4 = "N/A"
+            procedure_level_5 = "N/A"
+            cpt_consumer_description = "Prescription"
+        else:
+            major_service_category = scenario.get("service_category", "Medicine")
+            detailed_service_category = "Office Visit"
+            drug_name = None
+            drug_class = None
+            drug_subclass = None
+            drug = None
+            cpt = random.choice(scenario["procedures"]) if scenario["procedures"] else "99213"
+            cpt_consumer_description = "Medical Procedure"
+            
+            # Procedure hierarchy (toy)
+            procedure_level_1 = "Surgery" if cpt in {"12001"} else "Medicine"
+            procedure_level_2 = "Office Services" if cpt in {"99213", "99214"} else "Diagnostic"
+            procedure_level_3 = "Imaging" if cpt in {"71046", "93000"} else "Other"
+            procedure_level_4 = "N/A" if procedure_level_1 != "Surgery" else "Surgical Procedure"
+            procedure_level_5 = "N/A" if procedure_level_1 != "Surgery" else "Simple Repair"
+        
+        diagnosis_code = random.choice(scenario["diagnoses"]) if scenario["diagnoses"] else "1A00"
+
         ms_drg_code, ms_drg_desc = random.choice(MS_DRG_CODES)
         mdc_code, mdc_desc = random.choice(MS_DRG_MDC)
-        # CPT mapping
-        cpt = random.choice(CPT_SAMPLE)
-        cpt_consumer_description = {
-            "99213": "Established patient office visit, low complexity",
-            "99214": "Established patient office visit, moderate complexity",
-            "80050": "General health panel",
-            "93000": "Electrocardiogram, complete",
-            "71046": "Chest X-ray",
-            "36415": "Collection of venous blood",
-            "12001": "Simple repair of superficial wounds",
-        }.get(cpt, "Procedure")
-        # Procedure hierarchy (toy)
-        procedure_level_1 = "Surgery" if cpt in {"12001"} else "Medicine"
-        procedure_level_2 = "Office Services" if cpt in {"99213", "99214"} else "Diagnostic"
-        procedure_level_3 = "Imaging" if cpt in {"71046", "93000"} else "Other"
-        procedure_level_4 = "N/A" if procedure_level_1 != "Surgery" else "Surgical Procedure"
-        procedure_level_5 = "N/A" if procedure_level_1 != "Surgery" else "Simple Repair"
-        # RX only drug info
-        drug_name = drug_class = drug_subclass = drug = None
-        if claim_type == "RX":
-            dclass, dsub, dname = random.choice(DRUG_CLASSES)
-            drug_class = dclass
-            drug_subclass = dsub
-            drug_name = dname
-            drug = dname
+        
         # Contracting entity / provider group
         best_contracting_entity_name = random.choice(SA_CONTRACT_ENTITIES)
         provider_group_name = random.choice(PROVIDER_GROUPS)
@@ -484,7 +548,10 @@ def gen_claims(
         ccsr_description = random.choice(CCSR_DESC)
         # Utilization/units
         utilization = 1.0
-        hcg_units_days = random.randint(1, 5)
+        hcg_units_days = random.randint(los_min, max(los_min, los_max))
+        if hcg_units_days == 0 and claim_type != "RX":
+             hcg_units_days = 1 # Default to 1 unit for non-RX if 0 days (e.g. office visit)
+
         claims.append(
             {
                 "claim_id": f"CLM{year}{i:07d}",
@@ -496,7 +563,7 @@ def gen_claims(
                 "allowed_amount": allowed_amount,
                 "paid_amount": paid_amount,
                 "status": status,
-                "diagnosis_code": random.choice(ICD11_SAMPLE),
+                "diagnosis_code": diagnosis_code,
                 "procedure_code": cpt,
                 # Descriptor fields and metric primitives
                 "charges": claim_amount,
@@ -553,11 +620,20 @@ def main() -> None:
 
     ensure_dir(dbt_out)
 
+    # Load scenarios
+    with open("scripts/scenarios.json", "r") as f:
+        scenarios = json.load(f)
+
     # Timestamp suffix for archival files
     ts = datetime.now().strftime("%Y%m%d%H%M")
 
     # Generate providers once (they exist across both years)
     providers = gen_providers(fake, providers_n)
+    
+    # Index providers by specialty
+    providers_by_specialty = {}
+    for p in providers:
+        providers_by_specialty.setdefault(p["specialty"], []).append(p)
     
     # Initialize collections for all data across both years
     all_plans = []
@@ -584,7 +660,7 @@ def main() -> None:
         # Generate claims for this year
         enroll_idx = index_enrollments_by_member(year_enrollments)
         plans_by_id = {p["plan_id"]: p for p in year_plans}
-        year_claims = gen_claims(fake, year_members, providers, plans_by_id, enroll_idx, year, claims_per_year)
+        year_claims = gen_claims(fake, year_members, providers, plans_by_id, enroll_idx, year, claims_per_year, scenarios, providers_by_specialty)
         all_claims.extend(year_claims)
         
         print(f"  - Generated {len(year_plans)} plans")
