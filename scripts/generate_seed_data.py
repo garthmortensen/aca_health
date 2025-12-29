@@ -304,7 +304,7 @@ def gen_members(fake: Faker, n: int, year: int) -> List[Dict[str, object]]:
                 "first_name": fake.first_name(),
                 "last_name": fake.last_name(),
                 "dob": dob.isoformat(),
-                "gender": random.choice(["F", "M", "O"]),
+                "gender": random.choices(["F", "M", "O"], weights=[0.49, 0.49, 0.02])[0],
                 "email": fake.unique.email(),
                 "phone": fake.phone_number(),
                 "street": street,

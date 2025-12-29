@@ -1,782 +1,66 @@
 {
-  "catastrophic": [
+  "generated_comprehensive": [
     {
-      "name": "Neonatal Intensive Care (NICU Level IV)",
-      "specialty": "Neonatology",
+      "name": "Generated: HHS_HCC063 (63)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "KB00",
-        "KA00"
+        "Q351"
       ],
-      "procedures": [
-        "99468",
-        "99469"
-      ],
-      "drugs": [
-        "Surfactant",
-        "Ampicillin",
-        "Gentamicin"
-      ],
-      "service_category": "Inpatient",
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
       "cost_range": [
-        50000.0,
-        350000.0
+        1000.0,
+        5000.0
       ],
       "length_of_stay_range": [
-        15,
-        90
+        0,
+        0
       ],
       "age_range": {
-        "min": 0,
-        "max": 1
-      }
-    },
-    {
-      "name": "Ebola Virus Disease Isolation",
-      "specialty": "Infectious Disease",
-      "diagnoses": [
-        "1D60"
-      ],
-      "procedures": [
-        "99291",
-        "99292"
-      ],
-      "drugs": [
-        "Remdesivir",
-        "IV Fluids",
-        "Monoclonal Antibodies"
-      ],
-      "service_category": "Inpatient",
-      "cost_range": [
-        80000.0,
-        250000.0
-      ],
-      "length_of_stay_range": [
-        14,
-        40
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 65
-      }
-    },
-    {
-      "name": "CAR-T Cell Therapy (Lymphoma)",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2B30"
-      ],
-      "procedures": [
-        "0540T",
-        "Q2042"
-      ],
-      "drugs": [
-        "Tocilizumab"
-      ],
-      "service_category": "Inpatient",
-      "cost_range": [
-        400000.0,
-        650000.0
-      ],
-      "length_of_stay_range": [
-        14,
-        30
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 75
-      }
-    },
-    {
-      "name": "Severe Burn Treatment (ICU >50% BSA)",
-      "specialty": "Burn Surgery",
-      "diagnoses": [
-        "ND90"
-      ],
-      "procedures": [
-        "15100",
-        "99291"
-      ],
-      "drugs": [
-        "Morphine",
-        "Silver Sulfadiazine"
-      ],
-      "service_category": "Inpatient",
-      "cost_range": [
-        150000.0,
-        800000.0
-      ],
-      "length_of_stay_range": [
-        30,
-        120
-      ],
-      "age_range": {
-        "min": 5,
+        "min": 40,
         "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC063"
       }
     },
     {
-      "name": "SMA Gene Therapy (Zolgensma)",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8B60"
-      ],
-      "procedures": [
-        "96372"
-      ],
+      "name": "Generated: RXC_08_x_HCC118 (8)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
       "drugs": [
-        "Onasemnogene abeparvovec"
+        "00054047921"
       ],
-      "service_category": "Therapeutic",
-      "cost_range": [
-        1800000.0,
-        2200000.0
-      ],
-      "length_of_stay_range": [
-        1,
-        2
-      ],
-      "age_range": {
-        "min": 0,
-        "max": 2
-      }
-    },
-    {
-      "name": "Kidney Transplant",
-      "specialty": "Transplant Surgery",
-      "diagnoses": [
-        "GB61"
-      ],
-      "procedures": [
-        "50360"
-      ],
-      "drugs": [
-        "Tacrolimus",
-        "Mycophenolate"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        90000.0,
-        180000.0
-      ],
-      "length_of_stay_range": [
-        5,
-        14
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 70
-      }
-    }
-  ],
-  "chronic_management": [
-    {
-      "name": "Hypertension Management",
-      "specialty": "Family Medicine",
-      "diagnoses": [
-        "BA00"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Lisinopril",
-        "Amlodipine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Type 2 Diabetes Checkup",
-      "specialty": "Internal Medicine",
-      "diagnoses": [
-        "5A11"
-      ],
-      "procedures": [
-        "99214",
-        "83036"
-      ],
-      "drugs": [
-        "Metformin",
-        "Sitagliptin"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Hyperlipidemia Management",
-      "specialty": "Internal Medicine",
-      "diagnoses": [
-        "5C80"
-      ],
-      "procedures": [
-        "99213",
-        "80061"
-      ],
-      "drugs": [
-        "Atorvastatin"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "COPD Exacerbation",
-      "specialty": "Internal Medicine",
-      "diagnoses": [
-        "CA22"
-      ],
-      "procedures": [
-        "99214",
-        "94640"
-      ],
-      "drugs": [
-        "Prednisone",
-        "Azithromycin"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Hypothyroidism Follow-up",
-      "specialty": "Internal Medicine",
-      "diagnoses": [
-        "5A00"
-      ],
-      "procedures": [
-        "99213",
-        "84443"
-      ],
-      "drugs": [
-        "Levothyroxine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Childhood Asthma",
-      "specialty": "Pediatrics",
-      "diagnoses": [
-        "CA23"
-      ],
-      "procedures": [
-        "99214",
-        "94010"
-      ],
-      "drugs": [
-        "Fluticasone",
-        "Montelukast"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 1,
-        "max": 18
-      }
-    },
-    {
-      "name": "Heart Failure Management",
-      "specialty": "Cardiology",
-      "diagnoses": [
-        "BD10"
-      ],
-      "procedures": [
-        "99215"
-      ],
-      "drugs": [
-        "Furosemide",
-        "Carvedilol"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Psoriasis Treatment",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "EA90"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Clobetasol",
-        "Adalimumab"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Knee Osteoarthritis Injection",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "FA01"
-      ],
-      "procedures": [
-        "20610"
-      ],
-      "drugs": [
-        "Triamcinolone",
-        "Lidocaine"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Major Depressive Disorder",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6A70"
-      ],
-      "procedures": [
-        "90792"
-      ],
-      "drugs": [
-        "Sertraline"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Generalized Anxiety Disorder",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6B00"
-      ],
-      "procedures": [
-        "90834"
-      ],
-      "drugs": [
-        "Escitalopram"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "ADHD Management",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6A05"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Methylphenidate"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Bipolar Disorder",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6A60"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Lithium",
-        "Quetiapine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Type 1 Diabetes Management",
-      "specialty": "Endocrinology",
-      "diagnoses": [
-        "5A10"
-      ],
-      "procedures": [
-        "99214",
-        "95251"
-      ],
-      "drugs": [
-        "Insulin Glargine",
-        "Insulin Lispro"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Osteoporosis",
-      "specialty": "Endocrinology",
-      "diagnoses": [
-        "FB83"
-      ],
-      "procedures": [
-        "99213",
-        "77080"
-      ],
-      "drugs": [
-        "Alendronate"
-      ],
-      "service_category": "Radiology",
+      "service_category": "Pharmacy",
       "cost_range": [
         500.0,
-        3000.0
+        2000.0
       ],
       "length_of_stay_range": [
         0,
         0
       ],
       "age_range": {
-        "min": 65,
-        "max": 95
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_08_x_HCC118"
       }
     },
     {
-      "name": "Migraine Headache",
-      "specialty": "Neurology",
+      "name": "Generated: HHS_HCC111 (111)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "8A80"
+        "G120"
       ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Sumatriptan",
-        "Topiramate"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Epilepsy Management",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8A60"
-      ],
-      "procedures": [
-        "99214",
-        "95819"
-      ],
-      "drugs": [
-        "Levetiracetam"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Parkinson's Disease",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8A20"
-      ],
-      "procedures": [
-        "99215"
-      ],
-      "drugs": [
-        "Carbidopa-Levodopa"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 65,
-        "max": 95
-      }
-    },
-    {
-      "name": "Multiple Sclerosis",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8A40"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Interferon Beta-1a"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Migraine with Aura",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8A80.1"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Sumatriptan",
-        "Topiramate"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Epilepsy Management",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8A60"
-      ],
-      "procedures": [
-        "95816",
-        "99214"
-      ],
-      "drugs": [
-        "Levetiracetam",
-        "Lamotrigine"
-      ],
-      "service_category": "Diagnostic",
-      "cost_range": [
-        800.0,
-        2500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Parkinson's Disease Follow-up",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8A20"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Carbidopa-Levodopa",
-        "Ropinirole"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 65,
-        "max": 95
-      }
-    },
-    {
-      "name": "Multiple Sclerosis Treatment",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8A40"
-      ],
-      "procedures": [
-        "96365",
-        "99215"
-      ],
-      "drugs": [
-        "Ocrelizumab"
-      ],
-      "service_category": "Therapeutic",
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
       "cost_range": [
         1000.0,
         5000.0
@@ -786,80 +70,23 @@
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC111"
       }
     },
     {
-      "name": "Alzheimer's Disease Consultation",
-      "specialty": "Neurology",
+      "name": "Generated: HHS_HCC127 (127)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "8A20"
+        "I462"
       ],
-      "procedures": [
-        "99205",
-        "96116"
-      ],
-      "drugs": [
-        "Donepezil",
-        "Memantine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        200.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 65,
-        "max": 95
-      }
-    },
-    {
-      "name": "GERD Management",
-      "specialty": "Gastroenterology",
-      "diagnoses": [
-        "DA22"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Omeprazole",
-        "Famotidine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Crohn's Disease Flare",
-      "specialty": "Gastroenterology",
-      "diagnoses": [
-        "DD70"
-      ],
-      "procedures": [
-        "99215",
-        "96365"
-      ],
-      "drugs": [
-        "Infliximab",
-        "Prednisone"
-      ],
-      "service_category": "Therapeutic",
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
       "cost_range": [
         1000.0,
         5000.0
@@ -869,78 +96,23 @@
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC127"
       }
     },
     {
-      "name": "Hepatitis C Treatment",
-      "specialty": "Gastroenterology",
+      "name": "Generated: HHS_HCC109 (109)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "1E50"
+        "G8220"
       ],
-      "procedures": [
-        "99214",
-        "80076"
-      ],
-      "drugs": [
-        "Sofosbuvir-Velpatasvir"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Hypothyroidism Follow-up",
-      "specialty": "Endocrinology",
-      "diagnoses": [
-        "5A00"
-      ],
-      "procedures": [
-        "99213",
-        "84443"
-      ],
-      "drugs": [
-        "Levothyroxine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Osteoporosis Treatment",
-      "specialty": "Endocrinology",
-      "diagnoses": [
-        "FB83"
-      ],
-      "procedures": [
-        "96372"
-      ],
-      "drugs": [
-        "Denosumab",
-        "Alendronate"
-      ],
-      "service_category": "Therapeutic",
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
       "cost_range": [
         1000.0,
         5000.0
@@ -950,1783 +122,49 @@
         0
       ],
       "age_range": {
-        "min": 65,
-        "max": 95
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC109"
       }
     },
     {
-      "name": "Major Depressive Disorder",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6A70"
-      ],
-      "procedures": [
-        "90792",
-        "90834"
-      ],
+      "name": "Generated: RXC_06 (6)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
       "drugs": [
-        "Sertraline",
-        "Bupropion"
+        "00002021301"
       ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Generalized Anxiety Disorder",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6B00"
-      ],
-      "procedures": [
-        "90834"
-      ],
-      "drugs": [
-        "Escitalopram",
-        "Buspirone"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Bipolar Disorder Management",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6A60"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Lithium",
-        "Quetiapine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Schizophrenia Maintenance",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6A20"
-      ],
-      "procedures": [
-        "99214",
-        "96372"
-      ],
-      "drugs": [
-        "Risperidone",
-        "Olanzapine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "ADHD Evaluation",
-      "specialty": "Psychiatry",
-      "diagnoses": [
-        "6A05"
-      ],
-      "procedures": [
-        "90792"
-      ],
-      "drugs": [
-        "Methylphenidate",
-        "Amphetamine-Dextroamphetamine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Menopause Symptom Management",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "GA10"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Estradiol",
-        "Progesterone"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 45,
-        "max": 60
-      }
-    },
-    {
-      "name": "Endometriosis Consult",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "GA00"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Leuprolide"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        200.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Osteoarthritis Management",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "FA00"
-      ],
-      "procedures": [
-        "99213",
-        "20610"
-      ],
-      "drugs": [
-        "Diclofenac",
-        "Triamcinolone"
-      ],
-      "service_category": "Therapeutic",
-      "cost_range": [
-        1000.0,
-        5000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Psoriasis Biologic Therapy",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "EA90"
-      ],
-      "procedures": [
-        "99214",
-        "96372"
-      ],
-      "drugs": [
-        "Adalimumab"
-      ],
-      "service_category": "Therapeutic",
-      "cost_range": [
-        1000.0,
-        5000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Heart Failure Management",
-      "specialty": "Cardiology",
-      "diagnoses": [
-        "BD10"
-      ],
-      "procedures": [
-        "99214",
-        "93000"
-      ],
-      "drugs": [
-        "Furosemide",
-        "Carvedilol"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Pediatric Asthma",
-      "specialty": "Pediatrics",
-      "diagnoses": [
-        "CA23"
-      ],
-      "procedures": [
-        "99213",
-        "94010"
-      ],
-      "drugs": [
-        "Fluticasone",
-        "Montelukast"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 1,
-        "max": 18
-      }
-    }
-  ],
-  "preventive": [
-    {
-      "name": "Annual Physical Exam",
-      "specialty": "Family Medicine",
-      "diagnoses": [
-        "QA00"
-      ],
-      "procedures": [
-        "99395"
-      ],
-      "drugs": [],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Well Child Visit (Infant)",
-      "specialty": "Pediatrics",
-      "diagnoses": [
-        "QA00.0"
-      ],
-      "procedures": [
-        "99391"
-      ],
-      "drugs": [],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 0,
-        "max": 1
-      }
-    },
-    {
-      "name": "Colonoscopy Screening",
-      "specialty": "Gastroenterology",
-      "diagnoses": [
-        "QA00"
-      ],
-      "procedures": [
-        "45378"
-      ],
-      "drugs": [
-        "Propofol"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 45,
-        "max": 85
-      }
-    },
-    {
-      "name": "Screening Colonoscopy",
-      "specialty": "Gastroenterology",
-      "diagnoses": [
-        "QA00"
-      ],
-      "procedures": [
-        "45378"
-      ],
-      "drugs": [
-        "Propofol"
-      ],
-      "service_category": "Diagnostic",
-      "cost_range": [
-        800.0,
-        2500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 45,
-        "max": 85
-      }
-    },
-    {
-      "name": "Well-Woman Exam",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "QA00"
-      ],
-      "procedures": [
-        "99395",
-        "88142"
-      ],
-      "drugs": [],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Skin Cancer Screening",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "QA00"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        150.0,
-        450.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    }
-  ],
-  "acute_illness": [
-    {
-      "name": "Acute Bronchitis",
-      "specialty": "Family Medicine",
-      "diagnoses": [
-        "CA40"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Benzonatate",
-        "Albuterol"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Acute Otitis Media",
-      "specialty": "Pediatrics",
-      "diagnoses": [
-        "AB00"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Amoxicillin"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 1,
-        "max": 18
-      }
-    },
-    {
-      "name": "Streptococcal Pharyngitis",
-      "specialty": "Pediatrics",
-      "diagnoses": [
-        "1A40"
-      ],
-      "procedures": [
-        "99213",
-        "87880"
-      ],
-      "drugs": [
-        "Penicillin V"
-      ],
-      "service_category": "Pathology & Lab",
-      "cost_range": [
-        50.0,
-        250.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 1,
-        "max": 18
-      }
-    },
-    {
-      "name": "Routine Pap Smear",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "QA00"
-      ],
-      "procedures": [
-        "99395",
-        "88142"
-      ],
-      "drugs": [],
-      "service_category": "Pathology & Lab",
-      "cost_range": [
-        50.0,
-        250.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Gastroesophageal Reflux Disease",
-      "specialty": "Gastroenterology",
-      "diagnoses": [
-        "DA22"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Omeprazole"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Urinary Tract Infection",
-      "specialty": "Urology",
-      "diagnoses": [
-        "GB90"
-      ],
-      "procedures": [
-        "99213",
-        "81000"
-      ],
-      "drugs": [
-        "Ciprofloxacin"
-      ],
-      "service_category": "Pathology & Lab",
-      "cost_range": [
-        50.0,
-        250.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Recurrent UTI",
-      "specialty": "Urology",
-      "diagnoses": [
-        "GC08"
-      ],
-      "procedures": [
-        "99213",
-        "81001"
-      ],
-      "drugs": [
-        "Nitrofurantoin",
-        "Ciprofloxacin"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Otitis Media",
-      "specialty": "Pediatrics",
-      "diagnoses": [
-        "AB00"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Amoxicillin"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 1,
-        "max": 18
-      }
-    }
-  ],
-  "maternity": [
-    {
-      "name": "Prenatal Visit (First Trimester)",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "JA00"
-      ],
-      "procedures": [
-        "59400"
-      ],
-      "drugs": [
-        "Prenatal Vitamins"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 40
-      }
-    },
-    {
-      "name": "Prenatal Visit",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "QA40"
-      ],
-      "procedures": [
-        "59400"
-      ],
-      "drugs": [
-        "Prenatal Vitamins"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 40
-      }
-    }
-  ],
-  "oncology": [
-    {
-      "name": "Breast Cancer Follow-up",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2C60"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Tamoxifen"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        150.0,
-        450.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Chemotherapy Infusion",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2C80"
-      ],
-      "procedures": [
-        "96413"
-      ],
-      "drugs": [
-        "Carboplatin",
-        "Paclitaxel"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        1000.0,
-        5000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Lung Cancer Consultation",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2C25"
-      ],
-      "procedures": [
-        "99205"
-      ],
-      "drugs": [],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        300.0,
-        750.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Anemia in Neoplastic Disease",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "3A90"
-      ],
-      "procedures": [
-        "99213",
-        "85025"
-      ],
-      "drugs": [
-        "Epoetin Alfa"
-      ],
-      "service_category": "Pathology & Lab",
-      "cost_range": [
-        50.0,
-        250.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Bladder Cancer Surveillance",
-      "specialty": "Urology",
-      "diagnoses": [
-        "2C94"
-      ],
-      "procedures": [
-        "52000"
-      ],
-      "drugs": [
-        "BCG Vaccine"
-      ],
-      "service_category": "Diagnostic",
-      "cost_range": [
-        1200.0,
-        3750.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Breast Cancer Chemotherapy",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2C60"
-      ],
-      "procedures": [
-        "96413",
-        "99214"
-      ],
-      "drugs": [
-        "Doxorubicin",
-        "Cyclophosphamide"
-      ],
-      "service_category": "Therapeutic",
-      "cost_range": [
-        1500.0,
-        7500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Lung Cancer Immunotherapy",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2C25"
-      ],
-      "procedures": [
-        "96413",
-        "99215"
-      ],
-      "drugs": [
-        "Pembrolizumab"
-      ],
-      "service_category": "Therapeutic",
-      "cost_range": [
-        1500.0,
-        7500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Colon Cancer Follow-up",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2B90"
-      ],
-      "procedures": [
-        "99214",
-        "84153"
-      ],
-      "drugs": [
-        "Fluorouracil"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        150.0,
-        450.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Leukemia Maintenance",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2A00"
-      ],
-      "procedures": [
-        "99214",
-        "85025"
-      ],
-      "drugs": [
-        "Imatinib"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Lymphoma Staging",
-      "specialty": "Oncology",
-      "diagnoses": [
-        "2B30"
-      ],
-      "procedures": [
-        "71260",
-        "99214"
-      ],
-      "drugs": [],
-      "service_category": "Diagnostic",
-      "cost_range": [
-        800.0,
-        2500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Melanoma Excision",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "2C30"
-      ],
-      "procedures": [
-        "11602"
-      ],
-      "drugs": [
-        "Lidocaine"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    }
-  ],
-  "injury_ortho": [
-    {
-      "name": "Lower Back Pain",
-      "specialty": "Family Medicine",
-      "diagnoses": [
-        "ME84.2"
-      ],
-      "procedures": [
-        "99213",
-        "97110"
-      ],
-      "drugs": [
-        "Ibuprofen",
-        "Cyclobenzaprine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Chest Pain Evaluation",
-      "specialty": "Cardiology",
-      "diagnoses": [
-        "MB23.3"
-      ],
-      "procedures": [
-        "99204",
-        "93015"
-      ],
-      "drugs": [],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Distal Radius Fracture",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "NC12"
-      ],
-      "procedures": [
-        "25600"
-      ],
-      "drugs": [
-        "Acetaminophen-Hydrocodone"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Fracture Casting",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "NC12"
-      ],
-      "procedures": [
-        "29075",
-        "99203"
-      ],
-      "drugs": [
-        "Acetaminophen-Codeine"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Rotator Cuff Injury",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "FB53"
-      ],
-      "procedures": [
-        "99204",
-        "73030"
-      ],
-      "drugs": [
-        "Naproxen"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    }
-  ],
-  "surgical": [
-    {
-      "name": "Skin Biopsy",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "EK90"
-      ],
-      "procedures": [
-        "11100"
-      ],
-      "drugs": [
-        "Lidocaine"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Actinic Keratosis Cryotherapy",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "EK91"
-      ],
-      "procedures": [
-        "17000"
-      ],
-      "drugs": [],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Kidney Stone Treatment",
-      "specialty": "Urology",
-      "diagnoses": [
-        "GB90"
-      ],
-      "procedures": [
-        "50590"
-      ],
-      "drugs": [
-        "Tamsulosin",
-        "Ketorolac"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Benign Prostatic Hyperplasia (BPH)",
-      "specialty": "Urology",
-      "diagnoses": [
-        "GA90"
-      ],
-      "procedures": [
-        "52601"
-      ],
-      "drugs": [
-        "Finasteride",
-        "Tamsulosin"
-      ],
-      "service_category": "Surgery",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        1
-      ],
-      "age_range": {
-        "min": 50,
-        "max": 90
-      }
-    },
-    {
-      "name": "Knee Replacement Follow-up",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "FA01"
-      ],
-      "procedures": [
-        "99213",
-        "73560"
-      ],
-      "drugs": [
-        "Celecoxib"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        2000.0,
-        15000.0
-      ],
-      "length_of_stay_range": [
-        2,
-        5
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    }
-  ],
-  "general_medicine": [
-    {
-      "name": "Atrial Fibrillation",
-      "specialty": "Cardiology",
-      "diagnoses": [
-        "BC81.3"
-      ],
-      "procedures": [
-        "99214",
-        "93000"
-      ],
-      "drugs": [
-        "Warfarin",
-        "Metoprolol"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Coronary Artery Disease",
-      "specialty": "Cardiology",
-      "diagnoses": [
-        "BA80"
-      ],
-      "procedures": [
-        "99214",
-        "93306"
-      ],
-      "drugs": [
-        "Aspirin",
-        "Clopidogrel"
-      ],
-      "service_category": "Medicine",
-      "cost_range": [
-        100.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Acne Vulgaris",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "ED80"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Tretinoin",
-        "Doxycycline"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Rotator Cuff Tendinitis",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "FB53"
-      ],
-      "procedures": [
-        "99213",
-        "97140"
-      ],
-      "drugs": [
-        "Naproxen"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Carpal Tunnel Syndrome",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "8C10"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Menopausal Symptoms",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "GA10"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Estradiol"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Uterine Fibroids",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "2B60"
-      ],
-      "procedures": [
-        "99214",
-        "76856"
-      ],
-      "drugs": [],
-      "service_category": "Radiology",
+      "service_category": "Pharmacy",
       "cost_range": [
         500.0,
-        3000.0
+        2000.0
       ],
       "length_of_stay_range": [
         0,
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_06"
       }
     },
     {
-      "name": "Hyperthyroidism",
-      "specialty": "Endocrinology",
+      "name": "Generated: HHS_HCC029 (29)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "5A02"
+        "D841"
       ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Methimazole"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Irritable Bowel Syndrome",
-      "specialty": "Gastroenterology",
-      "diagnoses": [
-        "DD91"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Dicyclomine"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Benign Prostatic Hyperplasia",
-      "specialty": "Urology",
-      "diagnoses": [
-        "GA60"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Tamsulosin"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Kidney Stone",
-      "specialty": "Urology",
-      "diagnoses": [
-        "GB70"
-      ],
-      "procedures": [
-        "99214",
-        "74176"
-      ],
-      "drugs": [
-        "Ketorolac"
-      ],
-      "service_category": "Radiology",
-      "cost_range": [
-        500.0,
-        3000.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Stroke Follow-up",
-      "specialty": "Neurology",
-      "diagnoses": [
-        "8B10"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Clopidogrel",
-        "Atorvastatin"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Erectile Dysfunction Consult",
-      "specialty": "Urology",
-      "diagnoses": [
-        "HA01"
-      ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Sildenafil",
-        "Tadalafil"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        200.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "IBS Consultation",
-      "specialty": "Gastroenterology",
-      "diagnoses": [
-        "DD91"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Dicyclomine",
-        "Linaclotide"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        200.0,
-        500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Hyperthyroidism Management",
-      "specialty": "Endocrinology",
-      "diagnoses": [
-        "5A02"
-      ],
-      "procedures": [
-        "99214",
-        "84436"
-      ],
-      "drugs": [
-        "Methimazole",
-        "Propranolol"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Adrenal Insufficiency",
-      "specialty": "Endocrinology",
-      "diagnoses": [
-        "5A74"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Hydrocortisone",
-        "Fludrocortisone"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "PCOS Management",
-      "specialty": "Endocrinology",
-      "diagnoses": [
-        "5A80"
-      ],
-      "procedures": [
-        "99214"
-      ],
-      "drugs": [
-        "Metformin",
-        "Spironolactone"
-      ],
-      "service_category": "Evaluation & Management",
-      "cost_range": [
-        100.0,
-        300.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Ovarian Cyst Monitoring",
-      "specialty": "OB/GYN",
-      "diagnoses": [
-        "GA11"
-      ],
-      "procedures": [
-        "76830",
-        "99213"
-      ],
+      "procedures": [],
       "drugs": [],
-      "service_category": "Diagnostic",
-      "cost_range": [
-        800.0,
-        2500.0
-      ],
-      "length_of_stay_range": [
-        0,
-        0
-      ],
-      "age_range": {
-        "min": 18,
-        "max": 85
-      }
-    },
-    {
-      "name": "Carpal Tunnel Injection",
-      "specialty": "Orthopedics",
-      "diagnoses": [
-        "8C10"
-      ],
-      "procedures": [
-        "20550"
-      ],
-      "drugs": [
-        "Methylprednisolone"
-      ],
-      "service_category": "Therapeutic",
+      "service_category": "Outpatient",
       "cost_range": [
         1000.0,
         5000.0
@@ -2736,118 +174,3522 @@
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC029"
       }
     },
     {
-      "name": "Acne Treatment",
-      "specialty": "Dermatology",
+      "name": "Generated: HHS_HCC046 (46)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "ED80"
+        "K860"
       ],
-      "procedures": [
-        "99213"
-      ],
-      "drugs": [
-        "Isotretinoin",
-        "Doxycycline"
-      ],
-      "service_category": "Evaluation & Management",
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
       "cost_range": [
-        100.0,
-        300.0
+        1000.0,
+        5000.0
       ],
       "length_of_stay_range": [
         0,
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC046"
       }
     },
     {
-      "name": "Eczema Flare",
-      "specialty": "Dermatology",
-      "diagnoses": [
-        "EA80"
-      ],
-      "procedures": [
-        "99213"
-      ],
+      "name": "Generated: RXC_03_x_HCC142 (3)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
       "drugs": [
-        "Triamcinolone Ointment",
-        "Tacrolimus"
+        "00002140701"
       ],
-      "service_category": "Evaluation & Management",
+      "service_category": "Pharmacy",
       "cost_range": [
-        100.0,
-        300.0
+        500.0,
+        2000.0
       ],
       "length_of_stay_range": [
         0,
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_03_x_HCC142"
       }
     },
     {
-      "name": "Atrial Fibrillation Control",
-      "specialty": "Cardiology",
+      "name": "Generated: HHS_HCC001 (1)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "BC81"
+        "B20"
       ],
-      "procedures": [
-        "99214",
-        "93000"
-      ],
-      "drugs": [
-        "Warfarin",
-        "Diltiazem"
-      ],
-      "service_category": "Evaluation & Management",
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
       "cost_range": [
-        100.0,
-        300.0
+        1000.0,
+        5000.0
       ],
       "length_of_stay_range": [
         0,
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC001"
       }
     },
     {
-      "name": "Coronary Artery Disease",
-      "specialty": "Cardiology",
+      "name": "Generated: HHS_HCC068 (68)",
+      "specialty": "Internal Medicine",
       "diagnoses": [
-        "BA80"
+        "D600"
       ],
-      "procedures": [
-        "99214",
-        "93306"
-      ],
-      "drugs": [
-        "Aspirin",
-        "Clopidogrel"
-      ],
-      "service_category": "Diagnostic",
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
       "cost_range": [
-        800.0,
-        2500.0
+        1000.0,
+        5000.0
       ],
       "length_of_stay_range": [
         0,
         0
       ],
       "age_range": {
-        "min": 18,
-        "max": 85
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC068"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC097 (97)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E7871"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC097"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC154 (154)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I670"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC154"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC132 (132)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I200"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC132"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC183 (183)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "T8610"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC183"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC187 (187)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I120"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC187"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC203 (203)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O0000"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC203"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC002 (2)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A021"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC002"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC055 (55)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A0104"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC055"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC082 (82)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F11120"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC082"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC067 (67)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D460"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC067"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC131 (131)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I2101"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC131"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC128 (128)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "Z95811"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC128"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC188 (188)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "N184"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC188"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC205 (205)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O020"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC205"
+      }
+    },
+    {
+      "name": "Generated: RXC_09_x_HCC056_057_and_048_041 (9)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
+      "drugs": [
+        "00002418230"
+      ],
+      "service_category": "Pharmacy",
+      "cost_range": [
+        500.0,
+        2000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_09_x_HCC056_057_and_048_041"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC107 (107)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G8250"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC107"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC045 (45)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "K311"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC045"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC126 (126)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "P2881"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC126"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC149 (149)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A5205"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC149"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC021 (21)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E08649"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC021"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC122 (122)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G835"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC122"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC037_1 (37_1)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "B182"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC037_1"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC150 (150)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G8100"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC150"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC184 (184)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "N186"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC184"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC110 (110)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "B0082"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC110"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC142 (142)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I442"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC142"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC115 (115)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D8682"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC115"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC158 (158)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "J4A0"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC158"
+      }
+    },
+    {
+      "name": "Generated: RXC_05 (5)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
+      "drugs": [
+        "00008201080"
+      ],
+      "service_category": "Pharmacy",
+      "cost_range": [
+        500.0,
+        2000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_05"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC162 (162)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "B4481"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC162"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC130 (130)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A3681"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC130"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC030 (30)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A391"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC030"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC004 (4)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A870"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC004"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC102 (102)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F840"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC102"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC217 (217)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I70231"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC217"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC219 (219)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "L00"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC219"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC037_2 (37_2)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "B180"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC037_2"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC146 (146)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I6300"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC146"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC071 (71)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D561"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC071"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC156 (156)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I2601"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC156"
+      }
+    },
+    {
+      "name": "Generated: RXC_02 (2)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
+      "drugs": [
+        "00003001101"
+      ],
+      "service_category": "Pharmacy",
+      "cost_range": [
+        500.0,
+        2000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_02"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC011 (11)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "C01"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC011"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC087_1 (87_1)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F200"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC087_1"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC096 (96)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "Q8711"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC096"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC006 (6)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A072"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC006"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC012 (12)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "C4A0"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC012"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC106 (106)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "S14111A"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC106"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC084 (84)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F10130"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC084"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC054 (54)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "M726"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC054"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC209 (209)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O1204"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC209"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC228 (228)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "M4850XA"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC228"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC026 (26)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E7601"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC026"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC119 (119)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E7500"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC119"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC139 (139)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "Q206"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC139"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC035_1 (35_1)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A064"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC035_1"
+      }
+    },
+    {
+      "name": "Generated: RXC_04_x_HCC184_183_187_188 (4)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
+      "drugs": [
+        "00004040109"
+      ],
+      "service_category": "Pharmacy",
+      "cost_range": [
+        500.0,
+        2000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_04_x_HCC184_183_187_188"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC120 (120)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G40001"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC120"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC121 (121)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G910"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC121"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC125 (125)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "J9500"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC125"
+      }
+    },
+    {
+      "name": "Generated: RXC_01 (1)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
+      "drugs": [
+        "00003196401"
+      ],
+      "service_category": "Pharmacy",
+      "cost_range": [
+        500.0,
+        2000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_01"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC123 (123)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G47411"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC123"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC066 (66)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D66"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC066"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC019 (19)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E0800"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC019"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC047 (47)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "B252"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC047"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC056 (56)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I7782"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC056"
+      }
+    },
+    {
+      "name": "Generated: RXC_07_x_HCC018_019_020_021 (7)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
+      "drugs": [
+        "00002115201"
+      ],
+      "service_category": "Pharmacy",
+      "cost_range": [
+        500.0,
+        2000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_07_x_HCC018_019_020_021"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC253 (253)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "K91850"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC253"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC020 (20)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E0821"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC020"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC074 (74)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D700"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC074"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC223 (223)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "S061X3A"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC223"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC112 (112)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G800"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC112"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC069 (69)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D590"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC069"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC145 (145)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I6000"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC145"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC087_2 (87_2)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F22"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC087_2"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC212 (212)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O0900"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC212"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC161_1 (161_1)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "J410"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC161_1"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC161_2 (161_2)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "J4520"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC161_2"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC211 (211)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O09811"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC211"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC210 (210)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O1410"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC210"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC061 (61)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "Q773"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC061"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC081 (81)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F11150"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC081"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC207 (207)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O032"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC207"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC027 (27)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E7400"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC027"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC018 (18)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "Z9483"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC018"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC094 (94)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F5000"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC094"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC035_2 (35_2)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "I8500"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC035_2"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC113 (113)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G801"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC113"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC138 (138)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "P2930"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC138"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC251 (251)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D89810"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC251"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC073 (73)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D810"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC073"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC023 (23)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E40"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC023"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC135 (135)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A0102"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC135"
+      }
+    },
+    {
+      "name": "Generated: RXC_10_x_HCC159_158 (10)",
+      "specialty": "Pharmacy",
+      "diagnoses": [],
+      "procedures": [],
+      "drugs": [
+        "10122021201"
+      ],
+      "service_category": "Pharmacy",
+      "cost_range": [
+        500.0,
+        2000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "RXC",
+        "code": "RXC_10_x_HCC159_158"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC022 (22)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E1010"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC022"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC174 (174)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "H353210"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC174"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC088 (88)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F3010"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC088"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC010 (10)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "C380"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC010"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC163 (163)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A065"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC163"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC118 (118)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G35"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC118"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC159 (159)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E840"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC159"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC226 (226)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "M80051A"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC226"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC062 (62)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "M4200"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC062"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC083 (83)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F10131"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC083"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC117 (117)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G7100"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC117"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC103 (103)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F842"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC103"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC254 (254)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G546"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC254"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC036 (36)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "K7030"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC036"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC090 (90)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "F21"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC090"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC057 (57)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "M0230"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC057"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC151 (151)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G830"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC151"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC129 (129)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "T8620"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC129"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC028 (28)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "E700"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC028"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC034 (34)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "T8640"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC034"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC218 (218)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "T3111"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC218"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC009 (9)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "C153"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC009"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC013 (13)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "C430"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC013"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC041 (41)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "T86850"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC041"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC114 (114)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "G901"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC114"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC208 (208)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O1002"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC208"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC204 (204)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "O030"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC204"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC234 (234)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "S48011A"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC234"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC048 (48)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "K5000"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC048"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC070 (70)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "D5700"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC070"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC008 (8)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "C770"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC008"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC075 (75)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "C946"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC075"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC042 (42)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A5485"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC042"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC153 (153)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A480"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC153"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC160 (160)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "J410"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC160"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC137 (137)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "Q204"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC137"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC108 (108)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "S24111A"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC108"
+      }
+    },
+    {
+      "name": "Generated: HHS_HCC003 (3)",
+      "specialty": "Internal Medicine",
+      "diagnoses": [
+        "A0101"
+      ],
+      "procedures": [],
+      "drugs": [],
+      "service_category": "Outpatient",
+      "cost_range": [
+        1000.0,
+        5000.0
+      ],
+      "length_of_stay_range": [
+        0,
+        0
+      ],
+      "age_range": {
+        "min": 40,
+        "max": 80
+      },
+      "metadata": {
+        "type": "HCC",
+        "code": "HHS_HCC003"
       }
     }
   ]
