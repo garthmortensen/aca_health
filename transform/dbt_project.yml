@@ -64,4 +64,16 @@ seeds:
   aca_health_dw:
     +schema: staging             # Load all seeds into staging schema
     +quote_columns: false        # Don't quote column names (Postgres default)
+    # HHS-HCC reference CSVs have headers with characters like ?, (, / and spaces,
+    # which are invalid as unquoted Postgres identifiers
+    hhs_hcc_factors:
+      +quote_columns: true
+    hhs_hcc_factors_adult:
+      +quote_columns: true
+    hhs_hcc_variable_definitions:
+      +quote_columns: true
+    hhs_hcc_icd10_to_cc:
+      +quote_columns: true
+    hhs_hcc_interactions:
+      +quote_columns: true
 
