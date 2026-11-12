@@ -269,3 +269,48 @@ models:
       - name: load_timestamp
         description: "Ingestion timestamp."
 
+  - name: stg_pharmacy_claims
+    description: "Cleaned pharmacy (PBM) claims: one row per fill attempt with NDC, days supply, refill number, cost components, adjudication status and NCPDP reject code. Rejected rows carry the prior authorization request they triggered."
+    columns:
+      - name: pharmacy_claim_id
+        description: "Pharmacy claim identifier."
+        tests: [not_null, unique]
+      - name: member_id
+        description: "Member who filled or attempted the fill."
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('stg_members'), field: member_id}
+      - name: ndc
+        description: "National Drug Code (11-digit, text to keep leading zeros)."
+        tests: [not_null]
+      - name: claim_status
+        description: "paid, reversed, or rejected."
+        tests:
+          - accepted_values:
+              arguments: {values: [paid, reversed, rejected]}
+      - name: total_cost
+        description: "ingredient_cost + dispensing_fee."
+
+  - name: stg_prior_authorization_requests
+    description: "Prior authorization requests with timeline, decision, and the clinical facts that decided them. These facts are the ground truth for the clinical-note reviewer in pbm/."
+    columns:
+      - name: prior_authorization_request_id
+        description: "prior authorization request identifier."
+        tests: [not_null, unique]
+      - name: policy_id
+        description: "Coverage policy applied (see scripts/scenarios.json pharmacy.prior_authorization_policies)."
+        tests: [not_null]
+      - name: decision
+        description: "approved or denied."
+        tests:
+          - accepted_values:
+              arguments: {values: [approved, denied]}
+
+  - name: stg_formulary
+    description: "Drug list with class, tier, prior authorization requirement and governing policy."
+    columns:
+      - name: ndc
+        description: "National Drug Code."
+        tests: [not_null, unique]
+

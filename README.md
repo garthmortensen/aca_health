@@ -81,10 +81,12 @@ Generate synthetic seed data:
 python scripts/generate_seed_data.py
 ```
 
-This creates:
+This writes stable-named CSVs to `transform/seeds/` for `dbt seed`:
 
-- **Timestamped CSVs** in `data/seeds/` (for archival/versioning)
-- **Stable-named CSVs** in `transform/seeds/` (for dbt seed to load)
+- `plans`, `providers`, `members`, `enrollments`, `claims` (medical)
+- `pharmacy_claims` (pharmacy fills, reversals, and rejects for missing prior authorization), `prior_authorization_requests` (requests for the plan's approval of a drug, with the clinical facts that decided them), `formulary` (drug list with tier and prior authorization policy)
+
+Clinical content comes from `scripts/scenarios.json`: medical scenarios under `generated_comprehensive`, and the `pharmacy` block (formulary, member drug journeys, prior authorization policies) consumed by `scripts/gen_pharmacy.py`. Drug claims live only in `pharmacy_claims`; medical claims no longer carry `RX` rows, so PMPM is not double counted.
 
 ### 3. Create database with Podman
 
@@ -353,3 +355,7 @@ Validate the profile and connection:
 cd transform
 dbt debug
 ```
+
+## pharmacy benefit demo
+
+`pbm/` (pharmacy benefit management) holds an AI-assisted prior authorization review built on this warehouse. A prior authorization is the plan's approval that a prescriber must get before certain drugs are covered. The policy lives in `pbm/policy.json`; Claude reads the clinical note and extracts the facts the policy asks about; clear cases are approved by the system with a paper trail, and unclear or failing cases go to a nurse practitioner in a Streamlit dashboard. `pbm/data/` holds synthetic notes and the outputs of the first-pass pipeline (archived on branch `archive/pbm-v1`).

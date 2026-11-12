@@ -30,3 +30,12 @@ sources:
       - name: claims_raw       # Claim transactions loaded from seeds
         tests:
           - not_null: { column_name: claim_id }
+      - name: pharmacy_claims_raw  # Pharmacy (NCPDP-style) fills and rejects loaded from seeds
+        tests:
+          - not_null: { column_name: pharmacy_claim_id }
+      - name: prior_authorization_requests_raw      # Prior authorization requests with the clinical facts that decided them
+        tests:
+          - not_null: { column_name: prior_authorization_request_id }
+      - name: formulary_raw        # Drug list with tier, prior authorization flag, and policy reference
+        tests:
+          - not_null: { column_name: ndc }

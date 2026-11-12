@@ -116,4 +116,113 @@ seeds:
           - not_null
           - unique
 
+  - name: pharmacy_claims
+    config:
+      alias: pharmacy_claims_raw
+      schema: staging
+      column_types:
+        pharmacy_claim_id: text
+        member_id: text
+        plan_id: text
+        prescriber_id: text
+        pharmacy_npi: text
+        pharmacy_name: text
+        channel: text
+        fill_date: date
+        ndc: text
+        drug_name: text
+        generic_name: text
+        brand_name: text
+        drug_class: text
+        drug_subclass: text
+        is_generic: integer
+        is_specialty: integer
+        formulary_tier: integer
+        days_supply: integer
+        quantity: integer
+        refill_number: integer
+        ingredient_cost: numeric(12,2)
+        dispensing_fee: numeric(12,2)
+        member_copay: numeric(12,2)
+        plan_paid: numeric(12,2)
+        claim_status: text
+        reject_code: text
+        reject_description: text
+        prior_authorization_request_id: text
+    columns:
+      - name: pharmacy_claim_id
+        tests:
+          - not_null
+          - unique
+
+  - name: prior_authorization_requests
+    config:
+      alias: prior_authorization_requests_raw
+      schema: staging
+      column_types:
+        prior_authorization_request_id: text
+        member_id: text
+        plan_id: text
+        prescriber_id: text
+        prescriber_specialty: text
+        policy_id: text
+        ndc: text
+        drug_name: text
+        request_date: date
+        decision_date: date
+        turnaround_days: integer
+        urgency: text
+        decision: text
+        denial_reasons: text
+        first_fill_date: date
+        diagnosis_code: text
+        age_at_request: integer
+        has_type2_diabetes_diagnosis: boolean
+        has_rheumatoid_arthritis_diagnosis: boolean
+        hba1c_percent: numeric(4,1)
+        hba1c_date: date
+        bmi: numeric(4,1)
+        weight_comorbidities: text
+        weight_comorbidity_count: integer
+        lifestyle_program_months: integer
+        prior_therapy_drug: text
+        prior_therapy_days: integer
+        prior_therapy_start_date: date
+        prior_therapy_intolerance: boolean
+        medullary_thyroid_cancer_history: boolean
+        taking_another_glp1: boolean
+        tuberculosis_screen_negative: boolean
+        rheumatology_consult: boolean
+    columns:
+      - name: prior_authorization_request_id
+        tests:
+          - not_null
+          - unique
+
+  - name: formulary
+    config:
+      alias: formulary_raw
+      schema: staging
+      column_types:
+        ndc: text
+        drug_name: text
+        generic_name: text
+        brand_name: text
+        drug_class: text
+        drug_subclass: text
+        is_generic: integer
+        is_specialty: integer
+        formulary_tier: integer
+        requires_prior_authorization: integer
+        prior_authorization_policy_id: text
+        quantity_limit_per_fill: integer
+        standard_days_supply: integer
+        wac_per_fill_low: numeric(12,2)
+        wac_per_fill_high: numeric(12,2)
+    columns:
+      - name: ndc
+        tests:
+          - not_null
+          - unique
+
 

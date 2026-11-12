@@ -271,3 +271,102 @@ models:
         description: "ETL load identifier."
       - name: load_timestamp
         description: "Timestamp when the record was loaded."
+
+  - name: dim_formulary
+    description: "Drug dimension keyed by NDC with class, subclass, formulary tier, prior authorization requirement and the policy governing the PA. cost_category groups drugs into Generic, Brand, Specialty and GLP-1 for trend reporting."
+    columns:
+      - name: ndc
+        description: "National Drug Code (natural key)"
+        tests: [not_null, unique]
+      - name: formulary_tier
+        description: "Benefit tier 1-4 driving member cost share"
+        tests:
+          - accepted_values:
+              arguments: {values: [1, 2, 3, 4], quote: false}
+      - name: cost_category
+        description: "Generic, Brand, Specialty or GLP-1"
+        tests:
+          - accepted_values:
+              arguments: {values: [Generic, Brand, Specialty, GLP-1]}
+
+  - name: fct_pharmacy_claim
+    description: "Pharmacy claim fact at the fill-attempt grain, separate from fct_claim because pharmacy claims are adjudicated by the PBM with their own fields (NDC, days supply, refill number, reject codes). Rejected claims have zero dollars and link to the prior authorization request they triggered; paid fills carry ingredient cost, dispensing fee, member copay and plan paid."
+    columns:
+      - name: pharmacy_claim_id
+        description: "Unique pharmacy claim identifier (natural key)"
+        tests: [not_null, unique]
+      - name: member_id
+        description: "Foreign key to member dimension"
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_member'), field: member_id}
+      - name: plan_id
+        description: "Foreign key to plan dimension"
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_plan'), field: plan_id}
+      - name: prescriber_id
+        description: "Foreign key to provider dimension (prescribing provider)"
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_provider'), field: provider_id}
+      - name: ndc
+        description: "Foreign key to formulary dimension"
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_formulary'), field: ndc}
+      - name: fill_date
+        description: "Date the fill was dispensed or attempted"
+        tests: [not_null]
+      - name: days_supply
+        description: "Days of therapy dispensed"
+      - name: claim_status
+        description: "paid, reversed or rejected"
+        tests:
+          - accepted_values:
+              arguments: {values: [paid, reversed, rejected]}
+      - name: reject_code
+        description: "NCPDP reject code when claim_status = rejected (75 = prior authorization required)"
+      - name: plan_paid
+        description: "Amount paid by the plan"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments: {min_value: 0, max_value: 50000}
+      - name: prior_authorization_request_id
+        description: "prior authorization request this claim triggered (rejects) or was authorized by (post-approval fills)"
+
+  - name: fct_prior_authorization_request
+    description: "Prior authorization fact: one row per request with the drug, prescriber, timeline (request, decision, first fill), outcome, denial category, and the clinical facts the decision rested on. Supports prior authorization throughput, approval-rate, turnaround and abandonment analysis."
+    columns:
+      - name: prior_authorization_request_id
+        description: "Unique prior authorization request identifier"
+        tests: [not_null, unique]
+      - name: member_id
+        description: "Foreign key to member dimension"
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_member'), field: member_id}
+      - name: policy_id
+        description: "Coverage policy evaluated"
+        tests:
+          - accepted_values:
+              arguments: {values: [glp1_type2_diabetes, glp1_weight_management, adalimumab_rheumatoid_arthritis]}
+      - name: decision
+        description: "approved or denied"
+        tests:
+          - accepted_values:
+              arguments: {values: [approved, denied]}
+      - name: turnaround_days
+        description: "Days from request to decision"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments: {min_value: 0, max_value: 30}
+      - name: days_to_first_fill
+        description: "Days from decision to first paid fill (null if never filled)"
+      - name: primary_denial_category
+        description: "Grouped denial reason for reporting"

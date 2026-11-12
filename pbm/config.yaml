@@ -1,0 +1,39 @@
+# Prior authorization review: policy and decision settings.
+# Every other file in pbm/ reads from here. Change a rule here, nowhere else.
+
+policy:
+  id: glp1_type2_diabetes
+  version: "2026-11-11"
+  name: GLP-1 receptor agonist for type 2 diabetes
+  drugs: [Ozempic, Mounjaro, Trulicity]
+
+  # Each criterion names the fact the AI extracts and how it passes.
+  #   pass_when: the yes/no value that passes
+  #   min:       the number that passes (value >= min)
+  #   near:      how close to min counts as "near threshold" and goes to the NP
+  criteria:
+    - id: type2_diabetes_diagnosis
+      question: Is type 2 diabetes documented as a diagnosis?
+      fact: has_type2_diabetes_diagnosis
+      pass_when: true
+
+    - id: age_18
+      question: Is the member 18 or older?
+      fact: age
+      min: 18
+
+    - id: hba1c_7
+      question: Is the most recent HbA1c 7.0% or higher?
+      fact: hba1c_percent
+      min: 7.0
+      near: 0.3
+
+decision:
+  # Below this, the system does not approve on its own, even if every criterion passes.
+  confidence_threshold: 0.9
+
+  # Order of checks, strongest signal first:
+  #   any criterion fails on a documented fact  -> deny     (NP signs, failing criterion pre-filled)
+  #   any fact missing or near its threshold     -> unclear  (NP reviews)
+  #   confidence below threshold                 -> unclear  (NP reviews)
+  #   otherwise                                  -> approve  (system, with the quotes as the paper trail)

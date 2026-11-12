@@ -17,3 +17,6 @@ transform/package-lock.yml
 transform/seeds/*.csv
 
 .ruff_cache/
+
+# pbm demo outputs (synthetic notes, reviews, reports)
+pbm/data/

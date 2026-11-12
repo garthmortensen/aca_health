@@ -3692,5 +3692,1189 @@
         "code": "HHS_HCC003"
       }
     }
-  ]
+  ],
+  "pharmacy": {
+    "formulary": [
+      {
+        "ndc": "00093104801",
+        "drug_name": "Metformin HCl 500 mg tablet",
+        "generic_name": "metformin",
+        "brand_name": null,
+        "drug_class": "Antidiabetics",
+        "drug_subclass": "Biguanides",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 60,
+        "cost_per_fill": [
+          8,
+          18
+        ]
+      },
+      {
+        "ndc": "00093834501",
+        "drug_name": "Glipizide 5 mg tablet",
+        "generic_name": "glipizide",
+        "brand_name": null,
+        "drug_class": "Antidiabetics",
+        "drug_subclass": "Sulfonylureas",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 60,
+        "cost_per_fill": [
+          6,
+          14
+        ]
+      },
+      {
+        "ndc": "00597015230",
+        "drug_name": "Jardiance 10 mg tablet",
+        "generic_name": "empagliflozin",
+        "brand_name": "Jardiance",
+        "drug_class": "Antidiabetics",
+        "drug_subclass": "SGLT2 Inhibitors",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 2,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          520,
+          620
+        ]
+      },
+      {
+        "ndc": "00002771559",
+        "drug_name": "Basaglar KwikPen 100 units/mL",
+        "generic_name": "insulin glargine",
+        "brand_name": "Basaglar",
+        "drug_class": "Antidiabetics",
+        "drug_subclass": "Long-Acting Insulins",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 2,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 15,
+        "cost_per_fill": [
+          280,
+          380
+        ]
+      },
+      {
+        "ndc": "00169413013",
+        "drug_name": "Ozempic 1 mg/dose pen",
+        "generic_name": "semaglutide",
+        "brand_name": "Ozempic",
+        "drug_class": "Antidiabetics",
+        "drug_subclass": "GLP-1 Receptor Agonists",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 3,
+        "requires_prior_authorization": 1,
+        "prior_authorization_policy": "glp1_type2_diabetes",
+        "days_supply": 28,
+        "quantity_per_fill": 3,
+        "cost_per_fill": [
+          930,
+          1050
+        ]
+      },
+      {
+        "ndc": "00002150680",
+        "drug_name": "Mounjaro 5 mg/0.5 mL pen",
+        "generic_name": "tirzepatide",
+        "brand_name": "Mounjaro",
+        "drug_class": "Antidiabetics",
+        "drug_subclass": "GLP-1 Receptor Agonists",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 3,
+        "requires_prior_authorization": 1,
+        "prior_authorization_policy": "glp1_type2_diabetes",
+        "days_supply": 28,
+        "quantity_per_fill": 4,
+        "cost_per_fill": [
+          1000,
+          1120
+        ]
+      },
+      {
+        "ndc": "00002143380",
+        "drug_name": "Trulicity 1.5 mg/0.5 mL pen",
+        "generic_name": "dulaglutide",
+        "brand_name": "Trulicity",
+        "drug_class": "Antidiabetics",
+        "drug_subclass": "GLP-1 Receptor Agonists",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 3,
+        "requires_prior_authorization": 1,
+        "prior_authorization_policy": "glp1_type2_diabetes",
+        "days_supply": 28,
+        "quantity_per_fill": 4,
+        "cost_per_fill": [
+          900,
+          1000
+        ]
+      },
+      {
+        "ndc": "00169452014",
+        "drug_name": "Wegovy 2.4 mg/0.75 mL pen",
+        "generic_name": "semaglutide",
+        "brand_name": "Wegovy",
+        "drug_class": "Anti-Obesity Agents",
+        "drug_subclass": "GLP-1 Receptor Agonists",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 4,
+        "requires_prior_authorization": 1,
+        "prior_authorization_policy": "glp1_weight_management",
+        "days_supply": 28,
+        "quantity_per_fill": 4,
+        "cost_per_fill": [
+          1300,
+          1400
+        ]
+      },
+      {
+        "ndc": "00002250680",
+        "drug_name": "Zepbound 5 mg/0.5 mL pen",
+        "generic_name": "tirzepatide",
+        "brand_name": "Zepbound",
+        "drug_class": "Anti-Obesity Agents",
+        "drug_subclass": "GLP-1 Receptor Agonists",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 4,
+        "requires_prior_authorization": 1,
+        "prior_authorization_policy": "glp1_weight_management",
+        "days_supply": 28,
+        "quantity_per_fill": 4,
+        "cost_per_fill": [
+          1000,
+          1100
+        ]
+      },
+      {
+        "ndc": "68180051301",
+        "drug_name": "Lisinopril 20 mg tablet",
+        "generic_name": "lisinopril",
+        "brand_name": null,
+        "drug_class": "Antihypertensives",
+        "drug_subclass": "ACE Inhibitors",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          4,
+          10
+        ]
+      },
+      {
+        "ndc": "69097012707",
+        "drug_name": "Amlodipine 10 mg tablet",
+        "generic_name": "amlodipine",
+        "brand_name": null,
+        "drug_class": "Antihypertensives",
+        "drug_subclass": "Calcium Channel Blockers",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          4,
+          10
+        ]
+      },
+      {
+        "ndc": "60505257908",
+        "drug_name": "Atorvastatin 40 mg tablet",
+        "generic_name": "atorvastatin",
+        "brand_name": null,
+        "drug_class": "Antihyperlipidemics",
+        "drug_subclass": "Statins",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          6,
+          14
+        ]
+      },
+      {
+        "ndc": "62332002631",
+        "drug_name": "Metoprolol succinate ER 50 mg tablet",
+        "generic_name": "metoprolol succinate",
+        "brand_name": null,
+        "drug_class": "Cardiovascular Agents",
+        "drug_subclass": "Beta Blockers",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          8,
+          18
+        ]
+      },
+      {
+        "ndc": "00054429725",
+        "drug_name": "Furosemide 40 mg tablet",
+        "generic_name": "furosemide",
+        "brand_name": null,
+        "drug_class": "Cardiovascular Agents",
+        "drug_subclass": "Loop Diuretics",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          4,
+          10
+        ]
+      },
+      {
+        "ndc": "00003089421",
+        "drug_name": "Eliquis 5 mg tablet",
+        "generic_name": "apixaban",
+        "brand_name": "Eliquis",
+        "drug_class": "Cardiovascular Agents",
+        "drug_subclass": "Anticoagulants",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 2,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 60,
+        "cost_per_fill": [
+          540,
+          620
+        ]
+      },
+      {
+        "ndc": "59310057922",
+        "drug_name": "Albuterol HFA 90 mcg inhaler",
+        "generic_name": "albuterol",
+        "brand_name": null,
+        "drug_class": "Respiratory Agents",
+        "drug_subclass": "Short-Acting Beta Agonists",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 1,
+        "cost_per_fill": [
+          30,
+          60
+        ]
+      },
+      {
+        "ndc": "00173069600",
+        "drug_name": "Advair Diskus 250/50",
+        "generic_name": "fluticasone/salmeterol",
+        "brand_name": "Advair",
+        "drug_class": "Respiratory Agents",
+        "drug_subclass": "ICS/LABA Combinations",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 2,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 1,
+        "cost_per_fill": [
+          300,
+          380
+        ]
+      },
+      {
+        "ndc": "00597007541",
+        "drug_name": "Spiriva HandiHaler 18 mcg",
+        "generic_name": "tiotropium",
+        "brand_name": "Spiriva",
+        "drug_class": "Respiratory Agents",
+        "drug_subclass": "Long-Acting Anticholinergics",
+        "is_generic": 0,
+        "is_specialty": 0,
+        "tier": 2,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          450,
+          520
+        ]
+      },
+      {
+        "ndc": "31722072630",
+        "drug_name": "Montelukast 10 mg tablet",
+        "generic_name": "montelukast",
+        "brand_name": null,
+        "drug_class": "Respiratory Agents",
+        "drug_subclass": "Leukotriene Modifiers",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          8,
+          16
+        ]
+      },
+      {
+        "ndc": "68180035201",
+        "drug_name": "Sertraline 50 mg tablet",
+        "generic_name": "sertraline",
+        "brand_name": null,
+        "drug_class": "Antidepressants",
+        "drug_subclass": "SSRIs",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          5,
+          12
+        ]
+      },
+      {
+        "ndc": "16729016901",
+        "drug_name": "Escitalopram 10 mg tablet",
+        "generic_name": "escitalopram",
+        "brand_name": null,
+        "drug_class": "Antidepressants",
+        "drug_subclass": "SSRIs",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          5,
+          12
+        ]
+      },
+      {
+        "ndc": "00093100201",
+        "drug_name": "Bupropion XL 150 mg tablet",
+        "generic_name": "bupropion",
+        "brand_name": null,
+        "drug_class": "Antidepressants",
+        "drug_subclass": "Aminoketones",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          10,
+          25
+        ]
+      },
+      {
+        "ndc": "59762000502",
+        "drug_name": "Aripiprazole 5 mg tablet",
+        "generic_name": "aripiprazole",
+        "brand_name": null,
+        "drug_class": "Antipsychotics",
+        "drug_subclass": "Atypical Antipsychotics",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          12,
+          30
+        ]
+      },
+      {
+        "ndc": "51672404101",
+        "drug_name": "Methotrexate 2.5 mg tablet",
+        "generic_name": "methotrexate",
+        "brand_name": null,
+        "drug_class": "Immunomodulators",
+        "drug_subclass": "Antimetabolites",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 12,
+        "cost_per_fill": [
+          10,
+          25
+        ]
+      },
+      {
+        "ndc": "00074433902",
+        "drug_name": "Humira 40 mg/0.4 mL pen",
+        "generic_name": "adalimumab",
+        "brand_name": "Humira",
+        "drug_class": "Immunomodulators",
+        "drug_subclass": "TNF Inhibitors",
+        "is_generic": 0,
+        "is_specialty": 1,
+        "tier": 4,
+        "requires_prior_authorization": 1,
+        "prior_authorization_policy": "adalimumab_rheumatoid_arthritis",
+        "days_supply": 28,
+        "quantity_per_fill": 2,
+        "cost_per_fill": [
+          6200,
+          6900
+        ]
+      },
+      {
+        "ndc": "61314063902",
+        "drug_name": "Hyrimoz 40 mg/0.4 mL pen",
+        "generic_name": "adalimumab-adaz",
+        "brand_name": "Hyrimoz",
+        "drug_class": "Immunomodulators",
+        "drug_subclass": "TNF Inhibitors",
+        "is_generic": 0,
+        "is_specialty": 1,
+        "tier": 3,
+        "requires_prior_authorization": 1,
+        "prior_authorization_policy": "adalimumab_rheumatoid_arthritis",
+        "days_supply": 28,
+        "quantity_per_fill": 2,
+        "cost_per_fill": [
+          1500,
+          1900
+        ]
+      },
+      {
+        "ndc": "00093310905",
+        "drug_name": "Amoxicillin 500 mg capsule",
+        "generic_name": "amoxicillin",
+        "brand_name": null,
+        "drug_class": "Anti-Infectives",
+        "drug_subclass": "Penicillins",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 7,
+        "quantity_per_fill": 21,
+        "cost_per_fill": [
+          6,
+          12
+        ]
+      },
+      {
+        "ndc": "68180016006",
+        "drug_name": "Azithromycin 250 mg tablet",
+        "generic_name": "azithromycin",
+        "brand_name": null,
+        "drug_class": "Anti-Infectives",
+        "drug_subclass": "Macrolides",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 5,
+        "quantity_per_fill": 6,
+        "cost_per_fill": [
+          8,
+          16
+        ]
+      },
+      {
+        "ndc": "00054401725",
+        "drug_name": "Prednisone 10 mg tablet",
+        "generic_name": "prednisone",
+        "brand_name": null,
+        "drug_class": "Corticosteroids",
+        "drug_subclass": "Glucocorticoids",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 6,
+        "quantity_per_fill": 21,
+        "cost_per_fill": [
+          4,
+          9
+        ]
+      },
+      {
+        "ndc": "53746013101",
+        "drug_name": "Ibuprofen 800 mg tablet",
+        "generic_name": "ibuprofen",
+        "brand_name": null,
+        "drug_class": "Analgesics",
+        "drug_subclass": "NSAIDs",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 10,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          4,
+          9
+        ]
+      },
+      {
+        "ndc": "00004080085",
+        "drug_name": "Oseltamivir 75 mg capsule",
+        "generic_name": "oseltamivir",
+        "brand_name": null,
+        "drug_class": "Anti-Infectives",
+        "drug_subclass": "Antivirals",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 5,
+        "quantity_per_fill": 10,
+        "cost_per_fill": [
+          25,
+          60
+        ]
+      },
+      {
+        "ndc": "16729003510",
+        "drug_name": "Anastrozole 1 mg tablet",
+        "generic_name": "anastrozole",
+        "brand_name": null,
+        "drug_class": "Antineoplastics",
+        "drug_subclass": "Aromatase Inhibitors",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          10,
+          20
+        ]
+      },
+      {
+        "ndc": "00093773056",
+        "drug_name": "Letrozole 2.5 mg tablet",
+        "generic_name": "letrozole",
+        "brand_name": null,
+        "drug_class": "Antineoplastics",
+        "drug_subclass": "Aromatase Inhibitors",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          10,
+          20
+        ]
+      },
+      {
+        "ndc": "00904664060",
+        "drug_name": "Prenatal multivitamin with iron tablet",
+        "generic_name": "prenatal vitamins",
+        "brand_name": null,
+        "drug_class": "Vitamins",
+        "drug_subclass": "Prenatal Vitamins",
+        "is_generic": 1,
+        "is_specialty": 0,
+        "tier": 1,
+        "requires_prior_authorization": 0,
+        "prior_authorization_policy": null,
+        "days_supply": 30,
+        "quantity_per_fill": 30,
+        "cost_per_fill": [
+          8,
+          15
+        ]
+      }
+    ],
+    "journeys": [
+      {
+        "id": "type2_diabetes_maintenance",
+        "label": "Type 2 diabetes maintenance with possible GLP-1 prior authorization",
+        "anchor": {
+          "mutually_exclusive_hcc_condition": "Diabetes"
+        },
+        "min_age": 16,
+        "participation": 0.45,
+        "anchor_diagnosis": "E119",
+        "anchor_specialty": "Endocrinology",
+        "maintenance": [
+          {
+            "ndc": "00093104801",
+            "p": 0.88
+          },
+          {
+            "ndc": "00093834501",
+            "p": 0.22
+          },
+          {
+            "ndc": "00597015230",
+            "p": 0.28
+          },
+          {
+            "ndc": "00002771559",
+            "p": 0.18
+          },
+          {
+            "ndc": "60505257908",
+            "p": 0.45
+          },
+          {
+            "ndc": "68180051301",
+            "p": 0.35
+          }
+        ],
+        "prior_authorization_attempt": {
+          "policy": "glp1_type2_diabetes",
+          "step_ndc": "00093104801",
+          "drug_choices": [
+            [
+              "00169413013",
+              0.5
+            ],
+            [
+              "00002150680",
+              0.35
+            ],
+            [
+              "00002143380",
+              0.15
+            ]
+          ],
+          "rate_by_year": {
+            "2022": 0.12,
+            "2023": 0.2,
+            "2024": 0.3,
+            "2025": 0.38
+          }
+        }
+      },
+      {
+        "id": "weight_management",
+        "label": "Obesity without diabetes, GLP-1 for weight management",
+        "anchor": {
+          "clinical_segment": "Chronic",
+          "mutually_exclusive_hcc_condition": null
+        },
+        "min_age": 18,
+        "participation": 0.12,
+        "anchor_diagnosis": "E669",
+        "anchor_specialty": "Family Medicine",
+        "maintenance": [
+          {
+            "ndc": "68180051301",
+            "p": 0.4
+          },
+          {
+            "ndc": "60505257908",
+            "p": 0.35
+          }
+        ],
+        "prior_authorization_attempt": {
+          "policy": "glp1_weight_management",
+          "step_ndc": null,
+          "drug_choices": [
+            [
+              "00169452014",
+              0.6
+            ],
+            [
+              "00002250680",
+              0.4
+            ]
+          ],
+          "rate_by_year": {
+            "2022": 0.35,
+            "2023": 0.55,
+            "2024": 0.75,
+            "2025": 0.85
+          }
+        }
+      },
+      {
+        "id": "ra_biologic",
+        "label": "Rheumatoid arthritis, methotrexate then TNF inhibitor",
+        "anchor": {
+          "clinical_segment": "Complex"
+        },
+        "min_age": 18,
+        "participation": 0.07,
+        "anchor_diagnosis": "M069",
+        "anchor_specialty": "Rheumatology",
+        "maintenance": [
+          {
+            "ndc": "00054401725",
+            "p": 0.3
+          }
+        ],
+        "prior_authorization_attempt": {
+          "policy": "adalimumab_rheumatoid_arthritis",
+          "step_ndc": "51672404101",
+          "drug_choices": [
+            [
+              "00074433902",
+              0.55
+            ],
+            [
+              "61314063902",
+              0.45
+            ]
+          ],
+          "rate_by_year": {
+            "2022": 0.6,
+            "2023": 0.6,
+            "2024": 0.6,
+            "2025": 0.6
+          }
+        }
+      },
+      {
+        "id": "heart_failure",
+        "label": "Heart failure maintenance",
+        "anchor": {
+          "mutually_exclusive_hcc_condition": "CHF"
+        },
+        "min_age": 18,
+        "participation": 0.3,
+        "anchor_diagnosis": "I5022",
+        "anchor_specialty": "Cardiology",
+        "maintenance": [
+          {
+            "ndc": "62332002631",
+            "p": 0.8
+          },
+          {
+            "ndc": "00054429725",
+            "p": 0.6
+          },
+          {
+            "ndc": "68180051301",
+            "p": 0.5
+          },
+          {
+            "ndc": "00003089421",
+            "p": 0.2
+          }
+        ]
+      },
+      {
+        "id": "copd",
+        "label": "COPD maintenance",
+        "anchor": {
+          "mutually_exclusive_hcc_condition": "COPD"
+        },
+        "min_age": 30,
+        "participation": 0.3,
+        "anchor_diagnosis": "J449",
+        "anchor_specialty": "Internal Medicine",
+        "maintenance": [
+          {
+            "ndc": "00597007541",
+            "p": 0.5
+          },
+          {
+            "ndc": "59310057922",
+            "p": 0.5
+          },
+          {
+            "ndc": "00173069600",
+            "p": 0.25
+          }
+        ]
+      },
+      {
+        "id": "asthma",
+        "label": "Asthma maintenance",
+        "anchor": {
+          "mutually_exclusive_hcc_condition": "Asthma"
+        },
+        "min_age": 2,
+        "participation": 0.3,
+        "anchor_diagnosis": "J453",
+        "anchor_specialty": "Family Medicine",
+        "maintenance": [
+          {
+            "ndc": "59310057922",
+            "p": 0.6
+          },
+          {
+            "ndc": "00173069600",
+            "p": 0.25
+          },
+          {
+            "ndc": "31722072630",
+            "p": 0.3
+          }
+        ]
+      },
+      {
+        "id": "ckd",
+        "label": "Chronic kidney disease maintenance",
+        "anchor": {
+          "mutually_exclusive_hcc_condition": "CKD"
+        },
+        "min_age": 18,
+        "participation": 0.3,
+        "anchor_diagnosis": "N183",
+        "anchor_specialty": "Internal Medicine",
+        "maintenance": [
+          {
+            "ndc": "68180051301",
+            "p": 0.6
+          },
+          {
+            "ndc": "69097012707",
+            "p": 0.5
+          },
+          {
+            "ndc": "00054429725",
+            "p": 0.3
+          }
+        ]
+      },
+      {
+        "id": "behavioral",
+        "label": "Depression and anxiety maintenance",
+        "anchor": {
+          "clinical_segment": "Behavioral"
+        },
+        "min_age": 12,
+        "participation": 0.3,
+        "anchor_diagnosis": "F329",
+        "anchor_specialty": "Psychiatry",
+        "maintenance": [
+          {
+            "ndc": "68180035201",
+            "p": 0.4
+          },
+          {
+            "ndc": "16729016901",
+            "p": 0.35
+          },
+          {
+            "ndc": "00093100201",
+            "p": 0.25
+          },
+          {
+            "ndc": "59762000502",
+            "p": 0.12
+          }
+        ]
+      },
+      {
+        "id": "maternity",
+        "label": "Prenatal vitamins",
+        "anchor": {
+          "clinical_segment": "Maternity"
+        },
+        "min_age": 16,
+        "participation": 0.35,
+        "anchor_diagnosis": null,
+        "anchor_specialty": "OB/GYN",
+        "maintenance": [
+          {
+            "ndc": "00904664060",
+            "p": 1.0
+          }
+        ]
+      },
+      {
+        "id": "oncology_oral",
+        "label": "Oral hormonal therapy after breast cancer",
+        "anchor": {
+          "clinical_segment": "Complex"
+        },
+        "min_age": 30,
+        "participation": 0.1,
+        "anchor_diagnosis": "C50919",
+        "anchor_specialty": "Oncology",
+        "maintenance": [
+          {
+            "ndc": "16729003510",
+            "p": 0.55
+          },
+          {
+            "ndc": "00093773056",
+            "p": 0.45
+          }
+        ]
+      },
+      {
+        "id": "acute_episodes",
+        "label": "Occasional acute prescriptions (any member)",
+        "anchor": {},
+        "min_age": 0,
+        "participation": 0.2,
+        "anchor_diagnosis": null,
+        "anchor_specialty": "Family Medicine",
+        "acute": [
+          {
+            "ndc": "00093310905",
+            "p": 0.4
+          },
+          {
+            "ndc": "68180016006",
+            "p": 0.3
+          },
+          {
+            "ndc": "00054401725",
+            "p": 0.25
+          },
+          {
+            "ndc": "53746013101",
+            "p": 0.25
+          },
+          {
+            "ndc": "00004080085",
+            "p": 0.12
+          }
+        ]
+      }
+    ],
+    "prior_authorization_policies": {
+      "glp1_type2_diabetes": {
+        "name": "GLP-1 receptor agonists for type 2 diabetes",
+        "criteria": [
+          {
+            "id": "type2_diabetes_diagnosis",
+            "description": "Documented diagnosis of type 2 diabetes mellitus (ICD-10 E11.x)",
+            "field": "has_type2_diabetes_diagnosis",
+            "op": "eq",
+            "value": true
+          },
+          {
+            "id": "age_18",
+            "description": "Member is 18 years of age or older",
+            "field": "age",
+            "op": ">=",
+            "value": 18,
+            "near": 1
+          },
+          {
+            "id": "hba1c_7",
+            "description": "HbA1c of 7.0% or higher within the past 90 days",
+            "field": "hba1c_percent",
+            "op": ">=",
+            "value": 7.0,
+            "near": 0.3
+          },
+          {
+            "id": "step_metformin",
+            "description": "Trial of metformin for at least 90 days, or documented intolerance or contraindication to metformin",
+            "any": [
+              {
+                "id": "metformin_90d",
+                "description": "Metformin trial of at least 90 days",
+                "field": "prior_therapy_days",
+                "op": ">=",
+                "value": 90,
+                "near": 20
+              },
+              {
+                "id": "metformin_intolerance",
+                "description": "Documented intolerance or contraindication to metformin",
+                "field": "prior_therapy_intolerance",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          {
+            "id": "no_medullary_thyroid_cancer_history",
+            "description": "No personal or family history of medullary thyroid carcinoma or MEN 2",
+            "field": "medullary_thyroid_cancer_history",
+            "op": "eq",
+            "value": false
+          },
+          {
+            "id": "not_taking_another_glp1",
+            "description": "Not used in combination with another GLP-1 receptor agonist",
+            "field": "taking_another_glp1",
+            "op": "eq",
+            "value": false
+          }
+        ]
+      },
+      "glp1_weight_management": {
+        "name": "GLP-1 receptor agonists for chronic weight management",
+        "criteria": [
+          {
+            "id": "age_18",
+            "description": "Member is 18 years of age or older",
+            "field": "age",
+            "op": ">=",
+            "value": 18,
+            "near": 1
+          },
+          {
+            "id": "bmi",
+            "description": "BMI of 30 or higher, or BMI of 27 or higher with at least one weight-related comorbidity (hypertension, dyslipidemia, obstructive sleep apnea, prediabetes)",
+            "any": [
+              {
+                "id": "bmi_30",
+                "description": "BMI 30 or higher",
+                "field": "bmi",
+                "op": ">=",
+                "value": 30,
+                "near": 1.0
+              },
+              {
+                "id": "bmi_27_comorbid",
+                "description": "BMI 27 or higher with a weight-related comorbidity",
+                "all": [
+                  {
+                    "id": "bmi_27",
+                    "description": "BMI 27 or higher",
+                    "field": "bmi",
+                    "op": ">=",
+                    "value": 27,
+                    "near": 1.0
+                  },
+                  {
+                    "id": "comorbidity",
+                    "description": "At least one weight-related comorbidity",
+                    "field": "weight_comorbidity_count",
+                    "op": ">=",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lifestyle_program_3_months",
+            "description": "Participation in a structured lifestyle program (diet and exercise) for at least 3 months",
+            "field": "lifestyle_program_months",
+            "op": ">=",
+            "value": 3,
+            "near": 1
+          },
+          {
+            "id": "no_medullary_thyroid_cancer_history",
+            "description": "No personal or family history of medullary thyroid carcinoma or MEN 2",
+            "field": "medullary_thyroid_cancer_history",
+            "op": "eq",
+            "value": false
+          },
+          {
+            "id": "not_taking_another_glp1",
+            "description": "Not used in combination with another GLP-1 receptor agonist",
+            "field": "taking_another_glp1",
+            "op": "eq",
+            "value": false
+          }
+        ]
+      },
+      "adalimumab_rheumatoid_arthritis": {
+        "name": "Adalimumab products for rheumatoid arthritis",
+        "criteria": [
+          {
+            "id": "rheumatoid_arthritis_diagnosis",
+            "description": "Documented diagnosis of moderate to severe rheumatoid arthritis (ICD-10 M05.x or M06.x)",
+            "field": "has_rheumatoid_arthritis_diagnosis",
+            "op": "eq",
+            "value": true
+          },
+          {
+            "id": "age_18",
+            "description": "Member is 18 years of age or older",
+            "field": "age",
+            "op": ">=",
+            "value": 18,
+            "near": 1
+          },
+          {
+            "id": "step_methotrexate",
+            "description": "Trial of methotrexate for at least 90 days, or documented intolerance or contraindication to methotrexate",
+            "any": [
+              {
+                "id": "methotrexate_90d",
+                "description": "Methotrexate trial of at least 90 days",
+                "field": "prior_therapy_days",
+                "op": ">=",
+                "value": 90,
+                "near": 20
+              },
+              {
+                "id": "methotrexate_intolerance",
+                "description": "Documented intolerance or contraindication to methotrexate",
+                "field": "prior_therapy_intolerance",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          },
+          {
+            "id": "tuberculosis_screen",
+            "description": "Negative tuberculosis screening documented before starting therapy",
+            "field": "tuberculosis_screen_negative",
+            "op": "eq",
+            "value": true
+          },
+          {
+            "id": "rheumatology",
+            "description": "Prescribed by, or in consultation with, a rheumatologist",
+            "field": "rheumatology_consult",
+            "op": "eq",
+            "value": true
+          }
+        ]
+      }
+    }
+  }
 }

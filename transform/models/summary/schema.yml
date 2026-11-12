@@ -178,3 +178,37 @@ models:
         description: "Distinct enrolled members"
         tests:
           - not_null
+
+  - name: agg_pharmacy_monthly
+    description: "Monthly pharmacy utilization and cost by drug class, subclass and cost category, normalized to PMPM with member months from enrollment. Separates paid fills from rejects and reversals so prior authorization friction is visible next to spend."
+    columns:
+      - name: report_month
+        description: "First day of the fill month"
+        tests:
+          - not_null
+      - name: member_months
+        description: "Members enrolled at any point in the month (denominator for PMPM)"
+        tests:
+          - not_null
+      - name: plan_paid_pmpm
+        description: "Plan paid per member per month for this class/subclass"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 1000
+
+  - name: agg_prior_authorization_monthly
+    description: "Monthly prior authorization throughput by policy: requests, approval rate, turnaround by urgency, time to first fill, and denial reasons."
+    columns:
+      - name: report_month
+        description: "First day of the request month"
+        tests:
+          - not_null
+      - name: approval_rate
+        description: "Approved / requests"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0.0
+                max_value: 1.0
