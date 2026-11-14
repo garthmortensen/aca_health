@@ -18,5 +18,10 @@ transform/seeds/*.csv
 
 .ruff_cache/
 
-# pbm demo outputs (synthetic notes, reviews, reports)
-pbm/data/
+# pbm demo outputs (synthetic notes, reviews, reports). The dashboard's database
+# and the notes it shows are committed so the app can be hosted.
+pbm/data/*
+!pbm/data/pbm.duckdb
+!pbm/data/notes.jsonl
+*.duckdb.wal
+*.duckdb.tmp

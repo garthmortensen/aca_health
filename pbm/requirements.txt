@@ -1,0 +1,7 @@
+# Dependencies for the hosted dashboard (Streamlit Community Cloud reads this file
+# because it sits next to the entrypoint, pbm/app.py). The pipeline scripts use the
+# repo's pyproject.toml.
+streamlit>=1.67.0
+duckdb>=2.0.0
+pandas>=2.3.3
+pyyaml>=6.0.2
