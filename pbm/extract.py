@@ -1,4 +1,7 @@
-"""Step 2: read a clinical note, return the facts the policy asks about.
+"""Step 1: read a clinical note, return the facts the policy asks about.
+
+This is the note layer. The same facts are looked up in the warehouse by plain
+code (pbm/warehouse.py), and decide.py compares the two.
 
 One Claude call per note. The output is a validated object (see Facts below):
 each fact is either a value with a verbatim quote from the note, or null when
@@ -25,6 +28,8 @@ POLICY = yaml.safe_load(open(os.path.join(HERE, "config.yaml")))["policy"]
 NOTES_PATH = os.path.join(HERE, "data", "notes.jsonl")
 OUT_PATH = os.path.join(HERE, "data", "extractions.jsonl")
 MODEL = "claude-opus-5-5"
+# Criteria the note is asked about. The rest (note: false) are answered by the warehouse alone.
+NOTE_CRITERIA = [c for c in POLICY["criteria"] if c.get("note", True)]
 
 
 class Quote(BaseModel):
@@ -41,6 +46,9 @@ class Facts(BaseModel):
         description="Age in years, from a stated age or from date of birth and the note date.")
     hba1c_percent: Optional[float] = Field(
         description="Most recent HbA1c in percent, copied exactly as written.")
+    prior_therapy_days: Optional[int] = Field(
+        description="Total days the member has taken metformin before this request, from a stated duration "
+                    "(6 months = 180). 0 if the note says metformin was never tried. Null if the note does not say.")
     quotes: List[Quote] = Field(description="One verbatim quote per non-null fact")
     confidence: float = Field(
         description="0 to 1. How sure you are that every non-null fact is right and every null fact "
@@ -56,7 +64,7 @@ SYSTEM = (
 
 def extract(note: str, client: anthropic.Anthropic) -> dict:
     """Return the facts as a plain dict, plus the model's stop reason and token usage."""
-    questions = "\n".join(f"- {c['question']}" for c in POLICY["criteria"])
+    questions = "\n".join(f"- {c['question']}" for c in NOTE_CRITERIA)
     response = client.messages.parse(
         model=MODEL,
         max_tokens=4000,
@@ -95,7 +103,7 @@ def main() -> None:
             f.write(json.dumps(record) + "\n")
 
     # Show what came back next to the facts the note was written from
-    fact_names = [c["fact"] for c in POLICY["criteria"]]
+    fact_names = [c["fact"] for c in NOTE_CRITERIA]
     for note, result in zip(notes, results):
         print(f"\n{note['prior_authorization_request_id']}  ({note['style']} note, omitted on purpose: {note['omitted_fields'] or 'nothing'})")
         facts = result["facts"] or {}

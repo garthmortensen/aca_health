@@ -4,8 +4,7 @@ Two writers:
   write_system_decisions(path)   load the rows produced by decide.py
   write_np_decision(...)         one row from the dashboard when a reviewer acts
 
-Rows are only ever appended. Connection settings come from the repo's .env
-(POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB) or PG* environment variables.
+Rows are only ever appended. The table lives in the app's DuckDB file (pbm/db.py).
 
 Usage:
   python -m pbm.record                 # load pbm/data/decisions.jsonl
@@ -16,45 +15,26 @@ import argparse
 import json
 import os
 
-import psycopg
-from psycopg.types.json import Jsonb
+from pbm.db import connect
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO_ROOT = os.path.dirname(HERE)
 DECISIONS_PATH = os.path.join(HERE, "data", "decisions.jsonl")
 
 INSERT = """
 insert into review.prior_authorization_decision
     (prior_authorization_request_id, decided_by, outcome, reason, confidence,
-     policy_id, policy_version, model, checks, np_rationale)
-values (%(request_id)s, %(decided_by)s, %(outcome)s, %(reason)s, %(confidence)s,
-        %(policy_id)s, %(policy_version)s, %(model)s, %(checks)s, %(np_rationale)s)
+     policy_id, policy_version, model, checks, summary, np_rationale)
+values ($request_id, $decided_by, $outcome, $reason, $confidence,
+        $policy_id, $policy_version, $model, $checks, $summary, $np_rationale)
 """
-
-
-def connect() -> psycopg.Connection:
-    env = {}
-    env_path = os.path.join(REPO_ROOT, ".env")
-    if os.path.exists(env_path):
-        for line in open(env_path):
-            if "=" in line and not line.startswith("#"):
-                k, v = line.strip().split("=", 1)
-                env[k] = v
-    return psycopg.connect(
-        host=os.environ.get("PGHOST", "localhost"),
-        port=int(os.environ.get("PGPORT", "5432")),
-        dbname=os.environ.get("PGDATABASE", env.get("POSTGRES_DB", "aca_health")),
-        user=os.environ.get("PGUSER", env.get("POSTGRES_USER", "etl")),
-        password=os.environ.get("PGPASSWORD", env.get("POSTGRES_PASSWORD", "")),
-    )
 
 
 def write_system_decisions(path: str = DECISIONS_PATH) -> int:
     """Append every decision in the file as a 'system' row. Returns rows written."""
     decisions = [json.loads(line) for line in open(path)]
-    with connect() as conn, conn.cursor() as cur:
+    with connect() as conn:
         for d in decisions:
-            cur.execute(INSERT, {
+            conn.execute(INSERT, {
                 "request_id": d["prior_authorization_request_id"],
                 "decided_by": "system",
                 "outcome": d["outcome"],
@@ -63,7 +43,8 @@ def write_system_decisions(path: str = DECISIONS_PATH) -> int:
                 "policy_id": d.get("policy_id"),
                 "policy_version": d.get("policy_version"),
                 "model": d.get("model"),
-                "checks": Jsonb(d.get("checks", [])),
+                "checks": json.dumps(d.get("checks", [])),
+                "summary": d.get("summary"),
                 "np_rationale": None,
             })
     return len(decisions)
@@ -73,8 +54,8 @@ def write_np_decision(request_id: str, outcome: str, rationale: str, decided_by:
                       policy_id: str, policy_version: str) -> None:
     """Append one row for a human reviewer's action."""
     assert outcome in ("approve", "deny", "request_more_info"), outcome
-    with connect() as conn, conn.cursor() as cur:
-        cur.execute(INSERT, {
+    with connect() as conn:
+        conn.execute(INSERT, {
             "request_id": request_id,
             "decided_by": decided_by,
             "outcome": outcome,
@@ -84,6 +65,7 @@ def write_np_decision(request_id: str, outcome: str, rationale: str, decided_by:
             "policy_version": policy_version,
             "model": None,
             "checks": None,
+            "summary": None,
             "np_rationale": rationale,
         })
 

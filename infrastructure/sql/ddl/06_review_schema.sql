@@ -28,9 +28,13 @@ CREATE TABLE IF NOT EXISTS review.prior_authorization_decision (
     policy_id                       TEXT,
     policy_version                  TEXT,
     model                           TEXT,                   -- AI model id (system rows)
-    checks                          JSONB,                  -- per criterion: status, value, quote
+    checks                          JSONB,                  -- per criterion: status, and the value and evidence from each source
+    summary                         TEXT,                   -- AI briefing for the reviewer (system rows sent to review)
     np_rationale                    TEXT                    -- free text from the reviewer (NP rows)
 );
+
+-- For a table created before the summary column existed
+ALTER TABLE review.prior_authorization_decision ADD COLUMN IF NOT EXISTS summary TEXT;
 
 CREATE INDEX IF NOT EXISTS prior_authorization_decision_request_idx
     ON review.prior_authorization_decision (prior_authorization_request_id, decided_at);
@@ -38,7 +42,9 @@ CREATE INDEX IF NOT EXISTS prior_authorization_decision_request_idx
 COMMENT ON TABLE review.prior_authorization_decision IS
     'Append-only log of prior authorization decisions by the system and by human reviewers';
 COMMENT ON COLUMN review.prior_authorization_decision.checks IS
-    'List of {id, question, status (pass/fail/unknown), value, quote, near} for each policy criterion';
+    'List of {id, question, status (pass/fail/unknown/conflict), near, warehouse {value, evidence, status}, note {value, evidence, status}} for each policy criterion';
+COMMENT ON COLUMN review.prior_authorization_decision.summary IS
+    'Short AI briefing for the reviewer: what each source shows and where they disagree. Never a recommendation';
 
 -- Latest row per request: what the request's status is right now.
 CREATE OR REPLACE VIEW review.prior_authorization_status AS

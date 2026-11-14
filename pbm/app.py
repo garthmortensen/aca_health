@@ -1,9 +1,10 @@
 """Step 5: the reviewer's dashboard.
 
 Left: the queue of prior authorization requests, filtered by current outcome and
-sorted by AI confidence. Right: one case - the note, each policy criterion with
-its quote, the AI's reason, the request's full history, and the reviewer's
-action, which appends a row to review.prior_authorization_decision.
+sorted by AI confidence. Below it: one case - the AI briefing, each policy
+criterion with what the warehouse shows next to what the note says (conflicts
+highlighted), the note, the request's full history, and the reviewer's action,
+which appends a row to review.prior_authorization_decision.
 
 Run:
   streamlit run pbm/app.py
@@ -22,34 +23,40 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # Streamlit adds pbm/ to the import path, not the repo root, so add the root for `import pbm`
 sys.path.insert(0, os.path.dirname(HERE))
 
-from pbm.record import connect, write_np_decision  # noqa: E402
+from pbm.db import connect  # noqa: E402
+from pbm.record import write_np_decision  # noqa: E402
 CONFIG = yaml.safe_load(open(os.path.join(HERE, "config.yaml")))
 POLICY = CONFIG["policy"]
 OUTCOMES = ["All", "unclear", "deny", "approve", "request_more_info"]
-STATUS_ICON = {"pass": "✅", "fail": "❌", "unknown": "❓"}
+STATUS_ICON = {"pass": "✅", "fail": "❌", "unknown": "❓", "conflict": "⚠️"}
 
 QUEUE_SQL = """
+with ai as (  -- the latest system row per request
+    select prior_authorization_request_id,
+           confidence,
+           len(list_filter(json_extract_string(checks, '$[*].status'), lambda x: x = 'conflict')) as conflicts
+    from review.prior_authorization_decision
+    where decided_by = 'system'
+    qualify row_number() over (partition by prior_authorization_request_id order by decided_at desc, decision_id desc) = 1
+)
 select s.prior_authorization_request_id as request_id,
        s.current_outcome,
        s.last_decided_by,
        s.last_decided_at,
        s.reason,
        ai.confidence as ai_confidence,
+       ai.conflicts,
        r.member_id, r.drug_name, r.request_date, r.prescriber_specialty
 from review.prior_authorization_status s
 left join dw.fct_prior_authorization_request r using (prior_authorization_request_id)
-left join lateral (
-    select confidence from review.prior_authorization_decision d
-    where d.prior_authorization_request_id = s.prior_authorization_request_id and d.decided_by = 'system'
-    order by d.decided_at desc limit 1
-) ai on true
+left join ai using (prior_authorization_request_id)
 order by ai.confidence desc nulls last, s.prior_authorization_request_id
 """
 
 HISTORY_SQL = """
-select decision_id, decided_at, decided_by, outcome, reason, confidence, checks, np_rationale, policy_version
+select decision_id, decided_at, decided_by, outcome, reason, confidence, checks, summary, np_rationale, policy_version
 from review.prior_authorization_decision
-where prior_authorization_request_id = %s
+where prior_authorization_request_id = ?
 order by decided_at, decision_id
 """
 
@@ -57,12 +64,15 @@ order by decided_at, decision_id
 @st.cache_data(ttl=5)
 def load_queue() -> pd.DataFrame:
     with connect() as conn:
-        return pd.read_sql(QUEUE_SQL, conn)
+        return conn.execute(QUEUE_SQL).df()
 
 
 def load_history(request_id: str) -> pd.DataFrame:
     with connect() as conn:
-        return pd.read_sql(HISTORY_SQL, conn, params=(request_id,))
+        history = conn.execute(HISTORY_SQL, [request_id]).df()
+    # DuckDB returns JSON columns as text
+    history["checks"] = history["checks"].map(lambda c: json.loads(c) if isinstance(c, str) else None)
+    return history
 
 
 @st.cache_data
@@ -94,7 +104,7 @@ if outcome_filter != "All":
 st.subheader(f"Queue ({len(queue)})")
 counts = load_queue().current_outcome.value_counts()
 st.caption("  ·  ".join(f"{k}: {v}" for k, v in counts.items()))
-table = queue[["request_id", "current_outcome", "ai_confidence", "drug_name", "request_date", "last_decided_by"]]
+table = queue[["request_id", "current_outcome", "conflicts", "ai_confidence", "drug_name", "request_date", "last_decided_by"]]
 selection = st.dataframe(
     table, hide_index=True, width="stretch",
     on_select="rerun", selection_mode="single-row",
@@ -116,15 +126,40 @@ st.subheader(f"{selected_id}  —  {case.drug_name}")
 st.markdown(f"Member **{case.member_id}** · requested {case.request_date} · prescriber {case.prescriber_specialty}")
 st.markdown(f"Current outcome: **{case.current_outcome}** (by {case.last_decided_by})")
 
+def shown(source: dict) -> str:
+    """One source's answer for the table: the value, then the evidence behind it."""
+    parts = [str(source["value"])] if source.get("value") is not None else []
+    if source.get("evidence"):
+        parts.append(source["evidence"])
+    return "  ·  ".join(parts) or "—"
+
+
 if system_row is not None:
-    st.markdown(f"**AI assessment** — {system_row.reason}  (confidence {system_row.confidence})")
-    checks = system_row.checks or []
-    st.table(pd.DataFrame([{
-        "": STATUS_ICON.get(c["status"], ""),
-        "Criterion": c["question"],
-        "Value": "" if c["value"] is None else str(c["value"]),
-        "Quote from note": c["quote"] or "— not documented —",
-    } for c in checks]))
+    st.markdown(f"**System assessment** — {system_row.reason}  (AI confidence {system_row.confidence})")
+    if system_row.summary:
+        st.info(f"**AI briefing** (information only, not a recommendation)\n\n{system_row.summary}")
+
+    # Rows written before the two-source checks have no warehouse/note breakdown, so show those as they are
+    checks = [c for c in (system_row.checks or []) if "warehouse" in c]
+    for c in checks:
+        if c["status"] == "conflict":
+            st.warning(f"**Sources disagree — {c['question']}**\n\n"
+                       f"Warehouse: {shown(c['warehouse'])}\n\nNote: {shown(c['note'])}")
+    if checks:
+        rows = pd.DataFrame([{
+            "": STATUS_ICON.get(c["status"], ""),
+            "Criterion": c["question"],
+            "Warehouse": shown(c["warehouse"]),
+            "Clinical note (AI)": shown(c["note"]),
+        } for c in checks])
+        conflict = [c["status"] == "conflict" for c in checks]
+        st.table(rows.style.apply(
+            lambda row: ["background-color: #fff3cd" if conflict[row.name] else ""] * len(row), axis=1))
+        fyis = [c["fyi"] for c in checks if c.get("fyi")]
+        if fyis:
+            st.info("**FYI: lab values close to their threshold**\n\n" + "\n\n".join(f"- {f}" for f in fyis))
+    elif system_row.checks:
+        st.table(pd.DataFrame(system_row.checks).astype(str))
 
 with st.expander("Clinical note", expanded=case.current_outcome != "approve"):
     st.text(load_notes().get(selected_id, "(note not found)"))

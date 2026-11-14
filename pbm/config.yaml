@@ -3,15 +3,25 @@
 
 policy:
   id: glp1_type2_diabetes
-  version: "2026-11-11"
+  version: "2026-11-13"
   name: GLP-1 receptor agonist for type 2 diabetes
   drugs: [Ozempic, Mounjaro, Trulicity]
 
-  # Each criterion names the fact the AI extracts and how it passes.
+  # Each criterion names one fact and how it passes. The fact is looked up twice:
+  # in the warehouse (plain SQL, pbm/warehouse.py) and in the clinical note (AI, pbm/extract.py).
   #   pass_when: the yes/no value that passes
   #   min:       the number that passes (value >= min)
-  #   near:      how close to min counts as "near threshold" and goes to the NP
+  #   tolerance: for labs. A value within this distance of min, above or below, is noted to the
+  #              NP as an FYI and sends the case to the NP. Set it per lab.
+  #   label:     short name used in the FYI note
+  #   note:      false when the note is not asked about this fact (warehouse only)
   criteria:
+    - id: drug_on_policy
+      question: Is the requested drug covered by this policy?
+      fact: drug_on_policy_list
+      pass_when: true
+      note: false
+
     - id: type2_diabetes_diagnosis
       question: Is type 2 diabetes documented as a diagnosis?
       fact: has_type2_diabetes_diagnosis
@@ -25,15 +35,31 @@ policy:
     - id: hba1c_7
       question: Is the most recent HbA1c 7.0% or higher?
       fact: hba1c_percent
+      label: HbA1c
       min: 7.0
-      near: 0.3
+      tolerance: 0.3
+
+    - id: metformin_90_days
+      question: Has the member taken metformin for at least 90 days?
+      fact: prior_therapy_days
+      min: 90
+
+# What the warehouse checks look for.
+warehouse:
+  diabetes_diagnosis_code_prefix: E11   # ICD-10 type 2 diabetes, on medical claims
+  prior_therapy_drug: metformin         # generic name, on paid pharmacy claims
 
 decision:
   # Below this, the system does not approve on its own, even if every criterion passes.
   confidence_threshold: 0.9
 
+  # Each criterion gets a status from its two sources (warehouse, note):
+  #   both known and they disagree  -> conflict
+  #   otherwise                     -> whatever the known source(s) say; unknown if neither knows
+  #
   # Order of checks, strongest signal first:
-  #   any criterion fails on a documented fact  -> deny     (NP signs, failing criterion pre-filled)
-  #   any fact missing or near its threshold     -> unclear  (NP reviews)
-  #   confidence below threshold                 -> unclear  (NP reviews)
-  #   otherwise                                  -> approve  (system, with the quotes as the paper trail)
+  #   any criterion fails                         -> deny     (NP signs, failing criterion pre-filled)
+  #   any criterion in conflict                   -> unclear  (NP reviews, conflict highlighted)
+  #   any fact unknown or within a lab's tolerance -> unclear (NP reviews, FYI shown)
+  #   AI confidence below threshold               -> unclear  (NP reviews)
+  #   otherwise                                   -> approve  (system, with the evidence as the paper trail)
