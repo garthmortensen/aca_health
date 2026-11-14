@@ -3,7 +3,7 @@
 
 policy:
   id: glp1_type2_diabetes
-  version: "2026-11-13"
+  version: "2026-11-14"
   name: GLP-1 receptor agonist for type 2 diabetes
   drugs: [Ozempic, Mounjaro, Trulicity]
 
@@ -11,35 +11,40 @@ policy:
   # in the warehouse (plain SQL, pbm/warehouse.py) and in the clinical note (AI, pbm/extract.py).
   #   pass_when: the yes/no value that passes
   #   min:       the number that passes (value >= min)
-  #   tolerance: for labs. A value within this distance of min, above or below, is noted to the
-  #              NP as an FYI and sends the case to the NP. Set it per lab.
-  #   label:     short name used in the FYI note
   #   note:      false when the note is not asked about this fact (warehouse only)
+  #   tolerance: for labs. A value below min by no more than this is a near miss: it goes to the NP,
+  #              who may approve it. A value at or above min passes outright, with no band above.
+  #              A way to dial cost: widen it to let the NP approve more borderline cases.
+  #   short:     plain name the dashboard shows when this criterion is why a case is where it is
   criteria:
     - id: drug_on_policy
+      short: Drug on policy list              # plain name shown in the queue
       question: Is the requested drug covered by this policy?
       fact: drug_on_policy_list
       pass_when: true
       note: false
 
     - id: type2_diabetes_diagnosis
+      short: Type 2 diabetes diagnosis              # plain name shown in the queue
       question: Is type 2 diabetes documented as a diagnosis?
       fact: has_type2_diabetes_diagnosis
       pass_when: true
 
     - id: age_18
+      short: Age 18 or older              # plain name shown in the queue
       question: Is the member 18 or older?
       fact: age
       min: 18
 
     - id: hba1c_7
+      short: HbA1c 7.0% or higher              # plain name shown in the queue
       question: Is the most recent HbA1c 7.0% or higher?
       fact: hba1c_percent
-      label: HbA1c
       min: 7.0
       tolerance: 0.3
 
     - id: metformin_90_days
+      short: Metformin 90 days              # plain name shown in the queue
       question: Has the member taken metformin for at least 90 days?
       fact: prior_therapy_days
       min: 90
@@ -60,6 +65,10 @@ decision:
   # Order of checks, strongest signal first:
   #   any criterion fails                         -> deny     (NP signs, failing criterion pre-filled)
   #   any criterion in conflict                   -> unclear  (NP reviews, conflict highlighted)
-  #   any fact unknown or within a lab's tolerance -> unclear (NP reviews, FYI shown)
-  #   AI confidence below threshold               -> unclear  (NP reviews)
+  #   any fact unknown                            -> unclear  (NP reviews)
+  #   any lab below min but within tolerance      -> unclear  (NP reviews, may approve)
+  #   every criterion passes in the warehouse     -> approve  (system). If AI confidence is below the
+  #                                                  threshold the case is also an "AI flag" in the dashboard,
+  #                                                  but the approval stands
+  #   AI confidence below threshold               -> unclear  (NP reviews), when the note was needed to pass
   #   otherwise                                   -> approve  (system, with the evidence as the paper trail)

@@ -23,5 +23,6 @@ transform/seeds/*.csv
 pbm/data/*
 !pbm/data/pbm.duckdb
 !pbm/data/notes.jsonl
+!pbm/data/stories.jsonl
 *.duckdb.wal
 *.duckdb.tmp

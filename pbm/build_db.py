@@ -29,7 +29,7 @@ PA_MEMBERS = "member_id in (select member_id from pg.dw.fct_prior_authorization_
 
 TABLES = {
     "fct_prior_authorization_request": "select * from pg.dw.fct_prior_authorization_request",
-    "dim_member": f"select member_id, date_of_birth, gender, state, is_current from pg.dw.dim_member where {PA_MEMBERS}",
+    "dim_member": f"select member_id, first_name, last_name, date_of_birth, gender, state, is_current from pg.dw.dim_member where {PA_MEMBERS}",
     "fct_claim": f"select claim_id, member_id, claim_date, diagnosis_code, claim_status from pg.dw.fct_claim where {PA_MEMBERS}",
     "fct_pharmacy_claim": f"""select pharmacy_claim_id, member_id, fill_date, drug_name, generic_name, days_supply,
                                      claim_status, is_paid, prior_authorization_request_id

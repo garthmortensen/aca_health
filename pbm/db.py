@@ -16,6 +16,7 @@ Set PBM_DUCKDB to use a different file.
 from __future__ import annotations
 
 import os
+import threading
 
 import duckdb
 
@@ -45,7 +46,7 @@ create table if not exists review.prior_authorization_decision (
 );
 
 -- Latest row per request: what the request's status is right now
-create or replace view review.prior_authorization_status as
+create view if not exists review.prior_authorization_status as
 select prior_authorization_request_id,
        decided_at as last_decided_at,
        decided_by as last_decided_by,
@@ -57,12 +58,24 @@ qualify row_number() over (partition by prior_authorization_request_id
 """
 
 
+_ready: set[str] = set()  # files whose review schema this process has already checked
+_lock = threading.Lock()
+
+
 def connect(path: str = DB_PATH) -> duckdb.DuckDBPyConnection:
-    """Open the database, creating the review schema if it is missing."""
+    """Open the database, creating the review schema the first time this process opens the file.
+
+    The schema is set up once per process, under a lock, because two connections running DDL
+    at the same moment (two Streamlit sessions, say) conflict in DuckDB.
+    """
     if not os.path.exists(path):
         raise FileNotFoundError(f"{path} not found. Build it with: python -m pbm.build_db")
     conn = duckdb.connect(path)
-    conn.execute(REVIEW_DDL)
+    if path not in _ready:
+        with _lock:
+            if path not in _ready:
+                conn.execute(REVIEW_DDL)
+                _ready.add(path)
     return conn
 
 

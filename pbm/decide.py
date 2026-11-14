@@ -4,8 +4,9 @@ Every criterion is checked twice:
   warehouse   facts from the database (pbm/warehouse.py)
   note        facts the AI read from the clinical note (pbm/extract.py)
 
-A criterion's status is pass, fail, unknown (neither source knows), or
-conflict (the two sources disagree). Each decision carries, per criterion,
+A criterion's status is pass, fail, near (a lab slightly below its minimum, within the
+criterion's tolerance), unknown (neither source knows), or conflict (the two sources
+disagree). Each decision carries, per criterion,
 both values and the evidence behind each. That record is the paper trail.
 
 Usage:
@@ -34,25 +35,20 @@ def status(criterion: dict, value) -> str:
         return "unknown"
     if "pass_when" in criterion:
         return "pass" if value == criterion["pass_when"] else "fail"
-    return "pass" if value >= criterion["min"] else "fail"
+    if value >= criterion["min"]:
+        return "pass"
+    # Below the minimum. Within the tolerance it is a near miss the reviewer may approve; there is no band above
+    return "near" if round(criterion["min"] - value, 6) <= criterion.get("tolerance", 0) else "fail"
 
 
-def is_near(criterion: dict, value) -> bool:
-    """True when a lab value is within the criterion's tolerance of its threshold, above or below."""
-    return value is not None and "tolerance" in criterion and round(abs(value - criterion["min"]), 6) <= criterion["tolerance"]
-
-
-def fyi(criterion: dict, sources: dict) -> str | None:
-    """The FYI line for the NP when a lab is within tolerance of its threshold, else None."""
-    near = {name: s["value"] for name, s in sources.items() if is_near(criterion, s["value"])}
-    if not near:
+def shortfall(criterion: dict, sources: dict) -> str | None:
+    """The line for the reviewer when a lab is below its minimum but within tolerance, else None."""
+    parts = [f"{name} {s['value']} ({round(criterion['min'] - s['value'], 6):g} below)"
+             for name, s in sources.items() if s["status"] == "near"]
+    if not parts:
         return None
-    parts = []
-    for name, value in near.items():
-        gap = round(abs(value - criterion["min"]), 6)
-        parts.append(f"{name} {value} ({'at' if gap == 0 else f'{gap:g} ' + ('below' if value < criterion['min'] else 'above')})")
-    label = criterion.get("label", criterion["id"])
-    return f"{label} is within {criterion['tolerance']:g} of the {criterion['min']:g} minimum: " + ", ".join(parts)
+    return (f"{criterion.get('short', criterion['id'])}: " + ", ".join(parts)
+            + f", within the {criterion['tolerance']:g} tolerance")
 
 
 def check(criterion: dict, note_facts: dict, warehouse_facts: dict) -> dict:
@@ -74,9 +70,8 @@ def check(criterion: dict, note_facts: dict, warehouse_facts: dict) -> dict:
         overall = known.pop()         # the sources agree, or only one of them knows
     else:
         overall = "unknown"
-    note = fyi(criterion, sources)
     return {"id": criterion["id"], "question": criterion["question"], "status": overall,
-            "near": note is not None, "fyi": note, **sources}
+            "shortfall": shortfall(criterion, sources), **sources}
 
 
 def describe(c: dict) -> str:
@@ -89,21 +84,30 @@ def decide(extraction: dict, warehouse_facts: dict) -> dict:
     confidence = note_facts.get("confidence")
     checks = [check(c, note_facts, warehouse_facts) for c in POLICY["criteria"]]
 
-    def having(key, value=True):
-        return [c for c in checks if c[key] == value]
+    def having(status):
+        return [c for c in checks if c["status"] == status]
 
-    if having("status", "fail"):
-        outcome, reason = "deny", "Fails: " + "; ".join(map(describe, having("status", "fail")))
-    elif having("status", "conflict"):
-        outcome, reason = "unclear", "Sources disagree: " + "; ".join(map(describe, having("status", "conflict")))
-    elif having("status", "unknown"):
-        outcome, reason = "unclear", "Not found in warehouse or note: " + "; ".join(c["question"] for c in having("status", "unknown"))
+    floor = DECISION["confidence_threshold"]
+    if having("fail"):
+        outcome, reason = "deny", "Fails: " + "; ".join(map(describe, having("fail")))
+    elif having("conflict"):
+        outcome, reason = "unclear", "Sources disagree: " + "; ".join(map(describe, having("conflict")))
+    elif having("unknown"):
+        outcome, reason = "unclear", "Not found in warehouse or note: " + "; ".join(c["question"] for c in having("unknown"))
     elif having("near"):
-        outcome, reason = "unclear", "Within lab tolerance: " + "; ".join(map(describe, having("near")))
+        outcome, reason = "unclear", "Below the minimum, within tolerance: " + "; ".join(c["shortfall"] for c in having("near"))
+    elif all(c["warehouse"]["status"] == "pass" for c in checks):
+        # The warehouse alone meets every criterion, so the AI's confidence does not gate the approval.
+        # A weak reading of the note is recorded in the reason, and the dashboard lists it as an AI flag.
+        outcome, reason = "approve", "All criteria met in the warehouse"
+        if confidence is None:
+            reason += "; AI flag: the AI could not read the note"
+        elif confidence < floor:
+            reason += f"; AI flag: confidence {confidence} below {floor}"
     elif confidence is None:
         outcome, reason = "unclear", "AI could not read the note"
-    elif confidence < DECISION["confidence_threshold"]:
-        outcome, reason = "unclear", f"AI confidence {confidence} below {DECISION['confidence_threshold']}"
+    elif confidence < floor:
+        outcome, reason = "unclear", f"AI confidence {confidence} below {floor}"
     else:
         outcome, reason = "approve", "All criteria met"
 
