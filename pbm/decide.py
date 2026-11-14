@@ -6,7 +6,7 @@ Every criterion is checked twice:
 
 A criterion's status is pass, fail, near (a lab slightly below its minimum, within the
 criterion's tolerance), unknown (neither source knows), or conflict (the two sources
-disagree). Each decision carries, per criterion,
+disagree). A warehouse pass is final: the criterion passes whatever the note says. Each decision carries, per criterion,
 both values and the evidence behind each. That record is the paper trail.
 
 Usage:
@@ -64,8 +64,10 @@ def check(criterion: dict, note_facts: dict, warehouse_facts: dict) -> dict:
         source["status"] = status(criterion, source["value"])
 
     known = {s["status"] for s in sources.values()} - {"unknown"}
-    if len(known) == 2:
-        overall = "conflict"          # one source passes, the other fails
+    if sources["warehouse"]["status"] == "pass":
+        overall = "pass"              # the warehouse confirms it, so the note cannot overturn it
+    elif len(known) == 2:
+        overall = "conflict"          # the warehouse does not pass, and the note says otherwise
     elif known:
         overall = known.pop()         # the sources agree, or only one of them knows
     else:
