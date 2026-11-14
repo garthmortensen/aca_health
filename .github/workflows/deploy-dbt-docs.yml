@@ -36,6 +36,19 @@ jobs:
         working-directory: ./transform
         run: |
           dbt deps
+      - name: Create placeholder seeds
+        working-directory: ./transform
+        # The seed CSVs are gitignored (transform/seeds/*.csv), so a fresh checkout has only some of them.
+        # dbt needs each seed file to exist to build the project graph, but docs generation never reads the rows.
+        run: |
+          mkdir -p seeds
+          for name in claims enrollments members plans providers formulary pharmacy_claims prior_authorization_requests \
+                      hhs_hcc_factors hhs_hcc_factors_adult hhs_hcc_hierarchies hhs_hcc_icd10_to_cc \
+                      hhs_hcc_interactions hhs_hcc_variable_definitions; do
+            [ -f "seeds/$name.csv" ] || echo "placeholder" > "seeds/$name.csv"
+          done
+          ls seeds
+
       - name: Generate dbt docs
         working-directory: ./transform
         run: |
