@@ -358,4 +358,6 @@ dbt debug
 
 ## pharmacy benefit demo
 
-`pbm/` (pharmacy benefit management) holds an AI-assisted prior authorization review built on this warehouse. A prior authorization is the plan's approval that a prescriber must get before certain drugs are covered. The policy lives in `pbm/policy.json`; Claude reads the clinical note and extracts the facts the policy asks about; clear cases are approved by the system with a paper trail, and unclear or failing cases go to a nurse practitioner in a Streamlit dashboard. `pbm/data/` holds synthetic notes and the outputs of the first-pass pipeline (archived on branch `archive/pbm-v1`).
+`pbm/` (pharmacy benefit management) holds an AI-assisted prior authorization review built on this warehouse. A prior authorization is the plan's approval that a prescriber must get before certain drugs are covered. The policy lives in `pbm/config.yaml`; Claude reads the clinical note and extracts the facts the policy asks about; clear cases are approved by the system with a paper trail, and unclear or failing cases go to a nurse practitioner in a Streamlit dashboard. `pbm/data/` holds synthetic notes and the outputs of the first-pass pipeline (archived on branch `archive/pbm-v1`).
+
+Live reviewer dashboard: https://acahealth-rx-pa.streamlit.app/
